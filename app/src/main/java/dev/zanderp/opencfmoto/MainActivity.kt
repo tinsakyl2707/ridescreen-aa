@@ -996,6 +996,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.btn_fuel)?.setOnClickListener { FuelActivity.start(this) }
         findViewById<View>(R.id.btn_doctor)?.setOnClickListener { Doctor.show(this) }
         findViewById<View>(R.id.btn_doctor_tile)?.setOnClickListener { Doctor.show(this) }
+        findViewById<View>(R.id.btn_doctor_tile)?.setOnLongClickListener { DashExplorer.show(this); true }
         // Hero: tap to set the bike's photo / name (the garage now lives here instead of a home tile).
         findViewById<View>(R.id.hero_card)?.setOnClickListener { GarageActivity.start(this) }
         findViewById<View?>(R.id.lang_toggle)?.let { root ->

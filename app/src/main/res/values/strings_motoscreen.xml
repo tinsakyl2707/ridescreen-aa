@@ -70,4 +70,9 @@ Every ride
 Something wrong? Tap 🩺 App doctor.</string>
     <string name="ms_setup_done">✅ First-time setup is done · tap to show</string>
     <string name="ms_setup_done_hide">▲ Hide the first-time steps</string>
+    <string name="ms_explorer_title">🔬 Dash explorer</string>
+    <string name="ms_explorer_intro">For technicians. Connect to the bike\'s Wi‑Fi first (start the bike, open the mirroring page).\n\nThis only LOOKS: it lists which services the dash runs on its Wi‑Fi. It sends no files and changes nothing on the dash. Takes 1–3 minutes, then share the log.</string>
+    <string name="ms_explorer_start">Start</string>
+    <string name="ms_explorer_running">Scanning the dash… %1$d%%</string>
+    <string name="ms_explorer_none">No open ports found. Is the phone on the bike\'s Wi‑Fi?</string>
 </resources>

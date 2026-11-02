@@ -203,4 +203,9 @@
 มีปัญหา? กด 🩺 หมอแอป</string>
     <string name="ms_setup_done">✅ ตั้งค่าเริ่มต้นเสร็จแล้ว · แตะเพื่อดู</string>
     <string name="ms_setup_done_hide">▲ ซ่อนขั้นตอนตั้งค่าครั้งแรก</string>
+    <string name="ms_explorer_title">🔬 สำรวจจอรถ</string>
+    <string name="ms_explorer_intro">สำหรับช่าง ต่อ Wi‑Fi รถก่อน (ติดรถ เปิดหน้าฉายหน้าจอ)\n\nโหมดนี้แค่ "ดู" ว่าจอเปิดบริการอะไรไว้บน Wi‑Fi บ้าง ไม่ส่งไฟล์ ไม่แก้อะไรในจอ ใช้เวลา 1–3 นาที เสร็จแล้วกดแชร์บันทึกส่งมา</string>
+    <string name="ms_explorer_start">เริ่ม</string>
+    <string name="ms_explorer_running">กำลังสำรวจจอ… %1$d%%</string>
+    <string name="ms_explorer_none">ไม่เจอ port ที่เปิดอยู่ มือถือต่อ Wi‑Fi รถอยู่หรือเปล่า?</string>
 </resources>

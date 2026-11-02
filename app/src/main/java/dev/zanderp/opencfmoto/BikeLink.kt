@@ -36,6 +36,8 @@ object BikeLink {
     /** When this connect began: a Wi‑Fi blip in the first seconds is not an Android Auto failure. */
     @Volatile private var connectStartedAt = 0L
     @Volatile private var bikeNetwork: Network? = null
+    /** The bike's Wi‑Fi network while linked (read-only, for the dash explorer). */
+    val currentNetwork: Network? get() = bikeNetwork
     @Volatile private var networkReady = false
     @Volatile private var proberStarted = false
     /** Wi‑Fi Direct path: no [Network], so the prober binds/probes with these overrides. */
