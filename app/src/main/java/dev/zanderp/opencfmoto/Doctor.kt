@@ -178,7 +178,14 @@ object Doctor {
         // 6. Display over other apps: needed to resume on its own with the phone in a pocket.
         val overlayOk = try { Settings.canDrawOverlays(activity) } catch (_: Exception) { null }
         out += Item(s(R.string.doctor_overlay), s(R.string.doctor_overlay_desc), overlayOk, s(R.string.doctor_allow)) { a ->
-            open(a, Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${a.packageName}")))
+            // Android 13+ greys this switch out for sideloaded apps ("restricted setting"): it only
+            // unlocks from App info ▸ ⋮ ▸ Allow restricted settings, so go there and say how.
+            if (android.os.Build.VERSION.SDK_INT >= 33) {
+                Toast.makeText(a, R.string.doctor_overlay_restricted, Toast.LENGTH_LONG).show()
+                appDetails(a, a.packageName)
+            } else {
+                open(a, Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${a.packageName}")))
+            }
         }
 
         // 7. Official / EasyConnection apps grab the same dash ports.

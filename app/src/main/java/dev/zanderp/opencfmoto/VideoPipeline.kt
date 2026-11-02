@@ -661,7 +661,10 @@ class VideoPipeline(
      */
     private fun profileCap(fps: Int): Int {
         val oem = BikeProfileHolder.active.videoFrameRate
-        return if (oem in 1 until 30) minOf(fps, oem) else fps
+        var cap = if (oem in 1 until 30) minOf(fps, oem) else fps
+        val dash = try { KnownDashes.maxFpsFor(BikeMemory.lastQr(context)?.modelId, context) } catch (_: Exception) { 0 }
+        if (dash > 0) cap = minOf(cap, dash)
+        return cap
     }
 
     /** Compositor mode: the surface the AA decoder renders into (letterboxed before the encoder). */

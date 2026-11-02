@@ -34,6 +34,7 @@
     <string name="doctor_allow">Allow</string>
     <string name="doctor_overlay">Display over other apps</string>
     <string name="doctor_overlay_desc">Lets the app resume by itself with the phone in your pocket.</string>
+    <string name="doctor_overlay_restricted">If the switch is grey: tap ⋮ (top right) ▸ Allow restricted settings, then turn on Display over other apps.</string>
     <string name="doctor_official">No official dash app holding the connection</string>
     <string name="doctor_official_desc">The Zontes / EasyConnection app grabs the same dash ports. Force stop it (or uninstall it).</string>
     <string name="doctor_force_stop">Open app info</string>

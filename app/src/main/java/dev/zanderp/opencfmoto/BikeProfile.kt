@@ -829,11 +829,15 @@ internal object KnownDashes {
         val panel: Pair<Int, Int>,
         /** Default "match aspect" when the rider never chose one; null = the app's usual AUTO. */
         val matchMode: MatchAspectMode? = null,
+        /** The fastest the dash actually decodes; the compositor never feeds it faster. 0 = no cap. */
+        val maxFps: Int = 0,
     )
 
     private val byModelId = mapOf(
         // Zontes 368K (18 Oct 2026 log): AP+P2P QR, CLIENT_INFO "MotoPlay Landscape", panel 1024×425.
-        "21334" to Dash("Zontes 368", { Cfdl16MotoPlayLandscapeProfile }, 1024 to 425),
+        // MotoScreen TH, 368G log 2 Nov 2026: fed 30 fps the dash pulled only ~19/s, the queue
+        // overflowed 386× in 30 min and three of those stalls ended in a full reconnect. Cap at 20.
+        "21334" to Dash("Zontes 368", { Cfdl16MotoPlayLandscapeProfile }, 1024 to 425, maxFps = 20),
         // Zontes 125X (Manel's, 17 Oct logs): panel 800×416. AA at a plain 800×480 with no margins +
         // Fill keeps Android Auto's icon bar at the bottom, where it hides under the dash's own
         // speed/fuel strip; "match aspect" margins make AA put the bar on the left instead.
@@ -849,5 +853,6 @@ internal object KnownDashes {
 
     fun panelFor(modelId: String?, ctx: Context? = null): Pair<Int, Int>? = find(modelId, ctx)?.panel
     fun profileFor(modelId: String?): BikeProfile? = find(modelId, null)?.profile?.invoke()
+    fun maxFpsFor(modelId: String?, ctx: Context? = null): Int = find(modelId, ctx)?.maxFps ?: 0
     fun matchModeFor(modelId: String?, ctx: Context? = null): MatchAspectMode? = find(modelId, ctx)?.matchMode
 }

@@ -234,6 +234,7 @@
     <string name="doctor_allow">อนุญาต</string>
     <string name="doctor_overlay">แสดงทับแอปอื่นๆ</string>
     <string name="doctor_overlay_desc">ให้แอปกลับมาเชื่อมต่อเองได้ แม้มือถืออยู่ในกระเป๋า</string>
+    <string name="doctor_overlay_restricted">ถ้าสวิตช์เป็นสีเทา: กด ⋮ มุมขวาบน ▸ อนุญาตการตั้งค่าที่ถูกจำกัด แล้วไปเปิด แสดงทับแอปอื่นๆ</string>
     <string name="doctor_official">ไม่มีแอปทางการแย่งการเชื่อมต่อ</string>
     <string name="doctor_official_desc">แอป Zontes / EasyConnection แย่งการเชื่อมต่อกับจอรถ ให้บังคับหยุด หรือถอนออก</string>
     <string name="doctor_force_stop">เปิดหน้าข้อมูลแอป</string>
