@@ -57,17 +57,7 @@
     <string name="ms_stat_maint_over">%1$s overdue</string>
     <string name="ms_help_send_tech">📤 Send problem to technician</string>
     <string name="ms_guide_title">How to use MotoScreen TH</string>
-    <string name="ms_guide_body">First time only
-1. Android Auto settings → tap "Version" 10 times → ⋮ → Developer settings → allow unknown sources.
-2. Pair the phone's Bluetooth with the dash (ICANTRON_BT…). Turn the iPhone's Bluetooth off if it was paired.
-3. On the dash open screen mirroring, tap "Scan QR" in Settings → My bike, pick Zontes 368G.
-
-Every ride
-• Start the bike, open the mirroring page, tap Connect (or let it connect by itself when Bluetooth links).
-• After a phone restart: Android Auto → ⋮ → "Start head unit server".
-• Switching to another dash page (tyre pressure etc.) pauses the picture; come back and it returns.
-
-Something wrong? Tap 🩺 App doctor.</string>
+    <string name="ms_guide_body">First time only\n1. Android Auto settings → tap \"Version\" 10 times → ⋮ → Developer settings → allow unknown sources.\n2. Pair the phone\'s Bluetooth with the dash (ICANTRON_BT…). Turn the iPhone\'s Bluetooth off if it was paired.\n3. On the dash open screen mirroring, tap \"Scan QR\" in Settings → My bike, pick Zontes 368G.\n\nEvery ride\n• Start the bike, open the mirroring page, tap Connect (or let it connect by itself when Bluetooth links).\n• After a phone restart: Android Auto → ⋮ → \"Start head unit server\".\n• Switching to another dash page (tyre pressure etc.) pauses the picture; come back and it returns.\n\nSomething wrong? Tap 🩺 App doctor.</string>
     <string name="ms_setup_done">✅ First-time setup is done · tap to show</string>
     <string name="ms_setup_done_hide">▲ Hide the first-time steps</string>
     <string name="ms_explorer_title">🔬 Dash explorer</string>
