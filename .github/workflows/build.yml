@@ -46,10 +46,17 @@ jobs:
           KEYSTORE_B64: ${{ secrets.DEBUG_KEYSTORE_B64 }}
         run: |
           mkdir -p ~/.android
-          if [ -n "$KEYSTORE_B64" ]; then
-            echo "$KEYSTORE_B64" | base64 -d > ~/.android/debug.keystore
+          # Tolerate secrets pasted from a phone: drop whitespace / line breaks, a pasted
+          # "DEBUG_KEYSTORE_B64" label, and anything before the JKS magic ("/u3+7" = FEEDFEED).
+          KS="$(printf '%s' "$KEYSTORE_B64" | tr -d ' \r\n\t')"
+          KS="${KS#*DEBUG_KEYSTORE_B64}"
+          case "$KS" in *"/u3+7"*) KS="/u3+7${KS#*/u3+7}" ;; esac
+          if [ -n "$KS" ] && printf '%s' "$KS" | base64 -d > ~/.android/debug.keystore 2>/dev/null \
+             && keytool -list -keystore ~/.android/debug.keystore -storepass android >/dev/null 2>&1; then
             keytool -list -v -keystore ~/.android/debug.keystore -storepass android | grep 'SHA256:' | head -1
           else
+            echo "::warning::DEBUG_KEYSTORE_B64 missing or unreadable (len=${#KS}) — using a random key for this build"
+            rm -f ~/.android/debug.keystore
             echo "::warning::DEBUG_KEYSTORE_B64 secret not set — this APK gets a random key and won't install over the previous one"
             keytool -genkeypair -keystore ~/.android/debug.keystore -storetype JKS -alias androiddebugkey \
               -storepass android -keypass android -keyalg RSA -keysize 2048 -validity 10000 \
