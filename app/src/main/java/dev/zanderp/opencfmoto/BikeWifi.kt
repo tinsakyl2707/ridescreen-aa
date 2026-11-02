@@ -69,8 +69,8 @@ object BikeWifi {
     // EasyConn times out ("device is not on the network") and needs a manual restart. Grabbing it back
     // immediately keeps us on the bike's network long enough for the dash to reconnect on its own.
     private const val REJOIN_FAST_MS = 300L
-    private const val REJOIN_BASE_MS = 2500L
-    private const val REJOIN_MAX_MS = 15000L
+    private const val REJOIN_BASE_MS = 400L
+    private const val REJOIN_MAX_MS = 800L
     /** After a failed *first* join (picker canceled / timed out), wait before re-prompting. */
     private const val FIRST_JOIN_RETRY_MS = 4_000L
     /**

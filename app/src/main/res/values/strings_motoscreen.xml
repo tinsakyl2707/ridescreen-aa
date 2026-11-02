@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="th_prep_title">Before you tap Connect</string>
+    <string name="th_prep_1">1. Start the bike and open the dash screen-mirroring page (the one with the QR).</string>
+    <string name="th_prep_2">2. Turn on phone Wi-Fi and Bluetooth.</string>
+    <string name="th_prep_3">3. Just restarted the phone? Android Auto → ⋮ → Start head unit server.</string>
+    <string name="th_prep_note">Tip: keep the phone charging while riding. The first time, allow battery \"Unrestricted\".</string>
+    <string name="ms_hero_tag">● MOTOSCREEN LINK</string>
+    <string name="ms_prep_title">Before you tap Connect</string>
+    <string name="ms_step1">Start the bike and open the dash screen-mirroring page (the one with the QR)</string>
+    <string name="ms_step2">Phone Wi-Fi and Bluetooth ON (Bluetooth paired with the dash)</string>
+    <string name="ms_step3">Just restarted the phone? Android Auto → ⋮ → Start head unit server</string>
+    <string name="ms_quick_title">Quick actions</string>
+    <string name="ms_qr_title">Scan the QR on the dash</string>
+    <string name="doctor_button">🩺 Check my phone automatically</string>
+    <string name="doctor_menu">🩺 App doctor — find the problem</string>
+    <string name="doctor_title">App doctor</string>
+    <string name="doctor_all_ok">Everything looks good. If it still won\'t connect, share the logs.</string>
+    <string name="doctor_found">Found %1$d problem(s). Fix them from the top, then tap Re-check.</string>
+    <string name="doctor_close">Close</string>
+    <string name="doctor_recheck">Re-check</string>
+    <string name="doctor_aa">Android Auto installed (full version)</string>
+    <string name="doctor_aa_fix_desc">Android Auto is missing or is the 1.2 \"stub\". Update it from the Play Store.</string>
+    <string name="doctor_open_store">Open Play Store</string>
+    <string name="doctor_hus">Android Auto head unit server</string>
+    <string name="doctor_hus_desc">After a phone restart: Android Auto → ⋮ → Stop head unit server → Start head unit server.</string>
+    <string name="doctor_wifi">Phone Wi-Fi on</string>
+    <string name="doctor_wifi_desc">Turn Wi-Fi on. You don\'t need to join any network.</string>
+    <string name="doctor_open_settings">Open settings</string>
+    <string name="doctor_bt">Bluetooth paired with the dash</string>
+    <string name="doctor_bt_desc">Pair the phone with the dash Bluetooth (ICANTRON_BT-… on the 368G). Turn off Bluetooth on any other phone that is holding the dash.</string>
+    <string name="doctor_batt">Battery: unrestricted</string>
+    <string name="doctor_batt_desc">Otherwise the phone may kill the projection while you ride.</string>
+    <string name="doctor_allow">Allow</string>
+    <string name="doctor_overlay">Display over other apps</string>
+    <string name="doctor_overlay_desc">Lets the app resume by itself with the phone in your pocket.</string>
+    <string name="doctor_official">No official dash app holding the connection</string>
+    <string name="doctor_official_desc">The Zontes / EasyConnection app grabs the same dash ports. Force stop it (or uninstall it).</string>
+    <string name="doctor_force_stop">Open app info</string>
+    <string name="doctor_log_aa_stall">Android Auto stops after 2 seconds</string>
+    <string name="doctor_log_aa_stall_desc">Seen in the log. Clear Android Auto\'s storage (not \"uninstall updates\"), then turn on developer mode again: Wireless Android Auto + Unknown sources, and Start head unit server.</string>
+    <string name="doctor_open_aa_app">Open Android Auto app info</string>
+    <string name="doctor_log_bt">Bluetooth not paired with the dash (log)</string>
+    <string name="doctor_log_bt_desc">The log shows no paired dash. Pair with ICANTRON_BT-… first.</string>
+    <string name="doctor_log_wifi">Bike Wi-Fi never appeared (log)</string>
+    <string name="doctor_log_wifi_desc">Put the dash on its screen-mirroring page (the QR page). The dash only turns its Wi-Fi on there.</string>
+</resources>

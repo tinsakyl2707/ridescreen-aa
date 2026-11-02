@@ -1,799 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Visual test "verde mate": full-bleed bike photo hero, today's numbers as tiles, two pill
-     shortcuts, everything else under "Más", and the Connect/Disconnect pill pinned at the bottom.
-     Every id the code uses is kept. -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+<LinearLayout android:orientation="vertical" android:id="@+id/main" android:background="@color/bg" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/main_scroll"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:fillViewport="true"
-        android:overScrollMode="ifContentScrolls">
+    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingTop="10.0dip" android:paddingBottom="6.0dip" android:paddingStart="20.0dip" android:paddingEnd="12.0dip">
+        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+            <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:id="@+id/brand_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/brand_wordmark" android:fontFamily="@font/archivo_black" />
+            <TextView android:textSize="11.0sp" android:textColor="@color/text_secondary" android:id="@+id/brand_version" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+        </LinearLayout>
+        <ImageButton android:id="@+id/btn_hero_menu" android:background="@drawable/ms_chip" android:padding="11.0dip" android:layout_width="46.0dip" android:layout_height="46.0dip" android:src="@drawable/ic_settings" android:scaleType="fitCenter" android:contentDescription="@string/main_settings_desc" app:tint="@color/brand_gold" />
+    </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+    <androidx.core.widget.NestedScrollView android:id="@+id/main_scroll" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="0.0dip" android:fillViewport="true" android:layout_weight="1.0" android:overScrollMode="ifContentScrolls">
+        <LinearLayout android:orientation="vertical" android:paddingBottom="16.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingHorizontal="16.0dip">
 
-            <!-- Hero: the active bike's Garage photo, edge to edge. -->
-            <FrameLayout
-                android:id="@+id/hero_card"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@color/surface_high">
-
-                <ImageView
-                    android:id="@+id/hero_placeholder"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_gravity="center"
-                    android:alpha="0.18"
-                    android:contentDescription="@null"
-                    android:src="@drawable/ic_ride"
-                    app:tint="@color/text_secondary" />
-
-                <ImageView
-                    android:id="@+id/hero_photo"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:contentDescription="@null"
-                    android:scaleType="centerCrop" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="96dp"
-                    android:layout_gravity="top"
-                    android:background="@drawable/bg_hero_scrim_top" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_gravity="bottom"
-                    android:background="@drawable/bg_hero_scrim" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="22dp"
-                    android:paddingTop="14dp"
-                    android:paddingEnd="14dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/brand_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/archivo_black"
-                            android:text="@string/brand_wordmark"
-                            android:textColor="@color/text_primary"
-                            android:textSize="19sp" />
-
-                        <TextView
-                            android:id="@+id/brand_version"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="11sp"
-                            tools:text="v2.0.18" />
-                    </LinearLayout>
-
-                    <ImageButton
-                        android:id="@+id/btn_hero_menu"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:background="@drawable/bg_round_glass"
-                        android:contentDescription="@string/main_settings_desc"
-                        android:padding="12dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_settings"
-                        app:tint="@color/text_primary" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|start"
-                    android:layout_marginStart="22dp"
-                    android:layout_marginBottom="18dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/hero_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/archivo_black"
-                        android:maxLines="1"
-                        android:textColor="@color/brand_gold"
-                        android:textSize="46sp"
-                        tools:text="125X" />
-
-                    <TextView
-                        android:id="@+id/hero_sub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:textColor="#E6F1F4EC"
-                        android:textSize="13sp"
-                        tools:text="ZT473788" />
+            <FrameLayout android:id="@+id/hero_card" android:background="@drawable/ms_hero_bg" android:layout_width="fill_parent" android:layout_height="280.0dip" android:layout_marginTop="4.0dip">
+                <ImageView android:layout_gravity="center" android:id="@+id/hero_placeholder" android:layout_width="150.0dip" android:layout_height="150.0dip" android:src="@drawable/ic_ride" android:contentDescription="@null" android:alpha="0.16" app:tint="@color/brand_gold" />
+                <ImageView android:id="@+id/hero_photo" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerCrop" android:contentDescription="@null" />
+                <View android:layout_gravity="bottom" android:background="@drawable/bg_hero_scrim" android:layout_width="fill_parent" android:layout_height="150.0dip" />
+                <TextView android:textSize="11.0sp" android:textColor="@color/brand_gold" android:layout_gravity="top|center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:text="@string/ms_hero_tag" android:fontFamily="@font/archivo_semibold" android:letterSpacing="0.25" />
+                <LinearLayout android:layout_gravity="start|bottom" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="16.0dip" android:layout_marginStart="18.0dip" android:layout_marginEnd="18.0dip">
+                    <TextView android:textSize="42.0sp" android:textColor="@color/text_primary" android:id="@+id/hero_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/archivo_black" />
+                    <TextView android:textSize="13.0sp" android:textColor="@color/brand_gold" android:id="@+id/hero_sub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" />
                 </LinearLayout>
             </FrameLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="16dp"
-                android:paddingTop="6dp"
-                android:paddingBottom="16dp">
-
-                <!-- v2.2 home (proposal A): status + today's numbers in one card. -->
-                <LinearLayout
-                    android:id="@+id/status_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_stat_tile"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/status_icon"
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:contentDescription="@string/main_connection_status"
-                            android:src="@drawable/ic_status_dot" />
-
-                        <TextView
-                            android:id="@+id/status_view"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/archivo_semibold"
-                            android:text="@string/main_ready"
-                            android:textColor="@color/text_primary"
-                            android:textSize="17sp" />
-
-                        <ProgressBar
-                            android:id="@+id/status_progress"
-                            style="?android:attr/progressBarStyleSmall"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:indeterminateTint="@color/brand_orange"
-                            android:visibility="gone" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/bike_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="26dp"
-                        android:layout_marginTop="2dp"
-                        android:text="@string/main_no_bike_paired_yet"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="13sp" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="14dp"
-                        android:background="@color/surface_high" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:baselineAligned="false"
-                        android:gravity="bottom"
-                        android:orientation="horizontal">
-
-                        <!-- v2.3: live speed while projecting (replaces "km/h máx"). -->
-                        <LinearLayout
-                            android:id="@+id/stat_speed_box"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1.3"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:baselineAligned="true"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/stat_speed"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/archivo_black"
-                                    android:includeFontPadding="false"
-                                    android:text="--"
-                                    android:textColor="@color/brand_gold"
-                                    android:textSize="44sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="6dp"
-                                    android:text="km/h"
-                                    android:textColor="?android:attr/textColorSecondary"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-
-                            <TextView
-                                style="@style/HeroStatLabel"
-                                android:text="@string/stat_speed_now" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/stat_km"
-                                style="@style/HeroStatValue"
-                                android:text="--" />
-
-                            <TextView
-                                style="@style/HeroStatLabel"
-                                android:text="@string/stat_km_today" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/stat_max_box"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/stat_max"
-                                style="@style/HeroStatValue"
-                                android:text="--" />
-
-                            <TextView
-                                style="@style/HeroStatLabel"
-                                android:text="@string/stat_max_today" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/stat_clock"
-                                style="@style/HeroStatValue"
-                                android:text="--" />
-
-                            <TextView
-                                android:id="@+id/stat_clock_label"
-                                style="@style/HeroStatLabel"
-                                android:text="@string/stat_clock" />
-                        </LinearLayout>
+            <LinearLayout android:orientation="vertical" android:id="@+id/status_card" android:background="@drawable/ms_panel" android:padding="16.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip">
+                <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <FrameLayout android:background="@drawable/ms_ring" android:layout_width="64.0dip" android:layout_height="64.0dip">
+                        <ImageView android:layout_gravity="center" android:id="@+id/status_icon" android:layout_width="20.0dip" android:layout_height="20.0dip" android:src="@drawable/ic_status_dot" android:contentDescription="@string/main_connection_status" />
+                        <ProgressBar android:layout_gravity="center" android:id="@+id/status_progress" android:visibility="gone" android:layout_width="62.0dip" android:layout_height="62.0dip" android:indeterminateTint="@color/brand_gold" style="?android:progressBarStyle" />
+                    </FrameLayout>
+                    <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="14.0dip">
+                        <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:id="@+id/status_view" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/main_ready" android:fontFamily="@font/archivo_semibold" />
+                        <TextView android:textSize="13.0sp" android:textColor="@color/text_secondary" android:id="@+id/bike_view" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="3.0dip" android:text="@string/main_no_bike_paired_yet" android:lineSpacingExtra="2.0dip" />
                     </LinearLayout>
                 </LinearLayout>
-
-                <!-- v2.3: battery + lock card from the keyless box (read only); only once the PKE code is set. -->
-                <LinearLayout
-                    android:id="@+id/pke_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_stat_tile"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="12dp"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/HeroStatLabel"
-                            android:text="@string/pke_card_title" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:baselineAligned="true"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/pke_volts"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/archivo_black"
-                                android:includeFontPadding="false"
-                                android:text="--"
-                                android:textColor="@color/text_primary"
-                                android:textSize="30sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="5dp"
-                                android:text="V"
-                                android:textColor="@color/text_secondary"
-                                android:textSize="15sp" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/pke_sub"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
+                <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="14.0dip" android:baselineAligned="false">
+                    <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@+id/stat_speed_box" android:background="@drawable/ms_gauge_cell" android:paddingTop="10.0dip" android:paddingBottom="10.0dip" android:visibility="gone" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.3" android:layout_marginEnd="6.0dip">
+                        <TextView android:textSize="32.0sp" android:textColor="@color/brand_gold" android:id="@+id/stat_speed" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:includeFontPadding="false" android:fontFamily="@font/archivo_black" />
+                        <TextView android:text="@string/stat_speed_now" style="@style/HeroStatLabel" />
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/pke_lock"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/archivo_semibold"
-                        android:gravity="center"
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <!-- Android Auto's head unit server isn't running (RideScreen AA v2). -->
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/hus_banner"
-                    style="@style/Card.OpenCfMoto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:visibility="gone"
-                    app:strokeColor="@color/status_busy">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/hus_title"
-                            android:textColor="@color/status_busy"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="@string/hus_body"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="13sp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/hus_open"
-                                style="@style/Widget.OpenCfMoto.Button.Connect"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="6dp"
-                                android:layout_weight="1"
-                                android:text="@string/hus_open" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/hus_how"
-                                style="@style/Widget.OpenCfMoto.Segment"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="6dp"
-                                android:layout_weight="1"
-                                android:text="@string/hus_how" />
-                        </LinearLayout>
+                    <LinearLayout android:gravity="center" android:orientation="vertical" android:background="@drawable/ms_gauge_cell" android:paddingTop="10.0dip" android:paddingBottom="10.0dip" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginEnd="6.0dip">
+                        <TextView android:id="@+id/stat_km" android:text="--" style="@style/HeroStatValue" />
+                        <TextView android:text="@string/stat_km_today" style="@style/HeroStatLabel" />
                     </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Connected: what you use while riding. Tiles are filled in by MainActivity.setupHomeTiles(). -->
-                <LinearLayout
-                    android:id="@+id/live_section"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:baselineAligned="false"
-                        android:orientation="horizontal">
-
-                        <LinearLayout android:id="@+id/btn_park_photo" style="@style/HomeTile.Big" android:layout_marginEnd="5dp" />
-                        <LinearLayout android:id="@+id/btn_controls" style="@style/HomeTile.Big" android:layout_marginStart="5dp" />
+                    <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@+id/stat_max_box" android:background="@drawable/ms_gauge_cell" android:paddingTop="10.0dip" android:paddingBottom="10.0dip" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginEnd="6.0dip">
+                        <TextView android:id="@+id/stat_max" android:text="--" style="@style/HeroStatValue" />
+                        <TextView android:text="@string/stat_max_today" style="@style/HeroStatLabel" />
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:baselineAligned="false"
-                        android:orientation="horizontal">
-
-                        <LinearLayout android:id="@+id/btn_hud_view" style="@style/HomeTile.Big" android:layout_marginEnd="5dp" />
-                        <LinearLayout android:id="@+id/btn_trip" style="@style/HomeTile.Big" android:layout_marginStart="5dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <EditText
-                            android:id="@+id/et_destination"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:hint="@string/main_search_a_place_or_address"
-                            android:imeOptions="actionGo"
-                            android:inputType="textPostalAddress"
-                            android:maxLines="1"
-                            android:textColor="@color/text_primary"
-                            android:textColorHint="@color/text_secondary" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_navigate"
-                            style="@style/Widget.OpenCfMoto.Segment"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="@string/main_go" />
-                    </LinearLayout>
-
-                    <!-- v2.3: one-tap destinations (home, work, upcoming calendar events with a place). -->
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
-                        android:scrollbars="none">
-
-                        <LinearLayout
-                            android:id="@+id/quick_dest"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal" />
-                    </HorizontalScrollView>
-                </LinearLayout>
-
-                <!-- Parked: where the bike is, with the photo (RideScreen AA v2.2 card). -->
-                <LinearLayout
-                    android:id="@+id/btn_parked"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/bg_stat_tile"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="14dp"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:id="@+id/parked_thumb"
-                        android:layout_width="76dp"
-                        android:layout_height="76dp"
-                        android:background="@color/surface_high"
-                        android:contentDescription="@null"
-                        android:scaleType="centerCrop" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="14dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/parked_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/archivo_semibold"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            android:textColor="@color/text_primary"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:id="@+id/parked_sub"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="13sp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/parked_walk"
-                                style="@style/Widget.OpenCfMoto.Segment"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="8dp"
-                                android:minWidth="0dp"
-                                android:paddingHorizontal="12dp"
-                                android:text="@string/parked_walk"
-                                android:textSize="13sp" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/parked_view_photo"
-                                style="@style/Widget.OpenCfMoto.Segment"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:minWidth="0dp"
-                                android:paddingHorizontal="12dp"
-                                android:text="@string/home_view_photo"
-                                android:textSize="13sp" />
-                        </LinearLayout>
+                    <LinearLayout android:gravity="center" android:orientation="vertical" android:background="@drawable/ms_gauge_cell" android:paddingTop="10.0dip" android:paddingBottom="10.0dip" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+                        <TextView android:id="@+id/stat_clock" android:text="--" style="@style/HeroStatValue" />
+                        <TextView android:id="@+id/stat_clock_label" android:text="@string/stat_clock" style="@style/HeroStatLabel" />
                     </LinearLayout>
                 </LinearLayout>
-
-                <!-- Six shortcuts, each with a live detail line (both states). -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal">
-
-                    <LinearLayout android:id="@+id/btn_trips_list" style="@style/HomeTile" android:layout_marginEnd="5dp" />
-                    <LinearLayout android:id="@+id/btn_fuel" style="@style/HomeTile" android:layout_marginHorizontal="5dp" />
-                    <LinearLayout android:id="@+id/btn_maint" style="@style/HomeTile" android:layout_marginStart="5dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal">
-
-                    <LinearLayout android:id="@+id/btn_traffic_lights" style="@style/HomeTile" android:layout_marginEnd="5dp" />
-                    <LinearLayout android:id="@+id/btn_live" style="@style/HomeTile" android:layout_marginHorizontal="5dp" />
-                    <LinearLayout android:id="@+id/btn_help" style="@style/HomeTile" android:layout_marginStart="5dp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/more_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="22dp"
-                    android:letterSpacing="0.12"
-                    android:text="@string/main_more"
-                    android:textAllCaps="true"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="12sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btn_gpx" style="@style/HomeMore" android:text="@string/gpx_map" />
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btn_mirror_start" style="@style/HomeMore" android:text="@string/main_mirror" />
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btn_aa_start" style="@style/HomeMore" android:text="@string/main_scan" />
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btn_devices" style="@style/HomeMore" android:text="@string/garage_garage" />
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btn_controls_more" style="@style/HomeMore" android:text="@string/controls_controls" />
-                    <com.google.android.material.button.MaterialButton android:id="@+id/btn_setup" style="@style/HomeMore" android:text="@string/home_settings_short" />
-                </LinearLayout>
-
-                <!-- Hidden since v2.2 (kept for code refs): Stop merged into Connect; logs/tips live in Help. -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_aa_stop"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:text="@string/main_stop"
-                    android:visibility="gone" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_toggle_log"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:text="@string/main_logs"
-                    android:visibility="gone" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/tips_panel"
-                    style="@style/Card.OpenCfMoto"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:letterSpacing="0.08"
-                            android:text="@string/main_rider_tips"
-                            android:textAllCaps="true"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:lineSpacingExtra="4dp"
-                            android:text="@string/main_connect_start_android_auto_on_the_dash_becomes_s"
-                            android:textColor="@color/text_primary"
-                            android:textSize="14sp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_about_page"
-                            style="@style/Widget.OpenCfMoto.Segment"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:text="@string/main_about_credits" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_check_update"
-                            style="@style/Widget.OpenCfMoto.Segment"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="@string/main_check_for_update" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_problem_report"
-                            style="@style/Widget.OpenCfMoto.Segment"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
-                            android:text="@string/main_report_a_problem" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_donate"
-                            style="@style/Widget.OpenCfMoto.Button.Text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="@string/support_button"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/log_panel"
-                    style="@style/Card.OpenCfMoto.Log"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:minHeight="220dp"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:letterSpacing="0.08"
-                                android:text="@string/main_diagnostics"
-                                android:textAllCaps="true"
-                                android:textColor="@color/text_secondary"
-                                android:textSize="12sp" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_share_log"
-                                style="@style/Widget.OpenCfMoto.Button.Text"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:minWidth="0dp"
-                                android:text="@string/main_share" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/btn_clear"
-                                style="@style/Widget.OpenCfMoto.Button.Text"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:minWidth="0dp"
-                                android:text="@string/main_clear" />
-                        </LinearLayout>
-
-                        <ScrollView
-                            android:id="@+id/log_scroll"
-                            android:layout_width="match_parent"
-                            android:layout_height="220dp"
-                            android:layout_marginTop="4dp"
-                            android:background="@color/bg"
-                            android:fillViewport="true"
-                            android:nestedScrollingEnabled="true"
-                            android:padding="8dp">
-
-                            <TextView
-                                android:id="@+id/log_view"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:contentDescription="@string/main_logs"
-                                android:fontFamily="monospace"
-                                android:textColor="#9CDCFE"
-                                android:textIsSelectable="true"
-                                android:textSize="11sp" />
-                        </ScrollView>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
+
+            <LinearLayout android:orientation="vertical" android:background="@drawable/ms_panel_accent" android:paddingTop="14.0dip" android:paddingBottom="14.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:paddingStart="18.0dip" android:paddingEnd="14.0dip">
+                <TextView android:textSize="15.0sp" android:textColor="@color/brand_gold" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/ms_prep_title" android:fontFamily="@font/archivo_semibold" />
+                <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip">
+                    <TextView android:textSize="13.0sp" android:textColor="@color/brand_gold" android:gravity="center" android:background="@drawable/ms_step_num" android:layout_width="28.0dip" android:layout_height="28.0dip" android:text="1" android:fontFamily="@font/archivo_black" />
+                    <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/ms_step1" android:layout_weight="1.0" android:layout_marginStart="12.0dip" android:lineSpacingExtra="2.0dip" />
+                </LinearLayout>
+                <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip">
+                    <TextView android:textSize="13.0sp" android:textColor="@color/brand_gold" android:gravity="center" android:background="@drawable/ms_step_num" android:layout_width="28.0dip" android:layout_height="28.0dip" android:text="2" android:fontFamily="@font/archivo_black" />
+                    <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/ms_step2" android:layout_weight="1.0" android:layout_marginStart="12.0dip" android:lineSpacingExtra="2.0dip" />
+                </LinearLayout>
+                <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip">
+                    <TextView android:textSize="13.0sp" android:textColor="@color/brand_gold" android:gravity="center" android:background="@drawable/ms_step_num" android:layout_width="28.0dip" android:layout_height="28.0dip" android:text="3" android:fontFamily="@font/archivo_black" />
+                    <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/ms_step3" android:layout_weight="1.0" android:layout_marginStart="12.0dip" android:lineSpacingExtra="2.0dip" />
+                </LinearLayout>
+                <TextView android:textSize="12.0sp" android:textColor="@color/text_secondary" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:text="@string/th_prep_note" android:lineSpacingExtra="2.0dip" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btn_doctor" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:text="@string/doctor_button" app:icon="@drawable/ic_tune" style="@style/Widget.OpenCfMoto.Segment" />
+            </LinearLayout>
+
+            <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@+id/pke_card" android:background="@drawable/ms_panel" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:paddingHorizontal="16.0dip" android:paddingVertical="12.0dip">
+                <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+                    <TextView android:text="@string/pke_card_title" style="@style/HeroStatLabel" />
+                    <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:baselineAligned="true">
+                        <TextView android:textSize="30.0sp" android:textColor="@color/text_primary" android:id="@+id/pke_volts" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:includeFontPadding="false" android:fontFamily="@font/archivo_black" />
+                        <TextView android:textSize="15.0sp" android:textColor="@color/text_secondary" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V" android:layout_marginStart="5.0dip" />
+                    </LinearLayout>
+                    <TextView android:textSize="12.0sp" android:textColor="@color/text_secondary" android:id="@+id/pke_sub" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                </LinearLayout>
+                <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:gravity="center" android:id="@+id/pke_lock" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="@font/archivo_semibold" />
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView android:id="@+id/hus_banner" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" app:strokeColor="@color/status_busy" style="@style/Card.OpenCfMoto">
+                <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView android:textSize="15.0sp" android:textStyle="bold" android:textColor="@color/status_busy" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/hus_title" />
+                    <TextView android:textSize="13.0sp" android:textColor="@color/text_secondary" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dip" android:text="@string/hus_body" android:lineSpacingExtra="2.0dip" />
+                    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip">
+                        <com.google.android.material.button.MaterialButton android:id="@+id/hus_open" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/hus_open" android:layout_weight="1.0" android:layout_marginEnd="6.0dip" style="@style/Widget.OpenCfMoto.Button.Connect" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/hus_how" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/hus_how" android:layout_weight="1.0" android:layout_marginStart="6.0dip" style="@style/Widget.OpenCfMoto.Segment" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout android:orientation="vertical" android:id="@+id/live_section" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:baselineAligned="false">
+                    <LinearLayout android:id="@+id/btn_park_photo" android:layout_marginEnd="5.0dip" style="@style/HomeTile.Big" />
+                    <LinearLayout android:id="@+id/btn_controls" android:layout_marginStart="5.0dip" style="@style/HomeTile.Big" />
+                </LinearLayout>
+                <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:baselineAligned="false">
+                    <LinearLayout android:id="@+id/btn_hud_view" android:layout_marginEnd="5.0dip" style="@style/HomeTile.Big" />
+                    <LinearLayout android:id="@+id/btn_trip" android:layout_marginStart="5.0dip" style="@style/HomeTile.Big" />
+                </LinearLayout>
+                <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:background="@drawable/ms_chip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:paddingStart="12.0dip" android:paddingEnd="6.0dip">
+                    <EditText android:textColor="@color/text_primary" android:textColorHint="@color/text_secondary" android:id="@+id/et_destination" android:background="@null" android:layout_width="0.0dip" android:layout_height="52.0dip" android:hint="@string/main_search_a_place_or_address" android:maxLines="1" android:layout_weight="1.0" android:inputType="textPostalAddress" android:imeOptions="actionGo" />
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btn_navigate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/main_go" android:layout_marginStart="8.0dip" style="@style/Widget.OpenCfMoto.Segment" />
+                </LinearLayout>
+                <HorizontalScrollView android:scrollbars="none" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dip">
+                    <LinearLayout android:orientation="horizontal" android:id="@+id/quick_dest" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@+id/btn_parked" android:background="@drawable/ms_panel" android:padding="14.0dip" android:focusable="true" android:visibility="gone" android:clickable="true" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:foreground="?selectableItemBackground">
+                <ImageView android:id="@+id/parked_thumb" android:background="@color/surface_high" android:layout_width="72.0dip" android:layout_height="72.0dip" android:scaleType="centerCrop" android:contentDescription="@null" />
+                <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="14.0dip">
+                    <TextView android:textSize="16.0sp" android:textColor="@color/text_primary" android:ellipsize="end" android:id="@+id/parked_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/archivo_semibold" />
+                    <TextView android:textSize="13.0sp" android:textColor="@color/text_secondary" android:ellipsize="end" android:id="@+id/parked_sub" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="2.0dip" android:maxLines="1" />
+                    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="4.0dip">
+                        <com.google.android.material.button.MaterialButton android:textSize="13.0sp" android:id="@+id/parked_walk" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="0.0dip" android:text="@string/parked_walk" android:layout_marginEnd="8.0dip" android:paddingHorizontal="12.0dip" style="@style/Widget.OpenCfMoto.Segment" />
+                        <com.google.android.material.button.MaterialButton android:textSize="13.0sp" android:id="@+id/parked_view_photo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="0.0dip" android:text="@string/home_view_photo" android:paddingHorizontal="12.0dip" style="@style/Widget.OpenCfMoto.Segment" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout android:orientation="horizontal" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:baselineAligned="false">
+                <LinearLayout android:id="@+id/btn_trips_list" android:layout_marginEnd="5.0dip" style="@style/HomeTile" />
+                <LinearLayout android:id="@+id/btn_fuel" android:layout_marginHorizontal="5.0dip" style="@style/HomeTile" />
+                <LinearLayout android:id="@+id/btn_maint" android:layout_marginStart="5.0dip" style="@style/HomeTile" />
+            </LinearLayout>
+
+            <TextView android:textSize="11.0sp" android:textColor="@color/text_secondary" android:id="@+id/more_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20.0dip" android:text="@string/ms_quick_title" android:textAllCaps="true" android:letterSpacing="0.15" android:layout_marginStart="4.0dip" />
+            <LinearLayout android:orientation="horizontal" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:baselineAligned="false">
+                <LinearLayout android:id="@+id/btn_traffic_lights" style="@style/HomeTile" />
+                <LinearLayout android:id="@+id/btn_live" style="@style/HomeTile" />
+            </LinearLayout>
+            <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:baselineAligned="false">
+                <com.google.android.material.button.MaterialButton android:id="@+id/btn_gpx" android:visibility="gone" android:text="@string/gpx_map" style="@style/HomeMore" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btn_mirror_start" android:visibility="gone" android:text="@string/main_mirror" style="@style/HomeMore" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btn_aa_start" android:layout_marginEnd="4.0dip" android:text="@string/main_scan" app:icon="@drawable/ic_qr" app:iconTint="@color/brand_gold" app:backgroundTint="#ff0a1118" app:strokeColor="@color/outline" app:strokeWidth="1.0dip" app:cornerRadius="8.0dip" app:iconSize="26.0dip" android:layout_height="96.0dip" android:insetTop="0.0dip" android:insetBottom="0.0dip" style="@style/HomeMore" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btn_devices" android:layout_marginHorizontal="4.0dip" android:text="@string/garage_garage" app:icon="@drawable/ic_ride" app:iconTint="@color/brand_gold" app:backgroundTint="#ff0a1118" app:strokeColor="@color/outline" app:strokeWidth="1.0dip" app:cornerRadius="8.0dip" app:iconSize="26.0dip" android:layout_height="96.0dip" android:insetTop="0.0dip" android:insetBottom="0.0dip" style="@style/HomeMore" />
+                <LinearLayout android:id="@+id/btn_help" android:layout_height="96.0dip" android:minHeight="0.0dip" android:paddingTop="8.0dip" android:paddingBottom="6.0dip" android:layout_marginHorizontal="4.0dip" android:background="@drawable/ms_chip" style="@style/HomeTile" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btn_controls_more" android:visibility="gone" android:text="@string/controls_controls" style="@style/HomeMore" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btn_setup" android:layout_marginStart="4.0dip" android:text="@string/home_settings_short" app:icon="@drawable/ic_settings" app:iconTint="@color/brand_gold" app:backgroundTint="#ff0a1118" app:strokeColor="@color/outline" app:strokeWidth="1.0dip" app:cornerRadius="8.0dip" app:iconSize="26.0dip" android:layout_height="96.0dip" android:insetTop="0.0dip" android:insetBottom="0.0dip" style="@style/HomeMore" />
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton android:id="@+id/btn_aa_stop" android:visibility="gone" android:layout_width="0.0dip" android:layout_height="0.0dip" android:text="@string/main_stop" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/btn_toggle_log" android:visibility="gone" android:layout_width="0.0dip" android:layout_height="0.0dip" android:text="@string/main_logs" />
+
+            <com.google.android.material.card.MaterialCardView android:id="@+id/tips_panel" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" style="@style/Card.OpenCfMoto">
+                <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView android:textSize="12.0sp" android:textColor="@color/text_secondary" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/main_rider_tips" android:textAllCaps="true" android:letterSpacing="0.08" />
+                    <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:text="@string/main_connect_start_android_auto_on_the_dash_becomes_s" android:lineSpacingExtra="4.0dip" />
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btn_about_page" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:text="@string/main_about_credits" style="@style/Widget.OpenCfMoto.Segment" />
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btn_check_update" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dip" android:text="@string/main_check_for_update" style="@style/Widget.OpenCfMoto.Segment" />
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btn_problem_report" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dip" android:text="@string/main_report_a_problem" style="@style/Widget.OpenCfMoto.Segment" />
+                    <com.google.android.material.button.MaterialButton android:textSize="13.0sp" android:id="@+id/btn_donate" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:text="@string/support_button" style="@style/Widget.OpenCfMoto.Button.Text" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView android:id="@+id/log_panel" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:minHeight="220.0dip" style="@style/Card.OpenCfMoto.Log">
+                <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                        <TextView android:textSize="12.0sp" android:textColor="@color/text_secondary" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/main_diagnostics" android:layout_weight="1.0" android:textAllCaps="true" android:letterSpacing="0.08" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btn_share_log" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="0.0dip" android:text="@string/main_share" style="@style/Widget.OpenCfMoto.Button.Text" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btn_clear" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="0.0dip" android:text="@string/main_clear" style="@style/Widget.OpenCfMoto.Button.Text" />
+                    </LinearLayout>
+                    <ScrollView android:id="@+id/log_scroll" android:background="@color/bg" android:padding="8.0dip" android:layout_width="fill_parent" android:layout_height="220.0dip" android:layout_marginTop="4.0dip" android:fillViewport="true" android:nestedScrollingEnabled="true">
+                        <TextView android:textSize="11.0sp" android:textColor="#ff9cdcfe" android:id="@+id/log_view" android:layout_width="fill_parent" android:layout_height="wrap_content" android:contentDescription="@string/main_logs" android:textIsSelectable="true" android:fontFamily="monospace" />
+                    </ScrollView>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Connect becomes Disconnect while linking or projecting. Pinned like a thumb button. -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_connect"
-        style="@style/Widget.OpenCfMoto.Button.Connect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="14dp"
-        android:text="@string/main_connect" />
+    <com.google.android.material.button.MaterialButton android:id="@+id/btn_connect" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dip" android:layout_marginBottom="14.0dip" android:minHeight="68.0dip" android:textSize="19.0sp" android:text="@string/main_connect" android:layout_marginHorizontal="16.0dip" style="@style/Widget.OpenCfMoto.Button.Connect" />
 </LinearLayout>

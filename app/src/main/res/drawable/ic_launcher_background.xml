@@ -13,7 +13,7 @@
                 android:centerY="32"
                 android:gradientRadius="88"
                 android:startColor="#31443A"
-                android:endColor="#1A231D" />
+                android:endColor="#070b10" />
         </aapt:attr>
     </path>
 </vector>

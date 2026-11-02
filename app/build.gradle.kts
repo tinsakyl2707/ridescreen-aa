@@ -19,7 +19,7 @@ android {
         applicationId = "dev.zanderp.opencfmoto"
         minSdk = 29
         targetSdk = 36
-        versionCode = 77
+        versionCode = 100
         // Fork builds: CI passes -PversionSuffix (e.g. "-zontes2" for a release, "-dev" otherwise) so
         // the About screen and the log's [BUILD] line tell which fork build is installed.
         // RideScreen AA: CI passes -PappVersion (from the release tag, e.g. "1", "1.1") and
@@ -69,6 +69,8 @@ android {
         create("github") {
             dimension = "store"
             isDefault = true
+            // MotoScreen TH: own package so it installs next to RideScreen AA.
+            applicationId = "th.motoscreen.app"
             buildConfigField("String", "STORE", "\"github\"")
             buildConfigField("boolean", "SELF_UPDATE", "true")
             buildConfigField("boolean", "EXTERNAL_DONATIONS", "true")

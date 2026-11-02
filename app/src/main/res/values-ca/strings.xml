@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RideScreen AA</string>
+    <string name="app_name">MotoScreen TH</string>
     <string name="about_copyright">© 2026 Alexandru</string>
     <string name="about_copyright_body">Mantingut per Alexandru (zanderp). Programari gratuït sota GNU AGPL v3 o posterior: consulteu LICÈNCIA i AVÍS al repositori per obtenir el text complet de drets d\'autor i atribució.</string>
     <string name="about_license_body">Podeu utilitzar, estudiar, compartir i modificar aquesta aplicació segons l\'AGPL. Si redistribuïu una versió modificada (fins i tot com a servei de xarxa), heu d\'oferir el codi font corresponent complet sota la mateixa llicència.</string>

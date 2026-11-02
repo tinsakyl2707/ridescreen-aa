@@ -994,6 +994,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.btn_problem_report).setOnClickListener { reportProblem() }
         findViewById<View>(R.id.btn_donate).setOnClickListener { Support.open(this) }
         findViewById<View>(R.id.btn_fuel)?.setOnClickListener { FuelActivity.start(this) }
+        findViewById<View>(R.id.btn_doctor)?.setOnClickListener { Doctor.show(this) }
         findViewById<View>(R.id.btn_help)?.setOnClickListener {
             HelpMenu.show(this, shareLogs = { shareLog() }, reportProblem = { reportProblem() }, extras = helpExtras())
         }
@@ -1056,6 +1057,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Support.onResume(this)
+        Doctor.maybeAskBattery(this)
         renderQuickDestinations()
         // Back from the app's permission page / Bluetooth / Wi‑Fi settings: carry on with Connect.
         if (pendingAaQr != null && dev.zanderp.opencfmoto.aa.AaSelfMode.canAttemptHur(this) &&
@@ -1481,7 +1483,7 @@ class MainActivity : AppCompatActivity() {
         buildTile(R.id.btn_maint, "🔧", 0xFF4FB6A6.toInt(), getString(R.string.home_tile_maint))
         buildTile(R.id.btn_traffic_lights, "🚦", 0xFFE05A5A.toInt(), getString(R.string.home_tile_tl))
         buildTile(R.id.btn_live, "📍", 0xFF5FD07A.toInt(), getString(R.string.home_tile_live))
-        buildTile(R.id.btn_help, "❓", 0xFFA98BE0.toInt(), getString(R.string.home_tile_help), getString(R.string.home_tile_help_sub))
+        buildTile(R.id.btn_help, "💬", 0xFFA98BE0.toInt(), getString(R.string.home_tile_help), getString(R.string.home_tile_help_sub))
         buildTile(R.id.btn_park_photo, "📸", 0xFFD1A955.toInt(), getString(R.string.home_big_park), getString(R.string.home_big_park_sub), big = true)
         buildTile(R.id.btn_controls, "🎮", 0xFF5B8DEF.toInt(), getString(R.string.controls_controls), getString(R.string.home_big_controls_sub), big = true)
         buildTile(R.id.btn_hud_view, "🖥️", 0xFF4FB6A6.toInt(), getString(R.string.hud_dash_view), getString(R.string.home_big_hud_sub), big = true)
@@ -1500,6 +1502,7 @@ class MainActivity : AppCompatActivity() {
 
     /** Extra entries for ❓ Help: the bits that used to sit at the bottom of the home screen. */
     private fun helpExtras(): List<Pair<String, () -> Unit>> = buildList {
+        add(getString(R.string.doctor_menu) to { Doctor.show(this@MainActivity); Unit })
         add(getString(if (logPanel.visibility == View.VISIBLE) R.string.main_hide_logs else R.string.help_view_logs) to { toggleLogBtn.performClick(); Unit })
         add(getString(R.string.help_about) to { AboutActivity.start(this@MainActivity); Unit })
         if (BuildConfig.SELF_UPDATE) add(getString(R.string.help_check_update) to { checkUpdateManual(); Unit })
@@ -1522,7 +1525,7 @@ class MainActivity : AppCompatActivity() {
         val live = sessionAlive(phase)
         findViewById<View?>(R.id.live_section)?.visibility = if (live) View.VISIBLE else View.GONE
         findViewById<View?>(R.id.hero_card)?.let { hero ->
-            val h = ((if (live) 190 else 280) * resources.displayMetrics.density).toInt()
+            val h = ((if (live) 170 else 210) * resources.displayMetrics.density).toInt()
             if (hero.layoutParams.height != h) { hero.layoutParams.height = h; hero.requestLayout() }
         }
         findViewById<TextView?>(R.id.hero_name)?.textSize = if (live) 34f else 46f

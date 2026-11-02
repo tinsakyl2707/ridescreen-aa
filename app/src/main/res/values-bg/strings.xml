@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Draft from sashop2001/APRideScreen AA — improve via PR: docs/TRANSLATIONS.md -->
 <resources>
-    <string name="app_name">RideScreen AA</string>
+    <string name="app_name">MotoScreen TH</string>
     <string name="about_copyright">© 2026 Alexandru</string>
     <string name="about_copyright_body">Поддържа се от Alexandru (zanderp). Безплатен софтуер под GNU AGPL v3 или по-нова версия — вижте LICENSE и NOTICE в хранилището за пълния текст относно авторските права.</string>
     <string name="about_license_body">Можете да използвате, изучавате, споделяте и модифицирате това приложение според AGPL. Ако разпространявате модифицирана версия (включително като мрежова услуга), трябва да предложите пълния съответен изходен код под същия лиценз.</string>
