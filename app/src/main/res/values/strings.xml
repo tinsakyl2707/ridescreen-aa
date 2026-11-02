@@ -535,7 +535,7 @@
     <string name="conn_mirroring">Mirroring screen to dash</string>
     <string name="conn_reconnecting">Link dropped — reconnecting…</string>
     <string name="conn_waiting_for_bike">Bike out of range — waiting…</string>
-    <string name="conn_stopped">Stopped</string>
+    <string name="conn_stopped">Ready to connect</string>
     <string name="conn_error">Error — see logs</string>
     <string name="conn_detail_connect_failed">Connect failed — see Logs / Share Logs</string>
     <string name="conn_detail_auto_connect_failed">Auto-connect failed — see Logs</string>

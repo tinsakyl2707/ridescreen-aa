@@ -67,7 +67,7 @@
     <string name="conn_mirroring">กำลังฉายหน้าจอมือถือขึ้นจอรถ</string>
     <string name="conn_reconnecting">การเชื่อมต่อหลุด — กำลังต่อใหม่…</string>
     <string name="conn_waiting_for_bike">รถอยู่นอกระยะ — กำลังรอ…</string>
-    <string name="conn_stopped">หยุดแล้ว</string>
+    <string name="conn_stopped">พร้อมเชื่อมต่อ</string>
     <string name="conn_error">❌ เชื่อมต่อไม่สำเร็จ — อ่านวิธีแก้ด้านล่าง</string>
     <string name="conn_detail_connect_failed">เชื่อมต่อไม่สำเร็จ — กด ช่วยเหลือ → แชร์บันทึก ส่งให้คนช่วยดู</string>
     <string name="conn_detail_auto_connect_failed">เชื่อมต่ออัตโนมัติไม่สำเร็จ — กด \"เชื่อมต่อ\" อีกครั้ง</string>
@@ -101,7 +101,7 @@
     <string name="mic_perm_not_now">ไว้ทีหลัง</string>
     <string name="mic_perm_settings">เปิดการตั้งค่า</string>
     <string name="qr_point_the_camera_at_the_bike_s_motoplay_qr_if_it">ส่องกล้องไปที่ QR บนจอรถ\n\nต้องเป็น QR ในหน้า \"ฉายหน้าจอ\" ไม่ใช่ QR ในหน้าข้อมูลรถ</string>
-    <string name="qr_from_photo">สแกน QR จากรูปภาพ</string>
+    <string name="qr_from_photo">สแกนจากรูปภาพ</string>
     <string name="widget_connect_already">เชื่อมต่ออยู่แล้ว</string>
     <string name="widget_connect_no_bike">ยังไม่มีรถที่บันทึกไว้ — เปิดแอปแล้วเชื่อมต่อครั้งแรกก่อน</string>
     <string name="widget_connect_starting">กำลังเชื่อมต่อ…</string>
@@ -110,7 +110,7 @@
     <string name="bike_picker_menu">เลือกรุ่นรถ…</string>
     <string name="help_pill">❓ ช่วยเหลือ</string>
     <string name="help_title">ช่วยเหลือ</string>
-    <string name="help_guide">📖 คู่มือติดตั้ง</string>
+    <string name="help_guide">📖 วิธีใช้งาน</string>
     <string name="help_share_logs">📤 แชร์บันทึก (ส่งให้คนช่วยดูปัญหา)</string>
     <string name="help_whats_new">✨ มีอะไรใหม่</string>
     <string name="help_report">🐞 แจ้งปัญหา</string>
@@ -120,8 +120,8 @@
     <string name="help_interfaces">💡 ดูหน้าจอเดิมของรถระหว่างเชื่อมต่อ</string>
     <string name="help_interfaces_title">💡 ดูหน้าจอเดิมของรถระหว่างเชื่อมต่อ</string>
     <string name="help_interfaces_body">เชื่อมต่อที่หน้า \"ฉายหน้าจอ\" บนจอรถตามปกติ เมื่อ Android Auto ขึ้นแล้ว จะสลับไปหน้าอื่นของจอรถก็ได้ แอปยังเชื่อมต่ออยู่ กลับมาหน้าฉายหน้าจอเมื่อไหร่ Android Auto ก็ขึ้นทันที</string>
-    <string name="setup_setup_settings">ตั้งค่าครั้งแรก</string>
-    <string name="setup_a_one_time_setup_so_android_auto_can_project_to_">ทำ 3 ขั้นตอนนี้ครั้งเดียว แล้วกลับไปกด \"เชื่อมต่อ\" ที่หน้าหลัก</string>
+    <string name="setup_setup_settings">ตั้งค่า</string>
+    <string name="setup_a_one_time_setup_so_android_auto_can_project_to_">ปรับการทำงานของแอปและภาพบนจอรถ</string>
     <string name="setup_get_started">เริ่มต้นใช้งาน</string>
     <string name="setup_1_android_auto">1. Android Auto</string>
     <string name="setup_android_auto_runs_maps_waze_opencfmoto_relays_it">แอปนี้ใช้ Android Auto ในมือถือ ถ้าเวอร์ชันมีคำว่า \"stub\" ให้เข้า Play Store แล้วกดอัปเดต Android Auto ก่อน</string>

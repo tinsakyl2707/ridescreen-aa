@@ -115,6 +115,7 @@ class QrScanActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btn_zoom_1x).setOnClickListener { setZoom(1f) }
         findViewById<Button>(R.id.btn_zoom_2x).setOnClickListener { setZoom(2f) }
         findViewById<Button>(R.id.btn_zoom_3x).setOnClickListener { setZoom(3f) }
+        markZoom(1f)
     }
 
     private fun setZoom(ratio: Float) {
@@ -122,6 +123,21 @@ class QrScanActivity : AppCompatActivity() {
         val state = cam.cameraInfo.zoomState.value ?: return
         val clamped = ratio.coerceIn(state.minZoomRatio, state.maxZoomRatio)
         cam.cameraControl.setZoomRatio(clamped)
+        markZoom(ratio)
+    }
+
+    /** Selected zoom = filled pill, the others outlined, so the rider can see which one is on. */
+    private fun markZoom(ratio: Float) {
+        val on = androidx.core.content.ContextCompat.getColor(this, R.color.brand_gold)
+        val off = androidx.core.content.ContextCompat.getColor(this, R.color.surface_high)
+        val onText = androidx.core.content.ContextCompat.getColor(this, R.color.on_brand)
+        val offText = androidx.core.content.ContextCompat.getColor(this, R.color.text_primary)
+        listOf(R.id.btn_zoom_1x to 1f, R.id.btn_zoom_2x to 2f, R.id.btn_zoom_3x to 3f).forEach { (id, r) ->
+            val b = findViewById<Button?>(id) ?: return@forEach
+            val sel = r == ratio
+            b.backgroundTintList = android.content.res.ColorStateList.valueOf(if (sel) on else off)
+            b.setTextColor(if (sel) onText else offText)
+        }
     }
 
     private fun decodePhoto(uri: Uri) {

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- MotoScreen TH v5 · Thai for the screens riders actually open (settings, trips, maintenance, fit, parking). -->
+<resources>
+    <!-- Settings -->
+    <string name="pref_vq_smooth">ประหยัดเน็ต (ภาพนุ่มขึ้น)</string>
+    <string name="pref_vq_balanced">สมดุล (แนะนำ)</string>
+    <string name="pref_vq_sharp">คมขึ้น — ใช้ข้อมูลมากขึ้น จอรถอาจรับไม่ทัน</string>
+    <string name="pref_fit_fill">เต็มจอ — ขอบอาจโดนตัดนิดหน่อย</string>
+    <string name="pref_fit_fit">พอดีจอ — เห็นครบ มีขอบดำ</string>
+    <string name="pref_fit_stretch">ยืด — เต็มจอ ภาพเพี้ยนเล็กน้อย</string>
+    <string name="pref_power_auto">อัตโนมัติ — ปรับตามความร้อนและสัญญาณ</string>
+    <string name="pref_power_smooth">ลื่น — 30 fps</string>
+    <string name="pref_power_balanced">สมดุล — 24 fps</string>
+    <string name="pref_power_saver">ประหยัด — 20 fps</string>
+    <string name="setup_seamless_resume_enabled">✓ เปิดการต่อกลับอัตโนมัติแล้ว</string>
+    <string name="setup_bt_no_bluetooth">มือถือเครื่องนี้ไม่มีบลูทูธ</string>
+    <string name="setup_bt_off">บลูทูธปิดอยู่ — เปิดแล้วจับคู่กับรถ</string>
+    <string name="setup_bt_connected">เชื่อมกับ %1$s แล้ว — ปุ่มแฮนด์และการโทรใช้ได้</string>
+    <string name="setup_bt_audio_device">อุปกรณ์เสียง</string>
+    <string name="setup_bt_not_connected">บลูทูธเปิดแล้ว แต่ยังไม่ได้เชื่อมกับรถ จับคู่ก่อนเพื่อใช้ปุ่มแฮนด์</string>
+    <string name="sound_style_button">เสียง: %1$s ›</string>
+    <string name="sound_style_title">เลือกเสียง (แตะเพื่อฟัง)</string>
+    <string name="sound_chime">กริ๊ง (สองโน้ต)</string>
+    <string name="sound_arpeggio">ไล่โน้ต (สามโน้ต)</string>
+    <string name="sound_fob">รีโมทรถ (ปิ๊บ ปิ๊บ)</string>
+    <string name="sound_swell">นุ่มนวล</string>
+    <string name="sound_retro">เกมเก่า (8-bit)</string>
+    <string name="sound_system">เสียงแจ้งเตือนของมือถือ</string>
+    <string name="hus_how_title">เริ่มเซิร์ฟเวอร์เครื่องเสียง</string>
+    <string name="hus_how_steps">1. เปิดการตั้งค่า Android Auto\n2. เลื่อนลงล่างสุด แตะ \"เวอร์ชัน\" 10 ครั้ง (เปิดโหมดนักพัฒนา)\n3. แตะ ⋮ มุมขวาบน → \"เริ่มเซิร์ฟเวอร์เครื่องเสียง\"\n\nต้องทำใหม่ทุกครั้งที่รีสตาร์ทมือถือ</string>
+    <string name="hus_fallback_toast">เปิด \"การตั้งค่าเพิ่มเติมในแอป\" หรือเมนู Android Auto ในการตั้งค่า</string>
+    <string name="whats_new_ok">เข้าใจแล้ว</string>
+    <string name="help_check_update">🔄 ตรวจหาอัปเดต</string>
+    <string name="main_checking_update">กำลังตรวจหาอัปเดต…</string>
+    <string name="main_up_to_date">เป็นเวอร์ชันล่าสุดแล้ว (หรือไม่มีเน็ต)</string>
+    <string name="main_check_for_update">ตรวจหาอัปเดต</string>
+    <string name="main_hide_logs">ซ่อนบันทึก</string>
+    <string name="main_setup">ตั้งค่า</string>
+    <string name="main_trip">ทริป</string>
+    <string name="main_trips_pill">ทริป</string>
+    <string name="main_settings_failed">เปิดการตั้งค่าแอปไม่ได้</string>
+    <string name="main_share_report_failed">แชร์รายงานไม่ได้: %1$s</string>
+    <string name="qr_camera_failed">กล้องเปิดไม่ได้ในมือถือนี้ ให้ถ่ายรูป QR บนจอรถ แล้วกด \"จากรูปภาพ\" แทน</string>
+    <string name="stat_clock_fix">เช็ค ⚠ แตะ</string>
+    <string name="stat_clock_ok">นาฬิกาจอ ✓</string>
+    <string name="stat_clock_adjusting">กำลังตั้ง…</string>
+
+    <!-- Parking -->
+    <string name="parked_pill">🅿️ รถของคุณ · %1$s</string>
+    <string name="parked_pill_dist">🅿️ รถของคุณ · %1$s · %2$s</string>
+    <string name="parked_cleared">ลบจุดจอดแล้ว</string>
+    <string name="parked_options_title">รถของคุณ</string>
+    <string name="parked_view_photo">📷 ดูรูป</string>
+    <string name="parked_add_photo">📸 ถ่ายรูปจุดจอด</string>
+    <string name="parked_retake_photo">📸 ถ่ายใหม่</string>
+    <string name="parked_delete">🗑️ ลบจุดจอดนี้</string>
+
+    <!-- Trips -->
+    <string name="trips_trips">ทริป</string>
+    <string name="trips_loading_all">กำลังโหลดทริปทั้งหมด…</string>
+    <string name="trips_previous_day">วันก่อน</string>
+    <string name="trips_next_day">วันถัดไป</string>
+    <string name="trips_today">วันนี้</string>
+    <string name="trips_no_rides_this_day">วันนี้ไม่มีทริป</string>
+    <string name="trips_no_trips_yet">ยังไม่มีทริป\nแอปบันทึกให้เองทุกครั้งที่เชื่อมต่อจอรถ</string>
+    <string name="trips_no_rides_browse_days">วันนี้ไม่มีทริป\nกด ‹ › เพื่อดูวันอื่น</string>
+    <string name="trips_no_rides_summary">ไม่มีทริป</string>
+    <string name="trips_route_preview">เส้นทาง</string>
+    <string name="trips_stat_time">เวลา</string>
+    <string name="trips_stat_avg">เฉลี่ย</string>
+    <string name="trips_stat_max">สูงสุด</string>
+    <string name="trips_export_gpx">ส่งออก GPX</string>
+    <string name="trips_no_gps_points">ทริปนี้ไม่มีจุด GPS</string>
+    <string name="trips_export_failed">ส่งออกไม่ได้: %1$s</string>
+    <string name="trips_delete_trip_title">ลบทริปนี้?</string>
+    <string name="trips_delete">ลบ</string>
+    <string name="trips_import">📥 นำเข้าทริป (GPX)</string>
+    <string name="trips_import_done">นำเข้าแล้ว: %1$s</string>
+    <string name="trips_import_exists">มีทริปนี้อยู่แล้ว</string>
+    <string name="trips_import_empty">ไฟล์นี้ไม่มีเส้นทางที่มีเวลา</string>
+    <string name="trips_import_failed">นำเข้าไม่ได้: %1$s</string>
+    <string name="trips_logging_off">ปิดการบันทึกทริปอยู่: ทริปใหม่จะไม่ถูกเก็บ และไม่นับระยะบำรุงรักษา</string>
+    <string name="trips_logging_enable">เปิด</string>
+    <string name="trips_logging_enabled">เปิดบันทึกทริปแล้ว — ทริปต่อไปจะถูกเก็บ</string>
+
+    <!-- Maintenance -->
+    <string name="maint_title">บำรุงรักษา</string>
+    <string name="maint_pill_default">🔧 บำรุงรักษา</string>
+    <string name="maint_channel">บำรุงรักษา</string>
+    <string name="maint_notif_title">🔧 ถึงเวลาบำรุงรักษา</string>
+    <string name="maint_odometer">เลขไมล์โดยประมาณ</string>
+    <string name="maint_odometer_unset">ใส่เลขไมล์บนจอรถเพื่อเริ่มนับ</string>
+    <string name="maint_odometer_hint">เลขที่คุณใส่ + ทุกทริปที่แอปบันทึก ทริปที่ไม่ได้เปิดแอปจะไม่ถูกนับ ควรแก้ให้ตรงเป็นระยะ</string>
+    <string name="maint_fix_km">แก้เลขไมล์</string>
+    <string name="maint_odometer_dialog">เลขไมล์บนจอรถตอนนี้:</string>
+    <string name="maint_odometer_input">กม.</string>
+    <string name="maint_tasks">รายการ</string>
+    <string name="maint_oil">น้ำมันเครื่องและไส้กรอง</string>
+    <string name="maint_air">ไส้กรองอากาศ</string>
+    <string name="maint_belt">สายพานและเม็ดตุ้ม</string>
+    <string name="maint_brakes">ผ้าเบรก (ตรวจ)</string>
+    <string name="maint_tyres">ยาง (ตรวจ)</string>
+    <string name="maint_service">เช็คระยะ</string>
+    <string name="maint_itv">ต่อภาษี / ตรวจสภาพ</string>
+    <string name="maint_insurance">ต่อ พ.ร.บ. / ประกัน</string>
+    <string name="maint_status_unknown">แตะ \"แก้ไข\" เพื่อใส่ว่าทำครั้งล่าสุดเมื่อไร</string>
+    <string name="maint_status_km_left">อีก %1$s</string>
+    <string name="maint_status_over_km">เกินมา %1$s</string>
+    <string name="maint_status_days_left">อีก %1$d วัน</string>
+    <string name="maint_status_over_days">เกินมา %1$d วัน</string>
+    <string name="maint_every_km">ทุก %1$s</string>
+    <string name="maint_every_months">ทุก %1$d เดือน</string>
+    <string name="maint_last">ครั้งล่าสุด: %1$s</string>
+    <string name="maint_done">ทำแล้ว</string>
+    <string name="maint_done_title">%1$s เรียบร้อย</string>
+    <string name="maint_done_dialog">ทำตอนเลขไมล์เท่าไร (ตามจอรถ)?</string>
+    <string name="maint_edit">แก้ไข</string>
+    <string name="maint_delete">ลบ</string>
+    <string name="maint_add_task">+ เพิ่มรายการ</string>
+    <string name="maint_task_name">ชื่อ</string>
+    <string name="maint_interval_km">ทุก … กม. (ไม่บังคับ)</string>
+    <string name="maint_interval_months">ทุก … เดือน (ไม่บังคับ)</string>
+    <string name="maint_last_km">ทำล่าสุดที่ … กม.</string>
+    <string name="maint_last_date">ทำล่าสุดเมื่อ</string>
+    <string name="maint_interval_hint">ระยะเหล่านี้เป็นค่าทั่วไป ให้เทียบกับสมุดคู่มือรถของคุณ</string>
+    <string name="maint_task_invalid">ใส่ชื่อและระยะอย่างน้อยหนึ่งอย่าง</string>
+    <string name="maint_fuel">น้ำมัน</string>
+    <string name="maint_refuel">⛽ เติมน้ำมันแล้ว</string>
+    <string name="maint_refuel_dialog">เติมเต็มถังทุกครั้ง ตัวเลขอัตราสิ้นเปลืองจะแม่นขึ้น</string>
+    <string name="maint_liters">ลิตร</string>
+    <string name="maint_euros">ราคา บาท (ไม่บังคับ)</string>
+    <string name="maint_liters_needed">ใส่จำนวนลิตร</string>
+    <string name="maint_fuel_need_two">เติมเต็มถังให้ครบ 2 ครั้ง ถึงจะเห็นอัตราสิ้นเปลืองจริง</string>
+    <string name="maint_fuel_stats">%1$s ลิตร/100 กม. · %2$s · เติม %3$d ครั้ง</string>
+    <string name="maint_fuel_hint">คำนวณจากระยะที่แอปบันทึกระหว่างการเติมแต่ละครั้ง</string>
+    <string name="maint_history">ประวัติ</string>
+    <string name="maint_first_km">ครั้งแรกที่ … กม. (ไม่บังคับ)</string>
+    <string name="maint_first_at">ครั้งแรกที่ %1$s</string>
+    <string name="maint_then_every_km">จากนั้นทุก %1$s</string>
+    <string name="maint_oil_engine">น้ำมันเครื่อง</string>
+    <string name="maint_oil_filter">ไส้กรองน้ำมันเครื่อง</string>
+    <string name="maint_gear_oil">น้ำมันเฟืองท้าย</string>
+    <string name="maint_valves">ตั้งวาล์ว</string>
+    <string name="maint_spark">หัวเทียน</string>
+    <string name="maint_brake_fluid">น้ำมันเบรก</string>
+    <string name="maint_coolant">น้ำยาหม้อน้ำ</string>
+    <string name="maint_pulleys">บูชพูลเลย์ (อัดจาระบี)</string>
+    <string name="maint_steer_lock">ล็อกคอ (ทำความสะอาด อัดจาระบี)</string>
+
+    <!-- Fit to the dash -->
+    <string name="fit_title">ปรับภาพให้พอดีจอรถ</string>
+    <string name="fit_status_live">● ดูผลบนจอรถได้เลย</string>
+    <string name="fit_status_offline">ยังไม่ได้เชื่อมต่อ: ปรับได้ แต่ต้องเชื่อมต่อก่อนถึงจะเห็นผล</string>
+    <string name="fit_how">จอรถจะขึ้นกรอบสีเหลือง คือพื้นที่ที่ Android Auto วาด กดลูกศรเลื่อนขอบทั้ง 4 ด้านจนเส้นเหลืองชิดขอบจอที่มองเห็น กดค้างเพื่อเลื่อนเร็ว</string>
+    <string name="fit_margins_now">บน %1$d · ล่าง %2$d · ซ้าย %3$d · ขวา %4$d px\nพื้นที่ Android Auto: %5$d × %6$d</string>
+    <string name="fit_step_fine">ละเอียด (2 px)</string>
+    <string name="fit_step_coarse">เร็ว (10 px)</string>
+    <string name="fit_mode_title">วิธีเติมภาพในกรอบ</string>
+    <string name="fit_mode_fill">เต็มจอ</string>
+    <string name="fit_mode_fit">เห็นครบ</string>
+    <string name="fit_mode_stretch">ยืด</string>
+    <string name="fit_mode_hint">เต็มจอ: ไม่มีขอบดำ อาจตัดขอบนิดหน่อย · เห็นครบ: ไม่ตัด มีขอบดำ · ยืด: เต็มทุกด้าน ภาพเพี้ยนเล็กน้อย เปลี่ยนแล้วเห็นผลทันที</string>
+    <string name="fit_shape_title">รูปทรงจอสำหรับ Android Auto</string>
+    <string name="fit_shape_manual">กำหนดเอง: %1$d × %2$d</string>
+    <string name="fit_shape_off">ปิด: Android Auto ใช้ขนาดมาตรฐาน</string>
+    <string name="fit_shape_auto_is">อัตโนมัติ: %1$d × %2$d (จากรถของคุณ)</string>
+    <string name="fit_shape_auto_unknown">อัตโนมัติ: ยังไม่รู้ (เชื่อมต่อหนึ่งครั้งก่อน)</string>
+    <string name="fit_shape_from_frame">= กรอบเหลือง</string>
+    <string name="fit_shape_save">บันทึกขนาด</string>
+    <string name="fit_shape_auto">อัตโนมัติ</string>
+    <string name="fit_shape_hint">ถ้าแผนที่ดูโดนตัดหรือบี้หลังปรับกรอบ ให้แตะ \"= กรอบเหลือง\" เพื่อให้ Android Auto วาดพอดีขนาดนั้น ต้องรีสตาร์ท Android Auto</string>
+    <string name="fit_shape_invalid">ใส่ความกว้างและความสูง (16 ขึ้นไป)</string>
+    <string name="fit_shape_reconnect">รูปทรงใหม่จะใช้เมื่อ Android Auto เริ่มใหม่ เริ่มเลยไหม? จอรถจะดำไม่กี่วินาที</string>
+    <string name="fit_shape_reconnect_now">เริ่มใหม่เลย</string>
+    <string name="fit_shape_reconnect_later">ไว้ทีหลัง</string>
+    <string name="fit_shape_saved_next">บันทึกแล้ว: ใช้ตอนเชื่อมต่อครั้งหน้า</string>
+    <string name="fit_undo">ย้อนกลับ</string>
+    <string name="fit_reset">ค่าเริ่มต้นของรถ</string>
+    <string name="fit_done">เสร็จ</string>
+    <string name="fit_more_options">ความละเอียดและทิศทางจอ: อยู่ในตั้งค่า → หน้าจอ</string>
+    <string name="ms_lang_desc">ภาษา: ไทย / อังกฤษ</string>
+    <string name="ms_back">กลับ</string>
+    <string name="ms_garage_active">ใช้อยู่ · แตะเพื่อแก้ชื่อและรูป</string>
+    <string name="ms_garage_tap">แตะเพื่อใช้หรือแก้ไข</string>
+    <string name="ms_hero_add_photo">แตะเพื่อใส่รูปรถของคุณ</string>
+    <string name="ms_tile_doctor">หมอแอป</string>
+    <string name="ms_stat_maint_setup">ตั้งบำรุงรักษา</string>
+    <string name="ms_stat_maint_km">กม. ถึง%1$s</string>
+    <string name="ms_stat_maint_days">วัน ถึง%1$s</string>
+    <string name="ms_stat_maint_over">เกินกำหนด%1$s</string>
+    <string name="ms_help_send_tech">📤 ส่งปัญหาให้ช่าง (แนบบันทึกให้เอง)</string>
+    <string name="ms_guide_title">วิธีใช้ MotoScreen TH</string>
+    <string name="ms_guide_body">ทำครั้งแรกครั้งเดียว
+1. ตั้งค่า Android Auto → แตะ "เวอร์ชัน" 10 ครั้ง → ⋮ → การตั้งค่าสำหรับนักพัฒนา → เปิด "แหล่งที่มาที่ไม่รู้จัก"
+2. จับคู่บลูทูธมือถือกับจอรถ (ICANTRON_BT…) ถ้าเคยต่อกับไอโฟน ให้ปิดบลูทูธไอโฟนก่อน
+3. เปิดหน้า "ฉายหน้าจอ" บนจอรถ แล้วสแกน QR จาก ตั้งค่า → รถของฉัน เลือก Zontes 368G
+
+ทุกครั้งที่ขี่
+• ติดรถ เปิดหน้าฉายหน้าจอ แล้วกด "เชื่อมต่อ" (หรือให้แอปต่อเองตอนบลูทูธรถติด)
+• ถ้าเพิ่งรีสตาร์ทมือถือ: Android Auto → ⋮ → "เริ่มเซิร์ฟเวอร์เครื่องเสียง"
+• สลับไปหน้าอื่นบนจอรถ (เช่นดูลมยาง) ภาพจะหยุด กลับมาหน้าฉายหน้าจอแล้วภาพขึ้นเอง
+
+มีปัญหา? กด 🩺 หมอแอป</string>
+    <string name="ms_setup_done">✅ ตั้งค่าเริ่มต้นเสร็จแล้ว · แตะเพื่อดู</string>
+    <string name="ms_setup_done_hide">▲ ซ่อนขั้นตอนตั้งค่าครั้งแรก</string>
+</resources>

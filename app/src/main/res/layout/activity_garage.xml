@@ -16,12 +16,15 @@
         android:paddingTop="10dp"
         android:paddingBottom="6dp">
 
-        <ImageView
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:contentDescription="@string/garage_garage"
-            android:src="@drawable/ic_devices"
-            android:tint="@color/brand_orange" />
+        <ImageButton
+            android:id="@+id/garage_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="-8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/ms_back"
+            android:src="@drawable/ic_back"
+            android:tint="@color/text_primary" />
 
         <TextView
             android:layout_width="0dp"

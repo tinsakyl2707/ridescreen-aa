@@ -8,6 +8,7 @@ import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -717,6 +718,8 @@ class SetupActivity : AppCompatActivity() {
         step2Btn.text = if (permsOk) getString(R.string.setup_all_granted) else getString(R.string.setup_grant_permissions)
         step2Btn.isEnabled = !permsOk
 
+        collapseFirstSteps(aaOk && permsOk && MotoScreen.everConnected(this))
+
         val resumeOk = SetupHelper.canAutoResume(this)
         resumeBtn.text = if (resumeOk) getString(R.string.setup_seamless_resume_enabled)
             else getString(R.string.setup_enable_seamless_resume)
@@ -738,6 +741,35 @@ class SetupActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.setup_overlay_permission_failed), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private var stepsExpanded = false
+
+    /**
+     * MotoScreen TH: once Android Auto, the permissions and a first projection are done, the three
+     * one-time steps fold into a single "done" line (tap to unfold) so Settings opens on settings.
+     */
+    private fun collapseFirstSteps(done: Boolean) {
+        val first = findViewById<View?>(R.id.step1_title) ?: return
+        val box = first.parent as? android.widget.LinearLayout ?: return
+        var row: TextView? = box.findViewWithTag("ms_steps_done")
+        if (row == null) {
+            row = TextView(this).apply {
+                tag = "ms_steps_done"
+                textSize = 15f
+                setTextColor(ContextCompat.getColor(this@SetupActivity, R.color.status_live))
+                val dp = resources.displayMetrics.density
+                setPadding(0, (6 * dp).toInt(), 0, (6 * dp).toInt())
+                isClickable = true
+                setOnClickListener { stepsExpanded = !stepsExpanded; refresh() }
+            }
+            box.addView(row, box.indexOfChild(first))
+        }
+        val hide = done && !stepsExpanded
+        row.visibility = if (done) View.VISIBLE else View.GONE
+        row.text = getString(if (hide) R.string.ms_setup_done else R.string.ms_setup_done_hide)
+        val start = box.indexOfChild(first)
+        for (i in start until box.childCount) box.getChildAt(i).visibility = if (hide) View.GONE else View.VISIBLE
     }
 
     private fun tick(ok: Boolean): String = if (ok) "\u2713" else "\u2022"

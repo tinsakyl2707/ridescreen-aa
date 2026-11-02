@@ -63,6 +63,16 @@ object Doctor {
             .show()
     }
 
+    /** "Send problem to technician": put the doctor's verdict into the log that gets shared. */
+    fun logOnly(activity: Activity) {
+        try {
+            val items = checks(activity) + logFindings(activity)
+            LogBus.log("[DOCTOR] report: " + items.joinToString(" | ") { i ->
+                (when (i.ok) { true -> "OK"; false -> "FAIL"; null -> "?" }) + " " + i.title
+            })
+        } catch (e: Exception) { LogBus.log("[DOCTOR] report failed: ${e.message}") }
+    }
+
     private fun row(activity: Activity, item: Item, dp: Float): View {
         val box = LinearLayout(activity).apply {
             orientation = LinearLayout.VERTICAL

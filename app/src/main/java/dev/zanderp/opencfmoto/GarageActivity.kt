@@ -74,6 +74,7 @@ class GarageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_garage)
+        findViewById<android.view.View?>(R.id.garage_back)?.setOnClickListener { finish() }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.garage_root)) { v, insets ->
             val b = insets.getInsets(SafeInsets.BARS)
             v.setPadding(b.left, b.top, b.right, b.bottom)
@@ -153,7 +154,7 @@ class GarageActivity : AppCompatActivity() {
             setTypeface(typeface, android.graphics.Typeface.BOLD)
         })
         col.addView(TextView(this).apply {
-            text = if (isActive) "Active bike · tap to edit" else (bike.qr?.ssid ?: "tap to select or edit")
+            text = if (isActive) getString(R.string.ms_garage_active) else getString(R.string.ms_garage_tap)
             setTextColor(
                 ContextCompat.getColor(
                     this@GarageActivity,

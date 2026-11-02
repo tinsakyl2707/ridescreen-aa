@@ -995,8 +995,14 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.btn_donate).setOnClickListener { Support.open(this) }
         findViewById<View>(R.id.btn_fuel)?.setOnClickListener { FuelActivity.start(this) }
         findViewById<View>(R.id.btn_doctor)?.setOnClickListener { Doctor.show(this) }
+        findViewById<View>(R.id.btn_doctor_tile)?.setOnClickListener { Doctor.show(this) }
+        // Hero: tap to set the bike's photo / name (the garage now lives here instead of a home tile).
+        findViewById<View>(R.id.hero_card)?.setOnClickListener { GarageActivity.start(this) }
+        findViewById<View?>(R.id.lang_toggle)?.let { root ->
+            MotoScreen.bindLangToggle(root, findViewById(R.id.lang_thumb), findViewById(R.id.lang_th), findViewById(R.id.lang_en))
+        }
         findViewById<View>(R.id.btn_help)?.setOnClickListener {
-            HelpMenu.show(this, shareLogs = { shareLog() }, reportProblem = { reportProblem() }, extras = helpExtras())
+            HelpMenu.show(this, shareLogs = { Doctor.logOnly(this); shareLog() }, reportProblem = { reportProblem() }, extras = helpExtras())
         }
         findViewById<View>(R.id.btn_park_photo)?.setOnClickListener { takeParkingPhoto(thenStop = true) }
         // Play build: updates come from Google Play only (Play policy forbids self-updating).
@@ -1310,7 +1316,11 @@ class MainActivity : AppCompatActivity() {
         photo.setImageBitmap(bmp)
         findViewById<View>(R.id.hero_placeholder).visibility = if (bmp == null) View.VISIBLE else View.GONE
         findViewById<TextView>(R.id.hero_name).text = bike?.name ?: ""
-        findViewById<TextView>(R.id.hero_sub).text = bike?.qr?.ssid ?: getString(R.string.main_no_bike_paired_yet)
+        findViewById<TextView>(R.id.hero_sub).text = when {
+            bike == null -> getString(R.string.main_no_bike_paired_yet)
+            bmp == null -> getString(R.string.ms_hero_add_photo)
+            else -> ""
+        }
         // Wordmark: the last word in gold.
         findViewById<TextView>(R.id.brand_title).apply {
             val t = getString(R.string.brand_wordmark)
@@ -1389,24 +1399,45 @@ class MainActivity : AppCompatActivity() {
         // v2.3: while projecting, the current speed takes the place of today's top speed.
         val streaming = ConnectionState.phase == Phase.STREAMING
         findViewById<View?>(R.id.stat_speed_box)?.visibility = if (streaming) View.VISIBLE else View.GONE
-        findViewById<View?>(R.id.stat_max_box)?.visibility = if (streaming) View.GONE else View.VISIBLE
+        findViewById<View?>(R.id.stat_max_box)?.visibility = View.GONE
         if (streaming) findViewById<TextView?>(R.id.stat_speed)?.text = live?.speedKmh?.toString() ?: "--"
-        findViewById<TextView?>(R.id.stat_clock)?.text =
-            java.text.SimpleDateFormat("HH:mm", loc).format(java.util.Date())
+        renderMaintStat()
         renderParked()
         renderLive()
-        findViewById<TextView?>(R.id.stat_clock_label)?.setText(
-            when {
-                ClockLab.resyncInProgress() -> R.string.stat_clock_adjusting
-                ClockLab.resyncGaveUp && ConnectionState.phase == Phase.STREAMING -> R.string.stat_clock_fix
-                ConnectionState.phase == Phase.STREAMING -> R.string.stat_clock_ok
-                else -> R.string.stat_clock
-            }
-        )
     }
 
     /** v2.3 · Tap the dash clock while projecting: set it again (one extra resync). */
+    /** The third gauge: km (or days) to the next maintenance item, instead of the dash clock. */
+    private fun renderMaintStat() {
+        val v = findViewById<TextView?>(R.id.stat_clock) ?: return
+        val label = findViewById<TextView?>(R.id.stat_clock_label) ?: return
+        val st = try { Maintenance.mostUrgent(this) } catch (_: Exception) { null }
+        val loc = java.util.Locale.getDefault()
+        when {
+            st == null -> { v.text = "＋"; label.text = getString(R.string.ms_stat_maint_setup) }
+            st.kmLeft != null -> {
+                v.text = if (st.kmLeft <= 0) "!" else String.format(loc, "%,.0f", st.kmLeft)
+                label.text = getString(if (st.kmLeft <= 0) R.string.ms_stat_maint_over else R.string.ms_stat_maint_km, st.task.name)
+            }
+            else -> {
+                val d = st.daysLeft ?: 0
+                v.text = if (d <= 0) "!" else d.toString()
+                label.text = getString(if (d <= 0) R.string.ms_stat_maint_over else R.string.ms_stat_maint_days, st.task.name)
+            }
+        }
+        label.maxLines = 1
+        label.ellipsize = android.text.TextUtils.TruncateAt.END
+    }
+
     private fun wireDashClockTap() {
+        (findViewById<View?>(R.id.stat_clock)?.parent as? View)?.apply {
+            isClickable = true
+            setOnClickListener { MaintenanceActivity.start(this@MainActivity) }
+        }
+    }
+
+    @Suppress("unused")
+    private fun wireDashClockTapLegacy() {
         val box = findViewById<View?>(R.id.stat_clock)?.parent as? View ?: return
         box.isClickable = true
         box.setOnClickListener {
@@ -1478,12 +1509,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupHomeTiles() {
-        buildTile(R.id.btn_trips_list, "🏍️", 0xFF5B8DEF.toInt(), getString(R.string.home_tile_trips))
+        buildTile(R.id.btn_trips_list, "🏍️", 0xFF22E3D0.toInt(), getString(R.string.home_tile_trips))
         buildTile(R.id.btn_fuel, "⛽", 0xFFE5774E.toInt(), getString(R.string.home_tile_fuel), getString(R.string.home_tile_fuel_sub))
-        buildTile(R.id.btn_maint, "🔧", 0xFF4FB6A6.toInt(), getString(R.string.home_tile_maint))
+        buildTile(R.id.btn_maint, "🔧", 0xFF22E3D0.toInt(), getString(R.string.home_tile_maint))
+        buildTile(R.id.btn_doctor_tile, "🩺", 0xFF22E3D0.toInt(), getString(R.string.ms_tile_doctor))
         buildTile(R.id.btn_traffic_lights, "🚦", 0xFFE05A5A.toInt(), getString(R.string.home_tile_tl))
         buildTile(R.id.btn_live, "📍", 0xFF5FD07A.toInt(), getString(R.string.home_tile_live))
-        buildTile(R.id.btn_help, "💬", 0xFFA98BE0.toInt(), getString(R.string.home_tile_help), getString(R.string.home_tile_help_sub))
+        buildTile(R.id.btn_help, "💬", 0xFF22E3D0.toInt(), getString(R.string.home_tile_help))
         buildTile(R.id.btn_park_photo, "📸", 0xFFD1A955.toInt(), getString(R.string.home_big_park), getString(R.string.home_big_park_sub), big = true)
         buildTile(R.id.btn_controls, "🎮", 0xFF5B8DEF.toInt(), getString(R.string.controls_controls), getString(R.string.home_big_controls_sub), big = true)
         buildTile(R.id.btn_hud_view, "🖥️", 0xFF4FB6A6.toInt(), getString(R.string.hud_dash_view), getString(R.string.home_big_hud_sub), big = true)
@@ -1502,19 +1534,8 @@ class MainActivity : AppCompatActivity() {
 
     /** Extra entries for ❓ Help: the bits that used to sit at the bottom of the home screen. */
     private fun helpExtras(): List<Pair<String, () -> Unit>> = buildList {
-        add(getString(R.string.doctor_menu) to { Doctor.show(this@MainActivity); Unit })
-        add(getString(if (logPanel.visibility == View.VISIBLE) R.string.main_hide_logs else R.string.help_view_logs) to { toggleLogBtn.performClick(); Unit })
         add(getString(R.string.help_about) to { AboutActivity.start(this@MainActivity); Unit })
         if (BuildConfig.SELF_UPDATE) add(getString(R.string.help_check_update) to { checkUpdateManual(); Unit })
-        if (BuildConfig.SELF_UPDATE) add(getString(R.string.help_update_watch) to {
-            WearUpdater.showDialog(this@MainActivity) {
-                try { wearApkLauncher.launch(arrayOf("application/vnd.android.package-archive", "application/octet-stream", "*/*")) }
-                catch (_: Exception) { Toast.makeText(this@MainActivity, R.string.open_failed, Toast.LENGTH_SHORT).show() }
-            }; Unit
-        })
-        add(getString(R.string.pax_entry) to { CompanionActivity.start(this@MainActivity); Unit })
-        add(getString(R.string.pke_entry) to { PkeBatteryUi.show(this@MainActivity); Unit })
-        add(getString(R.string.help_support) to { Support.open(this@MainActivity); Unit })
     }
 
     /**
@@ -1525,10 +1546,14 @@ class MainActivity : AppCompatActivity() {
         val live = sessionAlive(phase)
         findViewById<View?>(R.id.live_section)?.visibility = if (live) View.VISIBLE else View.GONE
         findViewById<View?>(R.id.hero_card)?.let { hero ->
-            val h = ((if (live) 170 else 210) * resources.displayMetrics.density).toInt()
+            val h = ((if (live) 112 else 140) * resources.displayMetrics.density).toInt()
             if (hero.layoutParams.height != h) { hero.layoutParams.height = h; hero.requestLayout() }
         }
-        findViewById<TextView?>(R.id.hero_name)?.textSize = if (live) 34f else 46f
+        findViewById<TextView?>(R.id.hero_name)?.textSize = if (live) 26f else 30f
+        if (phase == Phase.STREAMING) MotoScreen.markConnected(this)
+        // First-time checklist: only until the dash has shown Android Auto once. After that a
+        // problem surfaces as the orange head-unit banner, or through the 🩺 tile.
+        findViewById<View?>(R.id.prep_card)?.visibility = if (MotoScreen.everConnected(this)) View.GONE else View.VISIBLE
         placeLiveShare(big = live)
         renderParked()
         renderPkeCard()
@@ -1723,6 +1748,8 @@ class MainActivity : AppCompatActivity() {
             spot.time, System.currentTimeMillis(), android.text.format.DateUtils.MINUTE_IN_MILLIS,
         )
         val dist = Parking.distanceFromHere(this, spot)
+        // Parked at home, 9 m away: nothing to find. Only show it once you've walked off.
+        if (dist == null || dist < 100) { card.visibility = View.GONE; return }
         findViewById<TextView>(R.id.parked_title).text =
             if (dist != null) getString(R.string.home_parked_title_dist, Parking.distanceText(dist)) else getString(R.string.home_parked_title)
         findViewById<TextView>(R.id.parked_sub).text = getString(R.string.home_parked_sub, ago)

@@ -16,12 +16,10 @@ object HelpMenu {
 
     fun show(activity: Activity, shareLogs: () -> Unit, reportProblem: () -> Unit, extras: List<Pair<String, () -> Unit>> = emptyList()) {
         val items = listOf(
-            activity.getString(R.string.help_guide) to { openGuide(activity) },
+            activity.getString(R.string.doctor_menu) to { Doctor.show(activity) },
+            activity.getString(R.string.help_guide) to { showThaiGuide(activity) },
             activity.getString(R.string.help_interfaces) to { showInterfacesTip(activity) },
-            activity.getString(R.string.help_watch_guide) to { openUrl(activity, WATCH_GUIDE_URL) },
-            activity.getString(R.string.help_share_logs) to shareLogs,
-            activity.getString(R.string.help_whats_new) to { WhatsNew.show(activity) },
-            activity.getString(R.string.help_report) to reportProblem,
+            activity.getString(R.string.ms_help_send_tech) to shareLogs,
         ) + extras
         MaterialAlertDialogBuilder(activity)
             .setTitle(R.string.help_title)
@@ -30,6 +28,17 @@ object HelpMenu {
     }
 
     fun openGuide(ctx: Context) = openUrl(ctx, GUIDE_URL)
+
+    /** MotoScreen TH: the setup guide in the app itself (the upstream web guide is Spanish). */
+    fun showThaiGuide(activity: Activity) {
+        if (activity.isFinishing || activity.isDestroyed) return
+        MaterialAlertDialogBuilder(activity)
+            .setTitle(R.string.ms_guide_title)
+            .setMessage(R.string.ms_guide_body)
+            .setPositiveButton(R.string.whats_new_ok, null)
+            .setNeutralButton(R.string.doctor_menu) { _, _ -> Doctor.show(activity) }
+            .show()
+    }
 
     /** v2.3 · Riders found the link survives switching the dash to screen 1/2 (19 Oct). */
     fun showInterfacesTip(activity: Activity) {

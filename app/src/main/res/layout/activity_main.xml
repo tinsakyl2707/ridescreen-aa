@@ -7,19 +7,26 @@
             <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:id="@+id/brand_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/brand_wordmark" android:fontFamily="@font/archivo_black" />
             <TextView android:textSize="11.0sp" android:textColor="@color/text_secondary" android:id="@+id/brand_version" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" />
         </LinearLayout>
+        <FrameLayout android:id="@+id/lang_toggle" android:background="@drawable/ms_lang_track" android:padding="3.0dip" android:clickable="true" android:focusable="true" android:layout_width="wrap_content" android:layout_height="38.0dip" android:layout_marginEnd="10.0dip" android:contentDescription="@string/ms_lang_desc">
+            <View android:id="@+id/lang_thumb" android:background="@drawable/ms_lang_thumb" android:layout_width="44.0dip" android:layout_height="fill_parent" />
+            <LinearLayout android:orientation="horizontal" android:layout_width="wrap_content" android:layout_height="fill_parent">
+                <TextView android:textSize="13.0sp" android:gravity="center" android:id="@+id/lang_th" android:layout_width="44.0dip" android:layout_height="fill_parent" android:text="TH" android:fontFamily="@font/archivo_black" />
+                <TextView android:textSize="13.0sp" android:gravity="center" android:id="@+id/lang_en" android:layout_width="44.0dip" android:layout_height="fill_parent" android:text="EN" android:fontFamily="@font/archivo_black" />
+            </LinearLayout>
+        </FrameLayout>
         <ImageButton android:id="@+id/btn_hero_menu" android:background="@drawable/ms_chip" android:padding="11.0dip" android:layout_width="46.0dip" android:layout_height="46.0dip" android:src="@drawable/ic_settings" android:scaleType="fitCenter" android:contentDescription="@string/main_settings_desc" app:tint="@color/brand_gold" />
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView android:id="@+id/main_scroll" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="0.0dip" android:fillViewport="true" android:layout_weight="1.0" android:overScrollMode="ifContentScrolls">
         <LinearLayout android:orientation="vertical" android:paddingBottom="16.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingHorizontal="16.0dip">
 
-            <FrameLayout android:id="@+id/hero_card" android:background="@drawable/ms_hero_bg" android:layout_width="fill_parent" android:layout_height="280.0dip" android:layout_marginTop="4.0dip">
-                <ImageView android:layout_gravity="center" android:id="@+id/hero_placeholder" android:layout_width="150.0dip" android:layout_height="150.0dip" android:src="@drawable/ic_ride" android:contentDescription="@null" android:alpha="0.16" app:tint="@color/brand_gold" />
+            <FrameLayout android:id="@+id/hero_card" android:background="@drawable/ms_hero_bg" android:foreground="?selectableItemBackground" android:clickable="true" android:focusable="true" android:layout_width="fill_parent" android:layout_height="140.0dip" android:layout_marginTop="4.0dip">
+                <ImageView android:layout_gravity="center" android:id="@+id/hero_placeholder" android:layout_width="96.0dip" android:layout_height="96.0dip" android:src="@drawable/ic_ride" android:contentDescription="@null" android:alpha="0.16" app:tint="@color/brand_gold" />
                 <ImageView android:id="@+id/hero_photo" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerCrop" android:contentDescription="@null" />
-                <View android:layout_gravity="bottom" android:background="@drawable/bg_hero_scrim" android:layout_width="fill_parent" android:layout_height="150.0dip" />
+                <View android:layout_gravity="bottom" android:background="@drawable/bg_hero_scrim" android:layout_width="fill_parent" android:layout_height="110.0dip" />
                 <TextView android:textSize="11.0sp" android:textColor="@color/brand_gold" android:layout_gravity="top|center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:text="@string/ms_hero_tag" android:fontFamily="@font/archivo_semibold" android:letterSpacing="0.25" />
-                <LinearLayout android:layout_gravity="start|bottom" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="16.0dip" android:layout_marginStart="18.0dip" android:layout_marginEnd="18.0dip">
-                    <TextView android:textSize="42.0sp" android:textColor="@color/text_primary" android:id="@+id/hero_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:fontFamily="@font/archivo_black" />
+                <LinearLayout android:layout_gravity="start|bottom" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="12.0dip" android:layout_marginStart="18.0dip" android:layout_marginEnd="18.0dip">
+                    <TextView android:textSize="30.0sp" android:textColor="@color/text_primary" android:id="@+id/hero_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:ellipsize="end" android:fontFamily="@font/archivo_black" />
                     <TextView android:textSize="13.0sp" android:textColor="@color/brand_gold" android:id="@+id/hero_sub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" />
                 </LinearLayout>
             </FrameLayout>
@@ -55,7 +62,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout android:orientation="vertical" android:background="@drawable/ms_panel_accent" android:paddingTop="14.0dip" android:paddingBottom="14.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:paddingStart="18.0dip" android:paddingEnd="14.0dip">
+            <LinearLayout android:orientation="vertical" android:id="@+id/prep_card" android:background="@drawable/ms_panel_accent" android:paddingTop="14.0dip" android:paddingBottom="14.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:paddingStart="18.0dip" android:paddingEnd="14.0dip">
                 <TextView android:textSize="15.0sp" android:textColor="@color/brand_gold" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/ms_prep_title" android:fontFamily="@font/archivo_semibold" />
                 <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip">
                     <TextView android:textSize="13.0sp" android:textColor="@color/brand_gold" android:gravity="center" android:background="@drawable/ms_step_num" android:layout_width="28.0dip" android:layout_height="28.0dip" android:text="1" android:fontFamily="@font/archivo_black" />
@@ -70,7 +77,7 @@
                     <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/ms_step3" android:layout_weight="1.0" android:layout_marginStart="12.0dip" android:lineSpacingExtra="2.0dip" />
                 </LinearLayout>
                 <TextView android:textSize="12.0sp" android:textColor="@color/text_secondary" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:text="@string/th_prep_note" android:lineSpacingExtra="2.0dip" />
-                <com.google.android.material.button.MaterialButton android:id="@+id/btn_doctor" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:text="@string/doctor_button" app:icon="@drawable/ic_tune" style="@style/Widget.OpenCfMoto.Segment" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btn_doctor" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:text="@string/doctor_button" style="@style/Widget.OpenCfMoto.Segment" />
             </LinearLayout>
 
             <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@+id/pke_card" android:background="@drawable/ms_panel" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:paddingHorizontal="16.0dip" android:paddingVertical="12.0dip">
@@ -126,10 +133,8 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout android:orientation="horizontal" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:baselineAligned="false">
-                <LinearLayout android:id="@+id/btn_trips_list" android:layout_marginEnd="5.0dip" style="@style/HomeTile" />
-                <LinearLayout android:id="@+id/btn_fuel" android:layout_marginHorizontal="5.0dip" style="@style/HomeTile" />
-                <LinearLayout android:id="@+id/btn_maint" android:layout_marginStart="5.0dip" style="@style/HomeTile" />
+            <LinearLayout android:orientation="horizontal" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:baselineAligned="false">
+                <LinearLayout android:id="@+id/btn_fuel" style="@style/HomeTile" />
             </LinearLayout>
 
             <TextView android:textSize="11.0sp" android:textColor="@color/text_secondary" android:id="@+id/more_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20.0dip" android:text="@string/ms_quick_title" android:textAllCaps="true" android:letterSpacing="0.15" android:layout_marginStart="4.0dip" />
@@ -140,11 +145,14 @@
             <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:baselineAligned="false">
                 <com.google.android.material.button.MaterialButton android:id="@+id/btn_gpx" android:visibility="gone" android:text="@string/gpx_map" style="@style/HomeMore" />
                 <com.google.android.material.button.MaterialButton android:id="@+id/btn_mirror_start" android:visibility="gone" android:text="@string/main_mirror" style="@style/HomeMore" />
-                <com.google.android.material.button.MaterialButton android:id="@+id/btn_aa_start" android:layout_marginEnd="4.0dip" android:text="@string/main_scan" app:icon="@drawable/ic_qr" app:iconTint="@color/brand_gold" app:backgroundTint="#ff0a1118" app:strokeColor="@color/outline" app:strokeWidth="1.0dip" app:cornerRadius="8.0dip" app:iconSize="26.0dip" android:layout_height="96.0dip" android:insetTop="0.0dip" android:insetBottom="0.0dip" style="@style/HomeMore" />
-                <com.google.android.material.button.MaterialButton android:id="@+id/btn_devices" android:layout_marginHorizontal="4.0dip" android:text="@string/garage_garage" app:icon="@drawable/ic_ride" app:iconTint="@color/brand_gold" app:backgroundTint="#ff0a1118" app:strokeColor="@color/outline" app:strokeWidth="1.0dip" app:cornerRadius="8.0dip" app:iconSize="26.0dip" android:layout_height="96.0dip" android:insetTop="0.0dip" android:insetBottom="0.0dip" style="@style/HomeMore" />
-                <LinearLayout android:id="@+id/btn_help" android:layout_height="96.0dip" android:minHeight="0.0dip" android:paddingTop="8.0dip" android:paddingBottom="6.0dip" android:layout_marginHorizontal="4.0dip" android:background="@drawable/ms_chip" style="@style/HomeTile" />
+                <LinearLayout android:id="@+id/btn_trips_list" android:layout_marginEnd="4.0dip" style="@style/HomeTile" />
+                <LinearLayout android:id="@+id/btn_maint" android:layout_marginHorizontal="4.0dip" style="@style/HomeTile" />
+                <LinearLayout android:id="@+id/btn_doctor_tile" android:layout_marginHorizontal="4.0dip" style="@style/HomeTile" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btn_aa_start" android:visibility="gone" android:layout_marginEnd="4.0dip" android:text="@string/main_scan" app:icon="@drawable/ic_qr" app:iconTint="@color/brand_gold" app:backgroundTint="#ff0a1118" app:strokeColor="@color/outline" app:strokeWidth="1.0dip" app:cornerRadius="8.0dip" app:iconSize="26.0dip" android:layout_height="96.0dip" android:insetTop="0.0dip" android:insetBottom="0.0dip" style="@style/HomeMore" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btn_devices" android:visibility="gone" android:layout_marginHorizontal="4.0dip" android:text="@string/garage_garage" app:icon="@drawable/ic_ride" app:iconTint="@color/brand_gold" app:backgroundTint="#ff0a1118" app:strokeColor="@color/outline" app:strokeWidth="1.0dip" app:cornerRadius="8.0dip" app:iconSize="26.0dip" android:layout_height="96.0dip" android:insetTop="0.0dip" android:insetBottom="0.0dip" style="@style/HomeMore" />
+                <LinearLayout android:id="@+id/btn_help" android:layout_marginStart="4.0dip" style="@style/HomeTile" />
                 <com.google.android.material.button.MaterialButton android:id="@+id/btn_controls_more" android:visibility="gone" android:text="@string/controls_controls" style="@style/HomeMore" />
-                <com.google.android.material.button.MaterialButton android:id="@+id/btn_setup" android:layout_marginStart="4.0dip" android:text="@string/home_settings_short" app:icon="@drawable/ic_settings" app:iconTint="@color/brand_gold" app:backgroundTint="#ff0a1118" app:strokeColor="@color/outline" app:strokeWidth="1.0dip" app:cornerRadius="8.0dip" app:iconSize="26.0dip" android:layout_height="96.0dip" android:insetTop="0.0dip" android:insetBottom="0.0dip" style="@style/HomeMore" />
+                <com.google.android.material.button.MaterialButton android:id="@+id/btn_setup" android:visibility="gone" android:layout_marginStart="4.0dip" android:text="@string/home_settings_short" app:icon="@drawable/ic_settings" app:iconTint="@color/brand_gold" app:backgroundTint="#ff0a1118" app:strokeColor="@color/outline" app:strokeWidth="1.0dip" app:cornerRadius="8.0dip" app:iconSize="26.0dip" android:layout_height="96.0dip" android:insetTop="0.0dip" android:insetBottom="0.0dip" style="@style/HomeMore" />
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton android:id="@+id/btn_aa_stop" android:visibility="gone" android:layout_width="0.0dip" android:layout_height="0.0dip" android:text="@string/main_stop" />
