@@ -42,8 +42,8 @@ object MotoDash {
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences("motoscreen_th", Context.MODE_PRIVATE)
     /** Connect button target: false = Android Auto (default), true = our dash. */
-    // v17: rider chose Android Auto — the MotoScreen dash stays in the code but is switched off.
-    fun preferDash(ctx: Context) = false
+    /** Default Android Auto; the rider can pick the MotoScreen dash on the home screen. */
+    fun preferDash(ctx: Context) = prefs(ctx).getBoolean("prefer_dash", false)
     fun setPreferDash(ctx: Context, on: Boolean) = prefs(ctx).edit().putBoolean("prefer_dash", on).apply()
 
     /** The music app currently playing, through our notification listener. Null without access. */
