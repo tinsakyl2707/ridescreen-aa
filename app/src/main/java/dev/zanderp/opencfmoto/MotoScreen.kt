@@ -26,6 +26,41 @@ object MotoScreen {
         if (!prefs(ctx).getBoolean("ever_connected", false)) prefs(ctx).edit().putBoolean("ever_connected", true).apply()
     }
 
+    // ---- Look: light / dark / follow the phone, and the accent colour ----
+
+    enum class Accent(val style: Int, val swatch: Long) {
+        CYAN(R.style.ThemeOverlay_Ms_Accent_Cyan, 0xFF22E3D0),
+        AMBER(R.style.ThemeOverlay_Ms_Accent_Amber, 0xFFFFB020),
+        RED(R.style.ThemeOverlay_Ms_Accent_Red, 0xFFFF453A),
+        LIME(R.style.ThemeOverlay_Ms_Accent_Lime, 0xFFA3E635),
+    }
+
+    fun accent(ctx: Context): Accent =
+        runCatching { Accent.valueOf(prefs(ctx).getString("accent", Accent.CYAN.name)!!) }.getOrDefault(Accent.CYAN)
+
+    /** Bumped on every accent change, so screens built with the old colour know to rebuild. */
+    @Volatile var accentGeneration = 0
+
+    fun setAccent(ctx: Context, a: Accent) {
+        prefs(ctx).edit().putString("accent", a.name).apply()
+        accentGeneration++
+    }
+
+    /** Called for every activity before onCreate (see OpenCfMotoApp). */
+    fun applyAccent(activity: android.app.Activity) {
+        try { activity.theme.applyStyle(accent(activity).style, true) } catch (_: Exception) {}
+    }
+
+    /** AppCompatDelegate night mode: FOLLOW_SYSTEM (default), NO (light) or YES (dark). */
+    fun nightMode(ctx: Context): Int = prefs(ctx).getInt("night", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+
+    fun setNightMode(ctx: Context, mode: Int) {
+        prefs(ctx).edit().putInt("night", mode).apply()
+        AppCompatDelegate.setDefaultNightMode(mode)
+    }
+
+    fun applyNightMode(ctx: Context) = AppCompatDelegate.setDefaultNightMode(nightMode(ctx))
+
     /** "th" or "en": the app's own choice if set, else the phone's language. */
     fun currentLang(): String {
         val app = AppCompatDelegate.getApplicationLocales()

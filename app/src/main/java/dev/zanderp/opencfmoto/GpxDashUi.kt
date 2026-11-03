@@ -464,10 +464,10 @@ class GpxDashUi(
             adaptChromeLayout(navigating)
         }
         fun <T> highlight(selected: T, vararg pairs: Pair<Int, T>) {
-            val onColor = ContextCompat.getColor(context, R.color.brand_orange)
-            val onText = ContextCompat.getColor(context, R.color.on_brand)
-            val offColor = ContextCompat.getColor(context, R.color.surface_high)
-            val offText = ContextCompat.getColor(context, R.color.text_primary)
+            val onColor = ContextCompat.getColor(context, R.color.ms_fixed_accent)
+            val onText = ContextCompat.getColor(context, R.color.ms_fixed_on_accent)
+            val offColor = ContextCompat.getColor(context, R.color.ms_fixed_surface_high)
+            val offText = ContextCompat.getColor(context, R.color.ms_fixed_text)
             for ((id, value) in pairs) {
                 val btn = root.findViewById<MaterialButton>(id) ?: continue
                 val on = value == selected

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- MotoScreen TH v9: the bike card. Surface + a soft accent glow in the top-right corner. -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item><shape><solid android:color="#ff0a0f15" /></shape></item>
-    <item><shape><gradient android:type="radial" android:gradientRadius="260.0dip" android:centerX="0.5" android:centerY="0.45" android:startColor="#3322e3d0" android:endColor="#0022e3d0" /></shape></item>
-    <item android:height="2.0dip" android:gravity="bottom" android:left="40.0dip" android:right="40.0dip">
-        <shape><gradient android:angle="0" android:startColor="#0022e3d0" android:centerColor="#ff22e3d0" android:endColor="#0022e3d0" /></shape>
-    </item>
+    <item><shape><solid android:color="@color/surface" /><corners android:radius="24dp" /></shape></item>
+    <item><shape><corners android:radius="24dp" />
+        <gradient android:type="radial" android:gradientRadius="220dp" android:centerX="0.92" android:centerY="0.05"
+            android:startColor="?attr/msAccentSoft" android:endColor="#00000000" /></shape></item>
 </layer-list>

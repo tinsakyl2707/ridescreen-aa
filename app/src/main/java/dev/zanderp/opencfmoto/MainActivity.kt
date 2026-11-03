@@ -1061,8 +1061,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /** Accent the screen was built with; a change in Settings rebuilds it on return. */
+    private var builtAccentGeneration = MotoScreen.accentGeneration
+
     override fun onResume() {
         super.onResume()
+        if (builtAccentGeneration != MotoScreen.accentGeneration) { builtAccentGeneration = MotoScreen.accentGeneration; recreate(); return }
         Support.onResume(this)
         // The wizard's last step ("scan the QR on the dash") hands over to the normal scanner here.
         if (SetupWizardActivity.pendingScan) { SetupWizardActivity.pendingScan = false; startAaScan() }
@@ -1319,6 +1323,7 @@ class MainActivity : AppCompatActivity() {
         }
         photo.setImageBitmap(bmp)
         findViewById<View>(R.id.hero_placeholder).visibility = if (bmp == null) View.VISIBLE else View.GONE
+        findViewById<View?>(R.id.hero_scrim)?.visibility = if (bmp == null) View.GONE else View.VISIBLE
         findViewById<TextView>(R.id.hero_name).text = bike?.name ?: ""
         findViewById<TextView>(R.id.hero_sub).text = when {
             bike == null -> getString(R.string.main_no_bike_paired_yet)
@@ -1468,10 +1473,17 @@ class MainActivity : AppCompatActivity() {
     private val tiles = HashMap<Int, Tile>()
 
     /** Icon bubble (soft colour per shortcut) + title + a live detail line, inside a HomeTile container. */
-    private fun buildTile(id: Int, emoji: String, color: Int, title: String, sub: String = "", big: Boolean = false) {
+    private fun buildTile(id: Int, emoji: String, color: Int, title: String, sub: String = "", big: Boolean = false, icon: Int = 0) {
         val box = findViewById<android.widget.LinearLayout?>(id) ?: return
         box.removeAllViews()
         val dp = resources.displayMetrics.density
+        if (icon != 0) {
+            // MotoScreen TH v9: one line-icon set in the accent colour (emoji differ per phone brand).
+            box.addView(android.widget.ImageView(this).apply {
+                setImageResource(icon)
+                imageTintList = android.content.res.ColorStateList.valueOf(ContextCompat.getColor(this@MainActivity, R.color.brand_gold))
+            }, android.widget.LinearLayout.LayoutParams((28 * dp).toInt(), (28 * dp).toInt()))
+        }
         val bubble = TextView(this).apply {
             text = emoji
             textSize = if (big) 20f else 22f
@@ -1482,7 +1494,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         val size = ((if (big) 42 else 46) * dp).toInt()
-        box.addView(bubble, android.widget.LinearLayout.LayoutParams(size, size))
+        if (icon == 0) box.addView(bubble, android.widget.LinearLayout.LayoutParams(size, size))
         val t = TextView(this).apply {
             text = title
             textSize = if (big) 15f else 13f
@@ -1513,13 +1525,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupHomeTiles() {
-        buildTile(R.id.btn_trips_list, "🏍️", 0xFF22E3D0.toInt(), getString(R.string.home_tile_trips))
+        buildTile(R.id.btn_trips_list, "🏍️", 0, getString(R.string.home_tile_trips), icon = R.drawable.ic_ms_trip)
         buildTile(R.id.btn_fuel, "⛽", 0xFFE5774E.toInt(), getString(R.string.home_tile_fuel), getString(R.string.home_tile_fuel_sub))
-        buildTile(R.id.btn_maint, "🔧", 0xFF22E3D0.toInt(), getString(R.string.home_tile_maint))
-        buildTile(R.id.btn_doctor_tile, "🩺", 0xFF22E3D0.toInt(), getString(R.string.ms_tile_doctor))
+        buildTile(R.id.btn_maint, "🔧", 0, getString(R.string.home_tile_maint), icon = R.drawable.ic_ms_wrench)
+        buildTile(R.id.btn_doctor_tile, "🩺", 0, getString(R.string.ms_tile_doctor), icon = R.drawable.ic_ms_doctor)
         buildTile(R.id.btn_traffic_lights, "🚦", 0xFFE05A5A.toInt(), getString(R.string.home_tile_tl))
         buildTile(R.id.btn_live, "📍", 0xFF5FD07A.toInt(), getString(R.string.home_tile_live))
-        buildTile(R.id.btn_help, "💬", 0xFF22E3D0.toInt(), getString(R.string.home_tile_help))
+        buildTile(R.id.btn_help, "💬", 0, getString(R.string.home_tile_help), icon = R.drawable.ic_ms_help)
         buildTile(R.id.btn_park_photo, "📸", 0xFFD1A955.toInt(), getString(R.string.home_big_park), getString(R.string.home_big_park_sub), big = true)
         buildTile(R.id.btn_controls, "🎮", 0xFF5B8DEF.toInt(), getString(R.string.controls_controls), getString(R.string.home_big_controls_sub), big = true)
         buildTile(R.id.btn_hud_view, "🖥️", 0xFF4FB6A6.toInt(), getString(R.string.hud_dash_view), getString(R.string.home_big_hud_sub), big = true)
@@ -1550,7 +1562,7 @@ class MainActivity : AppCompatActivity() {
         val live = sessionAlive(phase)
         findViewById<View?>(R.id.live_section)?.visibility = if (live) View.VISIBLE else View.GONE
         findViewById<View?>(R.id.hero_card)?.let { hero ->
-            val h = ((if (live) 112 else 140) * resources.displayMetrics.density).toInt()
+            val h = ((if (live) 170 else 190) * resources.displayMetrics.density).toInt()
             if (hero.layoutParams.height != h) { hero.layoutParams.height = h; hero.requestLayout() }
         }
         findViewById<TextView?>(R.id.hero_name)?.textSize = if (live) 26f else 30f
@@ -1850,13 +1862,15 @@ class MainActivity : AppCompatActivity() {
                 getString(R.string.main_connect_to, BikeMemory.lastBikeName(this) ?: "")
             else -> getString(R.string.main_connect)
         }
-        (connectBtn as? MaterialButton)?.setIconResource(
-            if (phase.busy || phase == Phase.STREAMING || phase == Phase.MIRRORING) {
-                R.drawable.ic_stop
-            } else {
-                R.drawable.ic_power
-            },
-        )
+        val stopLook = phase.busy || phase == Phase.STREAMING || phase == Phase.MIRRORING
+        (connectBtn as? MaterialButton)?.setIconResource(if (stopLook) R.drawable.ic_stop else R.drawable.ic_power)
+        // v9: Connect = accent gradient; Stop = outlined red, so the two never look alike.
+        (connectBtn as? MaterialButton)?.let { b ->
+            val fg = ContextCompat.getColor(this, if (stopLook) R.color.status_error else R.color.on_brand)
+            b.setBackgroundResource(if (stopLook) R.drawable.ms_cta_stop else R.drawable.ms_cta)
+            b.setTextColor(fg)
+            b.iconTint = android.content.res.ColorStateList.valueOf(fg)
+        }
         updateButtonStates(phase)
     }
 

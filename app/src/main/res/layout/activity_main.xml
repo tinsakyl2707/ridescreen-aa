@@ -20,45 +20,56 @@
     <androidx.core.widget.NestedScrollView android:id="@+id/main_scroll" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="0.0dip" android:fillViewport="true" android:layout_weight="1.0" android:overScrollMode="ifContentScrolls">
         <LinearLayout android:orientation="vertical" android:paddingBottom="16.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingHorizontal="16.0dip">
 
-            <FrameLayout android:id="@+id/hero_card" android:background="@drawable/ms_hero_bg" android:foreground="?selectableItemBackground" android:clickable="true" android:focusable="true" android:layout_width="fill_parent" android:layout_height="140.0dip" android:layout_marginTop="4.0dip">
-                <ImageView android:layout_gravity="center" android:id="@+id/hero_placeholder" android:layout_width="96.0dip" android:layout_height="96.0dip" android:src="@drawable/ic_ride" android:contentDescription="@null" android:alpha="0.16" app:tint="@color/brand_gold" />
+            <!-- MotoScreen TH v9: one bike card = model tag + name + live status ("what to do next"). -->
+            <FrameLayout android:id="@+id/hero_card" android:background="@drawable/ms_hero_bg" android:foreground="?selectableItemBackground" android:clickable="true" android:focusable="true" android:layout_width="fill_parent" android:layout_height="190.0dip" android:layout_marginTop="6.0dip">
                 <ImageView android:id="@+id/hero_photo" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerCrop" android:contentDescription="@null" />
-                <View android:layout_gravity="bottom" android:background="@drawable/bg_hero_scrim" android:layout_width="fill_parent" android:layout_height="110.0dip" />
-                <TextView android:textSize="11.0sp" android:textColor="@color/brand_gold" android:layout_gravity="top|center" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:text="@string/ms_hero_tag" android:fontFamily="@font/archivo_semibold" android:letterSpacing="0.25" />
-                <LinearLayout android:layout_gravity="start|bottom" android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="12.0dip" android:layout_marginStart="18.0dip" android:layout_marginEnd="18.0dip">
+                <View android:id="@+id/hero_scrim" android:layout_gravity="bottom" android:background="@drawable/bg_hero_scrim" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+                <ImageView android:layout_gravity="top|end" android:id="@+id/hero_placeholder" android:layout_width="150.0dip" android:layout_height="104.0dip" android:layout_marginTop="14.0dip" android:layout_marginEnd="6.0dip" android:src="@drawable/ms_gauge_art" android:contentDescription="@null" android:alpha="0.35" />
+                <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:padding="18.0dip">
+                    <TextView android:textSize="11.0sp" android:textColor="@color/brand_gold" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/ms_hero_tag" android:fontFamily="@font/archivo_semibold" android:letterSpacing="0.25" />
+                    <TextView android:textSize="12.0sp" android:textColor="@color/text_secondary" android:id="@+id/hero_sub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="2.0dip" android:maxLines="1" />
+                    <View android:layout_width="1.0dip" android:layout_height="0.0dip" android:layout_weight="1.0" />
                     <TextView android:textSize="30.0sp" android:textColor="@color/text_primary" android:id="@+id/hero_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" android:ellipsize="end" android:fontFamily="@font/archivo_black" />
-                    <TextView android:textSize="13.0sp" android:textColor="@color/brand_gold" android:id="@+id/hero_sub" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="1" />
+                    <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@+id/status_card" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dip">
+                        <FrameLayout android:background="@drawable/ms_ring" android:layout_width="26.0dip" android:layout_height="26.0dip">
+                            <ImageView android:layout_gravity="center" android:id="@+id/status_icon" android:layout_width="10.0dip" android:layout_height="10.0dip" android:src="@drawable/ic_status_dot" android:contentDescription="@string/main_connection_status" />
+                            <ProgressBar android:layout_gravity="center" android:id="@+id/status_progress" android:visibility="gone" android:layout_width="26.0dip" android:layout_height="26.0dip" android:indeterminateTint="@color/brand_gold" style="?android:progressBarStyle" />
+                        </FrameLayout>
+                        <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="10.0dip">
+                            <TextView android:textSize="17.0sp" android:textColor="@color/text_primary" android:id="@+id/status_view" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/main_ready" android:fontFamily="@font/archivo_semibold" />
+                            <TextView android:textSize="13.0sp" android:textColor="@color/text_secondary" android:id="@+id/bike_view" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/main_no_bike_paired_yet" android:maxLines="2" android:ellipsize="end" />
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
 
-            <LinearLayout android:orientation="vertical" android:id="@+id/status_card" android:background="@drawable/ms_panel" android:padding="16.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip">
-                <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
-                    <FrameLayout android:background="@drawable/ms_ring" android:layout_width="64.0dip" android:layout_height="64.0dip">
-                        <ImageView android:layout_gravity="center" android:id="@+id/status_icon" android:layout_width="20.0dip" android:layout_height="20.0dip" android:src="@drawable/ic_status_dot" android:contentDescription="@string/main_connection_status" />
-                        <ProgressBar android:layout_gravity="center" android:id="@+id/status_progress" android:visibility="gone" android:layout_width="62.0dip" android:layout_height="62.0dip" android:indeterminateTint="@color/brand_gold" style="?android:progressBarStyle" />
-                    </FrameLayout>
-                    <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="14.0dip">
-                        <TextView android:textSize="18.0sp" android:textColor="@color/text_primary" android:id="@+id/status_view" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/main_ready" android:fontFamily="@font/archivo_semibold" />
-                        <TextView android:textSize="13.0sp" android:textColor="@color/text_secondary" android:id="@+id/bike_view" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="3.0dip" android:text="@string/main_no_bike_paired_yet" android:lineSpacingExtra="2.0dip" />
+            <com.google.android.material.card.MaterialCardView android:id="@+id/hus_banner" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" app:cardBackgroundColor="@color/ms_banner_bg" app:strokeWidth="0.0dip" style="@style/Card.OpenCfMoto">
+                <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+                    <TextView android:textSize="15.0sp" android:textColor="@color/status_busy" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/hus_title" android:fontFamily="@font/archivo_semibold" />
+                    <TextView android:textSize="13.0sp" android:textColor="@color/text_secondary" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" android:text="@string/hus_body" android:lineSpacingExtra="2.0dip" />
+                    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip">
+                        <com.google.android.material.button.MaterialButton android:id="@+id/hus_open" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/hus_open" android:layout_weight="1.0" android:layout_marginEnd="6.0dip" style="@style/Widget.OpenCfMoto.Segment" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/hus_how" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/hus_how" android:layout_weight="1.0" android:layout_marginStart="6.0dip" style="@style/Widget.OpenCfMoto.Segment" />
                     </LinearLayout>
                 </LinearLayout>
-                <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="14.0dip" android:baselineAligned="false">
-                    <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@+id/stat_speed_box" android:background="@drawable/ms_gauge_cell" android:paddingTop="10.0dip" android:paddingBottom="10.0dip" android:visibility="gone" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.3" android:layout_marginEnd="6.0dip">
-                        <TextView android:textSize="32.0sp" android:textColor="@color/brand_gold" android:id="@+id/stat_speed" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--" android:includeFontPadding="false" android:fontFamily="@font/archivo_black" />
-                        <TextView android:text="@string/stat_speed_now" style="@style/HeroStatLabel" />
-                    </LinearLayout>
-                    <LinearLayout android:gravity="center" android:orientation="vertical" android:background="@drawable/ms_gauge_cell" android:paddingTop="10.0dip" android:paddingBottom="10.0dip" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginEnd="6.0dip">
-                        <TextView android:id="@+id/stat_km" android:text="--" style="@style/HeroStatValue" />
-                        <TextView android:text="@string/stat_km_today" style="@style/HeroStatLabel" />
-                    </LinearLayout>
-                    <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@+id/stat_max_box" android:background="@drawable/ms_gauge_cell" android:paddingTop="10.0dip" android:paddingBottom="10.0dip" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginEnd="6.0dip">
-                        <TextView android:id="@+id/stat_max" android:text="--" style="@style/HeroStatValue" />
-                        <TextView android:text="@string/stat_max_today" style="@style/HeroStatLabel" />
-                    </LinearLayout>
-                    <LinearLayout android:gravity="center" android:orientation="vertical" android:background="@drawable/ms_gauge_cell" android:paddingTop="10.0dip" android:paddingBottom="10.0dip" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
-                        <TextView android:id="@+id/stat_clock" android:text="--" style="@style/HeroStatValue" />
-                        <TextView android:id="@+id/stat_clock_label" android:text="@string/stat_clock" style="@style/HeroStatLabel" />
-                    </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip" android:baselineAligned="false">
+                <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@+id/stat_speed_box" android:background="@drawable/ms_gauge_cell" android:paddingTop="12.0dip" android:paddingBottom="12.0dip" android:visibility="gone" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginEnd="8.0dip">
+                    <TextView android:id="@+id/stat_speed" android:textColor="@color/brand_gold" android:text="--" style="@style/HeroStatValue" />
+                    <TextView android:text="@string/stat_speed_now" style="@style/HeroStatLabel" />
+                </LinearLayout>
+                <LinearLayout android:gravity="center" android:orientation="vertical" android:background="@drawable/ms_gauge_cell" android:paddingTop="12.0dip" android:paddingBottom="12.0dip" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginEnd="8.0dip">
+                    <TextView android:id="@+id/stat_km" android:text="--" style="@style/HeroStatValue" />
+                    <TextView android:text="@string/stat_km_today" style="@style/HeroStatLabel" />
+                </LinearLayout>
+                <LinearLayout android:gravity="center" android:orientation="vertical" android:id="@+id/stat_max_box" android:visibility="gone" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+                    <TextView android:id="@+id/stat_max" android:text="--" style="@style/HeroStatValue" />
+                    <TextView android:text="@string/stat_max_today" style="@style/HeroStatLabel" />
+                </LinearLayout>
+                <LinearLayout android:gravity="center" android:orientation="vertical" android:background="@drawable/ms_gauge_cell" android:paddingTop="12.0dip" android:paddingBottom="12.0dip" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0">
+                    <TextView android:id="@+id/stat_clock" android:textColor="@color/brand_gold" android:text="--" style="@style/HeroStatValue" />
+                    <TextView android:id="@+id/stat_clock_label" android:text="@string/stat_clock" style="@style/HeroStatLabel" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -91,17 +102,6 @@
                 </LinearLayout>
                 <TextView android:textSize="14.0sp" android:textColor="@color/text_primary" android:gravity="center" android:id="@+id/pke_lock" android:layout_width="wrap_content" android:layout_height="wrap_content" android:fontFamily="@font/archivo_semibold" />
             </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView android:id="@+id/hus_banner" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" app:strokeColor="@color/status_busy" style="@style/Card.OpenCfMoto">
-                <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
-                    <TextView android:textSize="15.0sp" android:textStyle="bold" android:textColor="@color/status_busy" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/hus_title" />
-                    <TextView android:textSize="13.0sp" android:textColor="@color/text_secondary" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dip" android:text="@string/hus_body" android:lineSpacingExtra="2.0dip" />
-                    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="10.0dip">
-                        <com.google.android.material.button.MaterialButton android:id="@+id/hus_open" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/hus_open" android:layout_weight="1.0" android:layout_marginEnd="6.0dip" style="@style/Widget.OpenCfMoto.Button.Connect" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/hus_how" android:layout_width="0.0dip" android:layout_height="wrap_content" android:text="@string/hus_how" android:layout_weight="1.0" android:layout_marginStart="6.0dip" style="@style/Widget.OpenCfMoto.Segment" />
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout android:orientation="vertical" android:id="@+id/live_section" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content">
                 <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:baselineAligned="false">
@@ -137,7 +137,7 @@
                 <LinearLayout android:id="@+id/btn_fuel" style="@style/HomeTile" />
             </LinearLayout>
 
-            <TextView android:textSize="11.0sp" android:textColor="@color/text_secondary" android:id="@+id/more_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="20.0dip" android:text="@string/ms_quick_title" android:textAllCaps="true" android:letterSpacing="0.15" android:layout_marginStart="4.0dip" />
+            <TextView android:textSize="11.0sp" android:textColor="@color/text_secondary" android:id="@+id/more_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="18.0dip" android:text="@string/ms_quick_title" android:letterSpacing="0.05" android:layout_marginStart="4.0dip" />
             <LinearLayout android:orientation="horizontal" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:baselineAligned="false">
                 <LinearLayout android:id="@+id/btn_traffic_lights" style="@style/HomeTile" />
                 <LinearLayout android:id="@+id/btn_live" style="@style/HomeTile" />
@@ -184,5 +184,5 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.button.MaterialButton android:id="@+id/btn_connect" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dip" android:layout_marginBottom="14.0dip" android:minHeight="68.0dip" android:textSize="19.0sp" android:text="@string/main_connect" android:layout_marginHorizontal="16.0dip" style="@style/Widget.OpenCfMoto.Button.Connect" />
+    <com.google.android.material.button.MaterialButton android:id="@+id/btn_connect" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dip" android:layout_marginBottom="14.0dip" android:minHeight="62.0dip" android:textSize="18.0sp" android:text="@string/main_connect" android:textColor="@color/on_brand" android:background="@drawable/ms_cta" app:backgroundTint="@null" app:iconTint="@color/on_brand" android:fontFamily="@font/archivo_black" android:layout_marginHorizontal="16.0dip" style="@style/Widget.OpenCfMoto.Button.Connect" />
 </LinearLayout>

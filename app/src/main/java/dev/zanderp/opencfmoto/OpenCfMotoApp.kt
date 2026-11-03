@@ -14,6 +14,20 @@ class OpenCfMotoApp : Application() {
             LogBus.includeSecrets = AppSettings.includeSecretsInLogs(this)
         } catch (_: Exception) {
         }
+        // MotoScreen TH v9: light/dark choice and the accent colour on every screen.
+        try { MotoScreen.applyNightMode(this) } catch (_: Exception) {}
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+            override fun onActivityPreCreated(activity: android.app.Activity, savedInstanceState: android.os.Bundle?) {
+                MotoScreen.applyAccent(activity)
+            }
+            override fun onActivityCreated(activity: android.app.Activity, savedInstanceState: android.os.Bundle?) {}
+            override fun onActivityStarted(activity: android.app.Activity) {}
+            override fun onActivityResumed(activity: android.app.Activity) {}
+            override fun onActivityPaused(activity: android.app.Activity) {}
+            override fun onActivityStopped(activity: android.app.Activity) {}
+            override fun onActivitySaveInstanceState(activity: android.app.Activity, outState: android.os.Bundle) {}
+            override fun onActivityDestroyed(activity: android.app.Activity) {}
+        })
         CrashGuard.install(this)
         SearchKeyGuard.install(this)
         CrashGuard.hydrateLogBus(this)

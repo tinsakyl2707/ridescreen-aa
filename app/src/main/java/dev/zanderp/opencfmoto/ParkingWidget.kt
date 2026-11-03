@@ -82,7 +82,7 @@ class ParkingWidget : AppWidgetProvider() {
             // Gold edge, like the plain card.
             paint.style = android.graphics.Paint.Style.STROKE
             paint.strokeWidth = 1.5f * dm.density * outW / (wDp * dm.density)
-            paint.color = androidx.core.content.ContextCompat.getColor(ctx, R.color.brand_orange)
+            paint.color = androidx.core.content.ContextCompat.getColor(ctx, R.color.ms_fixed_accent)
             val inset = paint.strokeWidth / 2
             c.drawRoundRect(android.graphics.RectF(inset, inset, outW - inset, outH - inset), r, r, paint)
             return out

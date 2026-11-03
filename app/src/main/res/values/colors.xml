@@ -3,27 +3,28 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Visual test "verde mate": matte green ground, gold accents like the ZT125T-X's stock
-         decals. The accent keeps its old resource name (brand_orange) so every screen that tints
-         with it follows without touching code. -->
-    <color name="brand_orange">#22e3d0</color>
-    <color name="brand_orange_dark">#129e93</color>
-    <color name="on_brand">#031014</color>
-    <color name="brand_gold">#22e3d0</color>
+    <!-- MotoScreen TH v9. Accent colours (brand_gold / brand_orange / on_brand …) are no longer
+         fixed here: they live in res/color/ and follow ?attr/msAccent, so the rider's colour choice
+         (cyan, amber, red, lime) reaches every screen. Surfaces and text below are the LIGHT
+         palette; values-night/colors.xml holds the dark one. -->
+    <color name="bg">#f2f5f7</color>
+    <color name="surface">#ffffff</color>
+    <color name="surface_high">#e8eef1</color>
+    <color name="outline">#d5dfe3</color>
 
-    <!-- Matte green surfaces -->
-    <color name="bg">#070b10</color>
-    <color name="surface">#0e151d</color>
-    <color name="surface_high">#16212c</color>
-    <color name="outline">#1f3a44</color>
+    <color name="text_primary">#0d1a20</color>
+    <color name="text_secondary">#5b6d75</color>
 
-    <!-- Text -->
-    <color name="text_primary">#eaf4f7</color>
-    <color name="text_secondary">#8aa0aa</color>
+    <color name="status_live">#1f9e55</color>
+    <color name="status_busy">#c98a00</color>
+    <color name="status_error">#d93a30</color>
+    <color name="status_idle">#7a8a91</color>
 
-    <!-- Status semantics -->
-    <color name="status_live">#4cff7a</color>
-    <color name="status_busy">#ffc547</color>
-    <color name="status_error">#ff5a4f</color>
-    <color name="status_idle">#6f848c</color>
+    <!-- Things drawn outside the app's theme (home-screen widgets, the dash presentation). -->
+    <color name="ms_fixed_accent">#22e3d0</color>
+    <color name="ms_fixed_on_accent">#031014</color>
+    <color name="ms_fixed_text">#eaf4f7</color>
+    <color name="ms_fixed_surface">#10151b</color>
+    <color name="ms_fixed_surface_high">#18202a</color>
+    <color name="ms_banner_bg">#22ffc547</color>
 </resources>

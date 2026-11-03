@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ThemeOverlay.Ms.Accent.Cyan" parent="">
+        <item name="msAccent">#0a9e91</item>
+        <item name="msAccent2">#1a8cff</item>
+        <item name="msAccentDark">#077a70</item>
+        <item name="msOnAccent">#ffffff</item>
+        <item name="msAccentSoft">#260a9e91</item>
+    </style>
+    <style name="ThemeOverlay.Ms.Accent.Amber" parent="">
+        <item name="msAccent">#d97706</item>
+        <item name="msAccent2">#f05a12</item>
+        <item name="msAccentDark">#a85a00</item>
+        <item name="msOnAccent">#ffffff</item>
+        <item name="msAccentSoft">#26d97706</item>
+    </style>
+    <style name="ThemeOverlay.Ms.Accent.Red" parent="">
+        <item name="msAccent">#e0352b</item>
+        <item name="msAccent2">#f26522</item>
+        <item name="msAccentDark">#b3241c</item>
+        <item name="msOnAccent">#ffffff</item>
+        <item name="msAccentSoft">#26e0352b</item>
+    </style>
+    <style name="ThemeOverlay.Ms.Accent.Lime" parent="">
+        <item name="msAccent">#4d8c12</item>
+        <item name="msAccent2">#16a34a</item>
+        <item name="msAccentDark">#3a6a0c</item>
+        <item name="msOnAccent">#ffffff</item>
+        <item name="msAccentSoft">#264d8c12</item>
+    </style>
+</resources>

@@ -199,4 +199,14 @@
     <string name="wz_qr_title">6 · สแกน QR บนจอรถ</string>
     <string name="wz_qr_body">บนจอรถเปิดหน้า \"ฉายหน้าจอ\" (หน้าที่มี QR) แล้วกดปุ่มด้านล่าง ส่องกล้องไปที่ QR ถ้าถามรุ่นให้เลือก \"Zontes 368G\"\n\nแค่นี้เสร็จ ครั้งต่อไปแค่ติดรถแล้วกดเชื่อมต่อ หรือปล่อยให้แอปต่อเอง</string>
     <string name="wz_qr_btn">สแกน QR บนจอรถ</string>
+    <string name="ms_look_title">หน้าตาแอป</string>
+    <string name="ms_look_mode">โหมดสว่าง / มืด</string>
+    <string name="ms_look_auto">ตามมือถือ</string>
+    <string name="ms_look_light">สว่าง</string>
+    <string name="ms_look_dark">มืด</string>
+    <string name="ms_look_accent">สีหลัก</string>
+    <string name="ms_accent_cyan">ฟ้า</string>
+    <string name="ms_accent_amber">อำพัน</string>
+    <string name="ms_accent_red">แดง</string>
+    <string name="ms_accent_lime">เขียว</string>
 </resources>

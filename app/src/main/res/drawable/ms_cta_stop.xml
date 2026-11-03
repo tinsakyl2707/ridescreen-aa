@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- While projecting the same button reads "Stop": outlined red, so it never looks like Connect. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="#33ff5a4f">
+    <item><shape><solid android:color="@color/bg" /><stroke android:width="2dp" android:color="@color/status_error" /><corners android:radius="20dp" /></shape></item>
+</ripple>

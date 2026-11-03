@@ -69,6 +69,7 @@ class SetupActivity : AppCompatActivity() {
             insets
         }
 
+        addLookCard()
         step1Title = findViewById(R.id.step1_title)
         step1Btn = findViewById(R.id.step1_btn)
         step2Title = findViewById(R.id.step2_title)
@@ -741,6 +742,98 @@ class SetupActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.setup_overlay_permission_failed), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    /**
+     * MotoScreen TH v9 · "Look" card at the top of Settings: light / dark / follow the phone, and
+     * the accent colour. Built in code so it needs no layout changes.
+     */
+    private fun addLookCard() {
+        val first = findViewById<View?>(R.id.step1_title) ?: return
+        var card: View = first
+        while (card.parent !is android.widget.LinearLayout || card !is com.google.android.material.card.MaterialCardView) {
+            card = card.parent as? View ?: return
+        }
+        val column = card.parent as android.widget.LinearLayout
+        val dp = resources.displayMetrics.density
+        fun px(v: Int) = (v * dp).toInt()
+        val c = { id: Int -> ContextCompat.getColor(this, id) }
+        val box = com.google.android.material.card.MaterialCardView(this).apply {
+            radius = 22 * dp
+            cardElevation = 0f
+            strokeWidth = 0
+            setCardBackgroundColor(c(R.color.surface))
+        }
+        val col = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            setPadding(px(20), px(18), px(20), px(18))
+        }
+        fun label(t: Int, top: Int) = TextView(this).apply {
+            setText(t); textSize = 15f; setTextColor(c(R.color.text_primary))
+            typeface = androidx.core.content.res.ResourcesCompat.getFont(this@SetupActivity, R.font.archivo_semibold)
+            setPadding(0, px(top), 0, px(8))
+        }
+        col.addView(TextView(this).apply { setText(R.string.ms_look_title); textSize = 12f; setTextColor(c(R.color.text_secondary)) })
+        col.addView(label(R.string.ms_look_mode, 8))
+        val modes = listOf(
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM to R.string.ms_look_auto,
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO to R.string.ms_look_light,
+            androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES to R.string.ms_look_dark,
+        )
+        val now = MotoScreen.nightMode(this)
+        val row = android.widget.LinearLayout(this).apply { orientation = android.widget.LinearLayout.HORIZONTAL }
+        modes.forEachIndexed { i, (mode, text) ->
+            val sel = mode == now
+            row.addView(com.google.android.material.button.MaterialButton(this).apply {
+                setText(text)
+                insetTop = 0; insetBottom = 0
+                cornerRadius = px(12)
+                minHeight = px(46)
+                setPadding(px(4), 0, px(4), 0)
+                backgroundTintList = android.content.res.ColorStateList.valueOf(c(if (sel) R.color.brand_gold else R.color.surface_high))
+                setTextColor(c(if (sel) R.color.on_brand else R.color.text_primary))
+                setOnClickListener { if (!sel) MotoScreen.setNightMode(this@SetupActivity, mode) }
+            }, android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                if (i > 0) marginStart = px(8)
+            })
+        }
+        col.addView(row)
+        col.addView(label(R.string.ms_look_accent, 16))
+        val names = mapOf(
+            MotoScreen.Accent.CYAN to R.string.ms_accent_cyan, MotoScreen.Accent.AMBER to R.string.ms_accent_amber,
+            MotoScreen.Accent.RED to R.string.ms_accent_red, MotoScreen.Accent.LIME to R.string.ms_accent_lime,
+        )
+        val cur = MotoScreen.accent(this)
+        val sw = android.widget.LinearLayout(this).apply { orientation = android.widget.LinearLayout.HORIZONTAL }
+        for (a in MotoScreen.Accent.values()) {
+            val sel = a == cur
+            val cell = android.widget.LinearLayout(this).apply {
+                orientation = android.widget.LinearLayout.VERTICAL
+                gravity = android.view.Gravity.CENTER_HORIZONTAL
+                isClickable = true
+                setOnClickListener {
+                    if (!sel) { MotoScreen.setAccent(this@SetupActivity, a); recreate() }
+                }
+            }
+            cell.addView(View(this).apply {
+                background = android.graphics.drawable.GradientDrawable().apply {
+                    shape = android.graphics.drawable.GradientDrawable.OVAL
+                    setColor(a.swatch.toInt())
+                    if (sel) setStroke(px(3), c(R.color.text_primary))
+                }
+            }, android.widget.LinearLayout.LayoutParams(px(44), px(44)))
+            cell.addView(TextView(this).apply {
+                setText(names.getValue(a)); textSize = 12f; gravity = android.view.Gravity.CENTER
+                setTextColor(c(if (sel) R.color.text_primary else R.color.text_secondary))
+                setPadding(0, px(6), 0, 0)
+            })
+            sw.addView(cell, android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        }
+        col.addView(sw)
+        box.addView(col)
+        column.addView(box, column.indexOfChild(card), android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+        ).apply { bottomMargin = px(12) })
     }
 
     private var stepsExpanded = false

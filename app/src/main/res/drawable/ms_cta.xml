@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The big Connect button: accent → accent2 gradient; dimmed while disabled. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false">
+        <shape><solid android:color="@color/surface_high" /><corners android:radius="20dp" /></shape>
+    </item>
+    <item>
+        <ripple android:color="#33FFFFFF">
+            <item><shape><corners android:radius="20dp" />
+                <gradient android:angle="0" android:startColor="?attr/msAccent" android:endColor="?attr/msAccent2" /></shape></item>
+        </ripple>
+    </item>
+</selector>

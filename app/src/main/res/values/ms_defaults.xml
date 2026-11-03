@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ms_def_accent">#0a9e91</color>
+    <color name="ms_def_accent2">#1a8cff</color>
+    <color name="ms_def_accent_dark">#077a70</color>
+    <color name="ms_def_on_accent">#ffffff</color>
+    <color name="ms_def_accent_soft">#260a9e91</color>
+    <bool name="ms_light_bars">true</bool>
+</resources>

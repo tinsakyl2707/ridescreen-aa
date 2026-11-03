@@ -97,4 +97,14 @@
     <string name="wz_qr_title">6 · Scan the QR on the dash</string>
     <string name="wz_qr_body">On the dash open screen mirroring (the page with a QR code), then tap the button and point the camera at it. Pick \"Zontes 368G\" when asked.\n\nThat\'s it. Next time just start the bike and tap Connect, or let it connect by itself.</string>
     <string name="wz_qr_btn">Scan the dash QR</string>
+    <string name="ms_look_title">Look</string>
+    <string name="ms_look_mode">Light / dark</string>
+    <string name="ms_look_auto">Like the phone</string>
+    <string name="ms_look_light">Light</string>
+    <string name="ms_look_dark">Dark</string>
+    <string name="ms_look_accent">Accent colour</string>
+    <string name="ms_accent_cyan">Cyan</string>
+    <string name="ms_accent_amber">Amber</string>
+    <string name="ms_accent_red">Red</string>
+    <string name="ms_accent_lime">Lime</string>
 </resources>
