@@ -111,3 +111,10 @@ onDestroy ไม่ teardown การเชื่อมต่อถ้าเป
 - ✅ v13: หน้าปัด Cockpit (CockpitView, Canvas) + แถบเพลง (notification access) + สลับ Android Auto | หน้าปัด MotoScreen บนหน้าแรก
   (เชื่อมต่อผ่าน AA ก่อน แล้ว soft-switch ไปหน้าปัดเรา; กลับ AA = reconnect) + หน้า 🎮 ทดสอบปุ่มแฮนด์ (ช่วยเหลือ)
   ⚠️ ยังไม่เคยทดสอบบน 368G: soft switch (attachOwnedGpxVideo) เคยใช้กับจอ CFMoto
+
+## B8 · Custom dash (drag & drop) — v18
+- DashTheme (JSON, normalised positions) + DashRenderer shared by the bike dash (CockpitView) and the editor preview.
+- DashEditorActivity (landscape): drag + snap (1/40 grid, centre guides), tap select, long-press options, S/M/L, add/delete/duplicate,
+  background (glow / art / own photo / black + dim), undo (40), reset, saved themes, share/import as text.
+- Entry: tap the selected "MotoScreen dash ✎" segment, long-press it, or Help → 🎨.
+- Not verified yet: the dash itself on the 368G.

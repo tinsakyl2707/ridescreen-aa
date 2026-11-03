@@ -20,6 +20,7 @@ object HelpMenu {
             activity.getString(R.string.wz_menu) to { SetupWizardActivity.start(activity) },
             activity.getString(R.string.help_guide) to { showThaiGuide(activity) },
             activity.getString(R.string.help_interfaces) to { showInterfacesTip(activity) },
+            activity.getString(R.string.de_menu) to { DashEditorActivity.start(activity) },
             activity.getString(R.string.bt_test_menu) to { ButtonTestActivity.start(activity) },
             activity.getString(R.string.ms_help_send_tech) to shareLogs,
         ) + extras

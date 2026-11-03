@@ -998,7 +998,11 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.btn_doctor)?.setOnClickListener { Doctor.show(this) }
         findViewById<View>(R.id.btn_doctor_tile)?.setOnClickListener { Doctor.show(this) }
         findViewById<View?>(R.id.mode_aa)?.setOnClickListener { chooseDashMode(false) }
-        findViewById<View?>(R.id.mode_dash)?.setOnClickListener { chooseDashMode(true) }
+        findViewById<View?>(R.id.mode_dash)?.setOnClickListener {
+            // v18: tapping the already-chosen dash segment opens the layout editor.
+            if (MotoDash.preferDash(this)) DashEditorActivity.start(this) else chooseDashMode(true)
+        }
+        findViewById<View?>(R.id.mode_dash)?.setOnLongClickListener { DashEditorActivity.start(this); true }
         renderDashMode()
         findViewById<View>(R.id.btn_doctor_tile)?.setOnLongClickListener { DashExplorer.show(this); true }
         // Hero: tap to set the bike's photo / name (the garage now lives here instead of a home tile).
@@ -2698,6 +2702,7 @@ class MainActivity : AppCompatActivity() {
             findViewById<TextView?>(id)?.apply {
                 setTextColor(if (sel) on else off)
                 background = if (sel) ContextCompat.getDrawable(this@MainActivity, R.drawable.ms_lang_thumb) else null
+                if (id == R.id.mode_dash) setText(if (dash) R.string.dash_mode_dash_edit else R.string.dash_mode_dash)
             }
         }
     }

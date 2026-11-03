@@ -232,6 +232,10 @@
         <activity
             android:name=".ButtonTestActivity"
             android:exported="false" />
+        <activity
+            android:name=".DashEditorActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
         <receiver
             android:name=".FuelPriceReceiver"
             android:exported="false">
