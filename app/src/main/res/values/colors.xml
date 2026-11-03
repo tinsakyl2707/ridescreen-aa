@@ -24,6 +24,7 @@
     <color name="ms_fixed_accent">#22e3d0</color>
     <color name="ms_fixed_on_accent">#031014</color>
     <color name="ms_fixed_text">#eaf4f7</color>
+    <color name="ms_fixed_text_dim">#D9EAF4F7</color>
     <color name="ms_fixed_surface">#10151b</color>
     <color name="ms_fixed_surface_high">#18202a</color>
     <color name="ms_icon_bg">#FF0B1117</color>

@@ -1355,9 +1355,11 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread { if (!isFinishing && !isDestroyed && decoded != null) refreshHero() }
         }, "hero-decode").also { HeroCache.decoding = key }.start()
         val bmp = cached
-        photo.setImageBitmap(bmp)
-        findViewById<View>(R.id.hero_placeholder).visibility = if (bmp == null) View.VISIBLE else View.GONE
-        findViewById<View?>(R.id.hero_scrim)?.visibility = if (bmp == null) View.GONE else View.VISIBLE
+        // v14: no photo of their own → the MotoScreen rider art; the card always has a picture now,
+        // so its text is always light on the dark scrim (also in light mode).
+        if (bmp != null) photo.setImageBitmap(bmp) else photo.setImageResource(R.drawable.ms_hero_default)
+        findViewById<View>(R.id.hero_placeholder).visibility = View.GONE
+        findViewById<View?>(R.id.hero_scrim)?.visibility = View.VISIBLE
         findViewById<TextView>(R.id.hero_name).text = bike?.name ?: ""
         findViewById<TextView>(R.id.hero_sub).text = when {
             bike == null -> getString(R.string.main_no_bike_paired_yet)
@@ -1962,7 +1964,7 @@ class MainActivity : AppCompatActivity() {
                     else if (BikeMemory.hasSaved(this)) ContextCompat.getColor(this, R.color.brand_gold)
                     else ContextCompat.getColor(this, R.color.status_idle)
         }
-        statusView.setTextColor(ContextCompat.getColor(this, R.color.text_primary))
+        statusView.setTextColor(ContextCompat.getColor(this, R.color.ms_fixed_text))
         statusIcon.setColorFilter(color)
         statusProgress.visibility = if (phase.busy) View.VISIBLE else View.GONE
 
