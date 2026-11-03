@@ -159,6 +159,10 @@ class VideoPipeline(
             // already has map pixels (postponing left the dash on a frozen AA frame).
             if (Looper.myLooper() == Looper.getMainLooper()) setupGpxPresentation()
             else main.post { setupGpxPresentation() }
+        } else if (MotoDash.active) {
+            log("[VIDEO] MotoScreen dash mode (Presentation)")
+            if (Looper.myLooper() == Looper.getMainLooper()) setupMotoDash()
+            else main.post { setupMotoDash() }
         } else {
             log("[VIDEO] own-content mode (Presentation)")
             if (Looper.myLooper() == Looper.getMainLooper()) setupDisplayAndPresentation()
@@ -476,6 +480,23 @@ class VideoPipeline(
             main.post(ticker)
         } catch (e: Exception) {
             log("[VIDEO] display/presentation failed: $e")
+        }
+    }
+
+    /** v13 · our own "Cockpit" dash, drawn on a Canvas (see [CockpitView]). */
+    private fun setupMotoDash() {
+        try {
+            val display = createOwnVirtualDisplay() ?: return
+            val pres = Presentation(context, display)
+            pres.setContentView(CockpitView(pres.context, log))
+            try { pres.window?.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) } catch (_: Exception) {}
+            pres.show()
+            presentation = pres
+            AndroidAutoService.setGpxScreenWake(context, true)
+            log("[DASH] cockpit shown → ${width}x${height}")
+        } catch (e: Exception) {
+            log("[DASH] cockpit failed: $e")
+            setupDisplayAndPresentation()
         }
     }
 

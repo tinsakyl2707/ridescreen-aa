@@ -604,7 +604,7 @@ class AndroidAutoService : Service() {
      * GPX Presentation to the existing prober. Does not rejoin the bike AP.
      */
     private fun parkAaForMap(): Boolean {
-        if (!GpxSession.active) {
+        if (!GpxSession.active && !MotoDash.active) {
             LogBus.log("[AA→MAP] no map session — abort soft-switch")
             return false
         }
@@ -823,7 +823,7 @@ class AndroidAutoService : Service() {
             AaVideoBridge.onSteadyVideo = null
             AaVideoBridge.pipeline = null
             val prober = BikeLink.prober
-            if (prober != null && prober.isRunning && GpxSession.active) {
+            if (prober != null && prober.isRunning && (GpxSession.active || MotoDash.active)) {
                 LogBus.log("[AA→MAP] no AA service — attaching GPX on live prober")
                 return prober.attachOwnedGpxVideo()
             }

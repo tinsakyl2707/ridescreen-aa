@@ -294,7 +294,7 @@ class EasyConnProber(
             log("[MAP] attachOwnedGpxVideo: prober not running")
             return false
         }
-        if (!GpxSession.active) {
+        if (!GpxSession.active && !MotoDash.active) {
             log("[MAP] attachOwnedGpxVideo: no map session")
             return false
         }

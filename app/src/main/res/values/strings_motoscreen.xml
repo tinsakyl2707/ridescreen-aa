@@ -138,4 +138,25 @@
     <string name="fuel_notif_up">%1$s goes UP %2$s ฿ at 05:00 tomorrow (→ %3$s ฿). Filling up today is cheaper.</string>
     <string name="fuel_notif_down">%1$s goes DOWN %2$s ฿ at 05:00 tomorrow (→ %3$s ฿). Worth waiting if you can.</string>
     <string name="fuel_refuel_hint">Price (empty = litres × %1$s ฿)</string>
+    <string name="dash_mode_aa">Android Auto</string>
+    <string name="dash_mode_dash">MotoScreen dash</string>
+    <string name="dash_media_title">Show your music on the dash?</string>
+    <string name="dash_media_body">To show the song and skip tracks, Android needs \"notification access\" for MotoScreen. It only reads what\'s playing; nothing leaves the phone.</string>
+    <string name="dash_media_allow">Open settings</string>
+    <string name="dash_media_later">Later</string>
+    <string name="dash_switch_failed">Couldn\'t switch the dash to the MotoScreen screen. Stop, then connect again.</string>
+    <string name="dash_gps_wait">waiting for GPS</string>
+    <string name="dash_kmh">km/h</string>
+    <string name="dash_now_playing">NOW PLAYING</string>
+    <string name="dash_trip">TODAY\'S RIDE</string>
+    <string name="dash_km">km</string>
+    <string name="dash_maint_left">%1$s in %2$s km</string>
+    <string name="dash_maint_over">%1$s overdue</string>
+    <string name="bt_test_menu">🎮 Handlebar button test</string>
+    <string name="bt_test_title">Button test</string>
+    <string name="bt_test_how">Connect to the bike, stay on the dash\'s mirroring page, then press SET / MODE (short and long), or a Bluetooth remote / intercom button. Every signal that reaches the phone appears below. Nothing appears = that button only drives the bike\'s own screen.</string>
+    <string name="bt_test_waiting">Waiting for a button…</string>
+    <string name="bt_test_src_bt">🔵 Bluetooth</string>
+    <string name="bt_test_src_wifi">📶 Dash Wi‑Fi</string>
+    <string name="bt_test_src_key">⌨️ Key</string>
 </resources>

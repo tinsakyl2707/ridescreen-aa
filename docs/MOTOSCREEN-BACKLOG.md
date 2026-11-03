@@ -107,3 +107,6 @@ onDestroy ไม่ teardown การเชื่อมต่อถ้าเป
   → แหล่งปุ่ม: (1) SET/MODE ถ้าส่งถึงมือถือ (2) รีโมทบลูทูธติดแฮนด์ (โค้ด DedicatedRemote/ButtonMapping มีอยู่แล้ว)
      (3) ปุ่มอินเตอร์คอมหมวก (ปุ่มเพลงมาตรฐาน) (4) แตะจอมือถือตอนจอด
   → แถบเพลงบนหน้าปัด: ชื่อเพลง/ศิลปิน + ⏮ ⏯ ⏭ (อ่านจาก media session ของแอปเพลงที่เล่นอยู่)
+- ✅ v13: หน้าปัด Cockpit (CockpitView, Canvas) + แถบเพลง (notification access) + สลับ Android Auto | หน้าปัด MotoScreen บนหน้าแรก
+  (เชื่อมต่อผ่าน AA ก่อน แล้ว soft-switch ไปหน้าปัดเรา; กลับ AA = reconnect) + หน้า 🎮 ทดสอบปุ่มแฮนด์ (ช่วยเหลือ)
+  ⚠️ ยังไม่เคยทดสอบบน 368G: soft switch (attachOwnedGpxVideo) เคยใช้กับจอ CFMoto

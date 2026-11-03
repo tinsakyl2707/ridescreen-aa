@@ -192,5 +192,10 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <!-- v13: what the Connect button puts on the dash — Android Auto or our own MotoScreen dash. -->
+    <LinearLayout android:orientation="horizontal" android:id="@+id/dash_mode_row" android:background="@drawable/ms_lang_track" android:padding="3.0dip" android:layout_width="fill_parent" android:layout_height="44.0dip" android:layout_marginTop="6.0dip" android:layout_marginHorizontal="16.0dip">
+        <TextView android:textSize="14.0sp" android:gravity="center" android:id="@+id/mode_aa" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" android:text="@string/dash_mode_aa" android:fontFamily="@font/archivo_semibold" />
+        <TextView android:textSize="14.0sp" android:gravity="center" android:id="@+id/mode_dash" android:layout_width="0.0dip" android:layout_height="fill_parent" android:layout_weight="1.0" android:text="@string/dash_mode_dash" android:fontFamily="@font/archivo_semibold" />
+    </LinearLayout>
     <com.google.android.material.button.MaterialButton android:id="@+id/btn_connect" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="6.0dip" android:layout_marginBottom="14.0dip" android:minHeight="62.0dip" android:textSize="18.0sp" android:text="@string/main_connect" android:textColor="@color/on_brand" android:background="@drawable/ms_cta" app:backgroundTint="@null" app:iconTint="@color/on_brand" android:fontFamily="@font/archivo_black" android:layout_marginHorizontal="16.0dip" style="@style/Widget.OpenCfMoto.Button.Connect" />
 </LinearLayout>

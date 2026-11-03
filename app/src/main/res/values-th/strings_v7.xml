@@ -251,4 +251,25 @@
     <string name="rain_now">ฝนกำลังตก หรือใกล้จะตกแถวที่คุณอยู่</string>
     <string name="rain_in_minutes">ฝนน่าจะตกในอีกประมาณ %1$d นาที แถวที่คุณอยู่</string>
     <string name="rain_source">สภาพอากาศ: Open-Meteo.com</string>
+    <string name="dash_mode_aa">Android Auto</string>
+    <string name="dash_mode_dash">หน้าปัด MotoScreen</string>
+    <string name="dash_media_title">โชว์เพลงบนหน้าปัดไหม?</string>
+    <string name="dash_media_body">ถ้าจะโชว์ชื่อเพลงและเลื่อนเพลงได้ Android ต้องให้สิทธิ์ \"เข้าถึงการแจ้งเตือน\" กับ MotoScreen แอปอ่านแค่เพลงที่กำลังเล่น ไม่ส่งข้อมูลออกจากมือถือ</string>
+    <string name="dash_media_allow">เปิดหน้าตั้งค่า</string>
+    <string name="dash_media_later">ไว้ทีหลัง</string>
+    <string name="dash_switch_failed">สลับจอรถเป็นหน้าปัด MotoScreen ไม่ได้ กดหยุดแล้วเชื่อมต่อใหม่</string>
+    <string name="dash_gps_wait">กำลังรอ GPS</string>
+    <string name="dash_kmh">กม./ชม.</string>
+    <string name="dash_now_playing">กำลังเล่น</string>
+    <string name="dash_trip">ทริปวันนี้</string>
+    <string name="dash_km">กม.</string>
+    <string name="dash_maint_left">%1$s อีก %2$s กม.</string>
+    <string name="dash_maint_over">%1$s เกินกำหนด</string>
+    <string name="bt_test_menu">🎮 ทดสอบปุ่มแฮนด์</string>
+    <string name="bt_test_title">ทดสอบปุ่ม</string>
+    <string name="bt_test_how">เชื่อมต่อรถ อยู่หน้าฉายหน้าจอบนจอรถ แล้วกด SET / MODE (ทั้งกดสั้นและกดค้าง) หรือปุ่มรีโมทบลูทูธ / อินเตอร์คอม สัญญาณที่มาถึงมือถือจะขึ้นด้านล่างทันที ถ้าไม่ขึ้นอะไร = ปุ่มนั้นคุมแค่จอรถเอง</string>
+    <string name="bt_test_waiting">รอกดปุ่ม…</string>
+    <string name="bt_test_src_bt">🔵 บลูทูธ</string>
+    <string name="bt_test_src_wifi">📶 Wi‑Fi จอรถ</string>
+    <string name="bt_test_src_key">⌨️ ปุ่มกด</string>
 </resources>

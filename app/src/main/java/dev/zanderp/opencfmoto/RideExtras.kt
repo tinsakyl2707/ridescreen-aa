@@ -184,6 +184,8 @@ object RainCheck {
 
     private val io = Executors.newSingleThreadExecutor { r -> Thread(r, "rain-check").apply { isDaemon = true } }
     @Volatile private var lastRunAt = 0L
+    /** Last rain warning (text, time) — shown on the MotoScreen dash for a while. */
+    @Volatile var lastAlert: Pair<String, Long>? = null
 
     fun runSoon(ctx: Context) {
         val now = System.currentTimeMillis()
@@ -243,6 +245,7 @@ object RainCheck {
             firstSlot == 0 -> ctx.getString(R.string.rain_now)
             else -> ctx.getString(R.string.rain_in_minutes, firstSlot * 15)
         }
+        lastAlert = text to System.currentTimeMillis()
         notify(ctx, text, maxMm >= 1.0)
     }
 

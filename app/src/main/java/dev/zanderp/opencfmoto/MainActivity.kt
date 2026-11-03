@@ -997,6 +997,9 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.btn_fuel)?.setOnClickListener { FuelActivity.start(this) }
         findViewById<View>(R.id.btn_doctor)?.setOnClickListener { Doctor.show(this) }
         findViewById<View>(R.id.btn_doctor_tile)?.setOnClickListener { Doctor.show(this) }
+        findViewById<View?>(R.id.mode_aa)?.setOnClickListener { chooseDashMode(false) }
+        findViewById<View?>(R.id.mode_dash)?.setOnClickListener { chooseDashMode(true) }
+        renderDashMode()
         findViewById<View>(R.id.btn_doctor_tile)?.setOnLongClickListener { DashExplorer.show(this); true }
         // Hero: tap to set the bike's photo / name (the garage now lives here instead of a home tile).
         findViewById<View>(R.id.hero_card)?.setOnClickListener { GarageActivity.start(this) }
@@ -1934,6 +1937,11 @@ class MainActivity : AppCompatActivity() {
 
     /** Update the big status header + Connect button label from a [ConnectionState] transition. */
     private fun renderStatus(phase: Phase, detail: String) {
+        // v13: rider wants our dash — once Android Auto is up (the proven connect path), switch.
+        if (phase == Phase.STREAMING && MotoDash.preferDash(this) && !MotoDash.active && !dashAutoTried) {
+            dashAutoTried = true
+            connectBtn.post { if (ConnectionState.phase == Phase.STREAMING && !MotoDash.active) switchToMotoDash() }
+        }
         statusView.text = getString(phase.labelRes) +
             (if (ClockLab.resyncInProgress() && phase != Phase.STOPPED && phase != Phase.IDLE)
                 " · " + getString(R.string.clock_resyncing) else "") +
@@ -2678,7 +2686,63 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // ---- v13 · MotoScreen dash vs Android Auto ----
+
+    private fun renderDashMode() {
+        val dash = MotoDash.preferDash(this)
+        val on = ContextCompat.getColor(this, R.color.on_brand)
+        val off = ContextCompat.getColor(this, R.color.text_secondary)
+        for ((id, sel) in listOf(R.id.mode_aa to !dash, R.id.mode_dash to dash)) {
+            findViewById<TextView?>(id)?.apply {
+                setTextColor(if (sel) on else off)
+                background = if (sel) ContextCompat.getDrawable(this@MainActivity, R.drawable.ms_lang_thumb) else null
+            }
+        }
+    }
+
+    private fun chooseDashMode(dash: Boolean) {
+        if (dash && !MotoDash.hasMediaAccess(this) && !askedMediaAccess) {
+            askedMediaAccess = true
+            com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.dash_media_title)
+                .setMessage(R.string.dash_media_body)
+                .setPositiveButton(R.string.dash_media_allow) { _, _ ->
+                    try { startActivity(Intent(android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) } catch (_: Exception) {}
+                }
+                .setNegativeButton(R.string.dash_media_later, null)
+                .show()
+        }
+        MotoDash.setPreferDash(this, dash)
+        renderDashMode()
+        val live = ConnectionState.phase == Phase.STREAMING
+        if (!live) return
+        if (dash && !MotoDash.active) switchToMotoDash()
+        else if (!dash && MotoDash.active) {
+            // Back to Android Auto: a clean reconnect is the reliable way to restart AA video.
+            log("→ dash → Android Auto: reconnecting")
+            stopEverything()
+            connectBtn.postDelayed({ reconnectSavedBike() }, 2500)
+        }
+    }
+    private var askedMediaAccess = false
+    /** One automatic AA→dash switch per connection (no retry loop if it fails). */
+    private var dashAutoTried = false
+
+    /** Live AA → our dash on the same bike link (the soft AA→Map path, with MotoDash as the source). */
+    private fun switchToMotoDash() {
+        MotoDash.active = true
+        ensureLocationPermission()
+        log("→ Android Auto → MotoScreen dash (soft switch)")
+        val ok = try { AndroidAutoService.switchToMapProjection(this) } catch (e: Exception) { log("dash switch: $e"); false }
+        if (!ok) {
+            MotoDash.active = false
+            Toast.makeText(this, R.string.dash_switch_failed, Toast.LENGTH_LONG).show()
+        }
+    }
+
     private fun stopEverything() {
+        MotoDash.active = false
+        dashAutoTried = false
         log("→ stopping everything (Android Auto + bike)")
         try { AaVideoBridge.onSteadyVideo = null } catch (_: Exception) {}
         try { AndroidAutoService.stop(this) } catch (e: Exception) { log("AA stop: $e") }

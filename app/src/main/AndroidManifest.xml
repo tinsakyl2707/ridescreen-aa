@@ -226,6 +226,19 @@
         <receiver
             android:name=".CrashActionReceiver"
             android:exported="false" />
+        <!-- v13: lets the MotoScreen dash show (and skip) what the music app is playing. -->
+        <service
+            android:name=".MsNotificationListener"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+        <activity
+            android:name=".ButtonTestActivity"
+            android:exported="false" />
         <receiver
             android:name=".FuelPriceReceiver"
             android:exported="false">
