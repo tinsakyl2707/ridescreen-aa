@@ -153,7 +153,9 @@ object Parking {
     }
 
     fun distanceText(meters: Int): String =
-        if (meters < 1000) "$meters m" else String.format(Locale.getDefault(), "%.1f km", meters / 1000.0)
+        if (Locale.getDefault().language == "th") {
+            if (meters < 1000) "$meters ม." else String.format(Locale.getDefault(), "%.1f กม.", meters / 1000.0)
+        } else if (meters < 1000) "$meters m" else String.format(Locale.getDefault(), "%.1f km", meters / 1000.0)
 
     /** Google Maps (or any maps app) walking directions to the bike. */
     fun walkIntent(spot: Spot): Intent = Intent(

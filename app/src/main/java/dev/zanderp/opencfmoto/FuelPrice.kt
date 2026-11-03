@@ -114,7 +114,12 @@ object FuelPrice {
         when (node) {
             is JSONArray -> for (i in 0 until node.length()) walk(node.opt(i), out, depth + 1)
             is JSONObject -> {
-                entry(node)?.let { (f, p) -> if (out[f] == null) out[f] = p }
+                // Several products can match (e.g. regular Gasohol 95 and a premium 95): keep the
+                // cheapest — the regular one is what riders mean by "95" (v15: premium 41.54 ฿ showed).
+                entry(node)?.let { (f, p) ->
+                    val cur = out[f]
+                    if (cur == null || (p.today ?: Double.MAX_VALUE) < (cur.today ?: Double.MAX_VALUE)) out[f] = p
+                }
                 val keys = node.keys()
                 while (keys.hasNext()) walk(node.opt(keys.next()), out, depth + 1)
             }
@@ -131,6 +136,7 @@ object FuelPrice {
         val n = name.lowercase(Locale.ROOT)
         val gasohol = n.contains("แก๊สโซฮอล์") || n.contains("แก๊สโซฮอล") || n.contains("gasohol")
         if (!gasohol) return null
+        if (n.contains("พรีเมียม") || n.contains("premium") || n.contains("v-power") || n.contains("ไฮ") || n.contains("super")) return null
         return when {
             n.contains("e20") -> Fuel.E20
             n.contains("e85") -> null

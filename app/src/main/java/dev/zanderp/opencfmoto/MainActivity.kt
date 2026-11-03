@@ -1540,7 +1540,7 @@ class MainActivity : AppCompatActivity() {
         when {
             st == null -> {
                 // v11 (H5): a word in the accent, not a giant "+" next to a number.
-                v.text = getString(R.string.ms_stat_maint_set_value); v.textSize = 20f
+                v.text = getString(R.string.ms_stat_maint_set_value); v.textSize = 17f
                 label.text = getString(R.string.ms_stat_maint_setup)
             }
             st.kmLeft != null -> {
