@@ -3,7 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- MotoScreen TH v9. Accent colours (brand_gold / brand_orange / on_brand …) are no longer
+    <!-- MotoScreen v9. Accent colours (brand_gold / brand_orange / on_brand …) are no longer
          fixed here: they live in res/color/ and follow ?attr/msAccent, so the rider's colour choice
          (cyan, amber, red, lime) reaches every screen. Surfaces and text below are the LIGHT
          palette; values-night/colors.xml holds the dark one. -->
@@ -26,5 +26,6 @@
     <color name="ms_fixed_text">#eaf4f7</color>
     <color name="ms_fixed_surface">#10151b</color>
     <color name="ms_fixed_surface_high">#18202a</color>
+    <color name="ms_icon_bg">#FF0B1117</color>
     <color name="ms_banner_bg">#22ffc547</color>
 </resources>

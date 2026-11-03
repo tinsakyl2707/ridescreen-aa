@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- MotoScreen TH v7 · Thai for trips, all-rides map, records, trophies, year review, weekly summary. -->
+<!-- MotoScreen v7 · Thai for trips, all-rides map, records, trophies, year review, weekly summary. -->
 <resources>
     <string name="ms_yir_ref_km">700</string>
     <string name="all_rides_button">🗺 ทั้งหมด</string>
@@ -45,13 +45,13 @@
     <string name="share_avg">เฉลี่ย กม./ชม.</string>
     <string name="share_button">แชร์</string>
     <string name="share_chooser">แชร์ทริป</string>
-    <string name="share_footer">Android Auto บนจอรถ · MotoScreen TH</string>
+    <string name="share_footer">Android Auto บนจอรถ · MotoScreen</string>
     <string name="share_hours">ชั่วโมงที่ขี่</string>
     <string name="share_km">กม.</string>
     <string name="share_max">สูงสุด กม./ชม.</string>
     <string name="share_preparing">กำลังเตรียมรูป…</string>
     <string name="share_rides">ทริป</string>
-    <string name="share_text">ขี่กับ MotoScreen TH 🏍️</string>
+    <string name="share_text">ขี่กับ MotoScreen 🏍️</string>
     <string name="share_time">เวลา</string>
     <string name="tl_entry">🚦 ไฟแดงและเส้นทางของคุณ</string>
     <string name="tl_failed">วิเคราะห์ทริปไม่ได้ ลองใหม่ตอนมีเน็ต</string>
@@ -179,7 +179,7 @@
     <string name="wz_status_ok">✅ เรียบร้อย</string>
     <string name="wz_status_todo">⏳ ยังไม่เรียบร้อย: กดปุ่มด้านล่าง</string>
     <string name="wz_status_manual">👉 ขั้นนี้มือถือเช็คเองไม่ได้ ทำตามแล้วกด \"ทำแล้ว ถัดไป\"</string>
-    <string name="wz_welcome_title">ยินดีต้อนรับสู่ MotoScreen TH</string>
+    <string name="wz_welcome_title">ยินดีต้อนรับสู่ MotoScreen</string>
     <string name="wz_welcome_body">แผนที่ เพลง และสายโทรเข้าจากมือถือ ขึ้นบนจอ Zontes 368G\n\nตั้งค่าครั้งเดียว ใช้เวลาประมาณ 5 นาที ทำตอนอยู่ใกล้รถ เพราะขั้นสุดท้ายต้องสแกน QR บนจอรถ\n\nเลือกภาษา:</string>
     <string name="wz_aa_title">1 · Android Auto</string>
     <string name="wz_aa_body">แอปใช้ Android Auto ในมือถือวาดแผนที่ขึ้นจอรถ\n\nมือถือบางรุ่นมาพร้อม Android Auto ตัวย่อ (stub) ที่ใช้งานนี้ไม่ได้ กดปุ่มแล้วกด \"อัปเดต\" หรือ \"ติดตั้ง\" ใน Play Store</string>
@@ -209,4 +209,16 @@
     <string name="ms_accent_amber">อำพัน</string>
     <string name="ms_accent_red">แดง</string>
     <string name="ms_accent_lime">เขียว</string>
+    <string name="ms_stat_maint_set_value">ตั้งค่า</string>
+    <string name="doctor_hus_unknown">Android ไม่ให้แอปเช็คข้อนี้เอง ถ้าจอรถขึ้นแผนที่ได้แปลว่าเปิดอยู่ ถ้าเพิ่งรีสตาร์ทมือถือ: Android Auto → ⋮ → เริ่มเซิร์ฟเวอร์เครื่องเสียง</string>
+    <string name="ms_maint_tap_hint">แตะรายการเพื่อกด \"ทำแล้ว\" หรือแก้ไข</string>
+    <string name="ms_km_unit">กม.</string>
+    <string name="ms_icon_title">ไอคอนแอป</string>
+    <string name="ms_icon_gauge">เกจ</string>
+    <string name="ms_icon_screen">จอ</string>
+    <string name="ms_icon_mono">ตัว M</string>
+    <string name="ms_icon_toast">เปลี่ยนไอคอนแล้ว หน้าจอมือถืออาจใช้เวลาสักครู่กว่าจะเปลี่ยน</string>
+    <plurals name="home_tile_trips_today">
+        <item quantity="other">วันนี้ %1$d ทริป</item>
+    </plurals>
 </resources>

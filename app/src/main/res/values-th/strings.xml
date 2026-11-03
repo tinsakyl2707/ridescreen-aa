@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MotoScreen TH</string>
-    <string name="brand_wordmark">MotoScreen TH</string>
+    <string name="app_name">MotoScreen</string>
+    <string name="brand_wordmark">MotoScreen</string>
     <string name="main_connect">เชื่อมต่อ</string>
     <string name="main_connect_to">เชื่อมต่อ %1$s</string>
     <string name="main_stop">หยุด</string>
     <string name="main_scan">สแกน QR</string>
-    <string name="main_ready">พร้อม</string>
+    <string name="main_ready">พร้อมเชื่อมต่อ</string>
     <string name="main_more">เพิ่มเติม</string>
     <string name="main_mirror">ฉายหน้าจอ</string>
     <string name="main_logs">บันทึก</string>
@@ -27,7 +27,7 @@
     <string name="main_phone_hotspot_status">รอรถเชื่อมต่อฮอตสปอตมือถือ…</string>
     <string name="main_mirror_ready_title">พร้อมฉายหน้าจอ</string>
     <string name="home_settings_short">ตั้งค่า</string>
-    <string name="home_tile_trips">ทริปของฉัน</string>
+    <string name="home_tile_trips">ทริป</string>
     <string name="home_tile_fuel">ปั๊มน้ำมัน</string>
     <string name="home_tile_fuel_sub">ใกล้ฉัน</string>
     <string name="home_tile_maint">บำรุงรักษา</string>
@@ -147,7 +147,7 @@
     <string name="setup_fit">พอดีจอ</string>
     <string name="setup_stretch">ยืด</string>
     <string name="setup_battery_power">แบตเตอรี่</string>
-    <string name="setup_this_app_runs_a_live_video_transcoder_it_always_">แอปนี้แปลงภาพตลอดเวลา จึงกินแบตและทำให้มือถืออุ่น ให้เสียบชาร์จไว้ตอนขี่ ปิดหน้าจอมือถือได้ (ภาพยังขึ้นจอรถ)\n\nมือถือ OPPO / realme / Xiaomi: ตั้งค่า → แอป → MotoScreen TH และ Android Auto → แบตเตอรี่ → อนุญาตทำงานเบื้องหลัง</string>
+    <string name="setup_this_app_runs_a_live_video_transcoder_it_always_">แอปนี้แปลงภาพตลอดเวลา จึงกินแบตและทำให้มือถืออุ่น ให้เสียบชาร์จไว้ตอนขี่ ปิดหน้าจอมือถือได้ (ภาพยังขึ้นจอรถ)\n\nมือถือ OPPO / realme / Xiaomi: ตั้งค่า → แอป → MotoScreen และ Android Auto → แบตเตอรี่ → อนุญาตทำงานเบื้องหลัง</string>
     <string name="setup_bike_profile">โปรไฟล์รถ</string>
     <string name="setup_auto_detect_from_the_bike_recommended">อัตโนมัติ — ตรวจจากรถ (แนะนำ)</string>
     <string name="setup_auto_match_your_bike_recommended">อัตโนมัติ — ตามรุ่นรถ (แนะนำ)</string>
@@ -204,7 +204,7 @@
     <string name="setup_record_each_ride_s_route_and_stats_from_gps_whil">บันทึกเส้นทางและสถิติจาก GPS ทุกครั้งที่ขี่ ดูได้ในเมนูทริป</string>
     <string name="crash_entry">🆘 ตรวจจับการล้ม</string>
     <string name="about_done">เสร็จ</string>
-    <string name="setup_2026_alexandru_opencfmoto_agpl_3_0">MotoScreen TH · ดัดแปลงจาก RideScreen AA / OpenCfMoto © 2026 Alexandru · AGPL‑3.0</string>
+    <string name="setup_2026_alexandru_opencfmoto_agpl_3_0">MotoScreen · ดัดแปลงจาก RideScreen AA / OpenCfMoto © 2026 Alexandru · AGPL‑3.0</string>
     <string name="garage_each_bike_keeps_its_own_name_photo_screen_fit_re">รถแต่ละคันเก็บชื่อ รูป และการตั้งค่าหน้าจอแยกกัน กดที่รถเพื่อเลือกใช้หรือแก้ไข</string>
     <string name="garage_enter_wi_fi_manually">ใส่ Wi‑Fi รถเอง</string>
     <string name="garage_no_bikes_yet_scan_your_dash_qr_or_enter_wi_fi_na">ยังไม่มีรถ\nสแกน QR บนจอรถ หรือใส่ชื่อและรหัส Wi‑Fi รถเอง</string>

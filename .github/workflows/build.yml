@@ -111,7 +111,7 @@ jobs:
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           mkdir -p dist
           # Phone APK first; the in-app updater also skips any asset with "wear" in its name.
-          cp "$(find app/build/outputs/apk/github/release -name '*.apk' | head -1)" "dist/MotoScreen-TH-$TAG.apk"
+          cp "$(find app/build/outputs/apk/github/release -name '*.apk' | head -1)" "dist/MotoScreen-$TAG.apk"
           # Optional Wear OS companion (install on the watch, not the phone).
           W="$(find wear/build/outputs/apk/github/release -name '*.apk' | head -1)"
           [ -n "$W" ] && cp "$W" "dist/RideScreen-AA-$TAG-WearOS-reloj.apk"
@@ -121,7 +121,7 @@ jobs:
         with:
           tag_name: ${{ steps.rel.outputs.tag }}
           target_commitish: ${{ github.sha }}
-          name: MotoScreen TH ${{ steps.rel.outputs.tag }}
+          name: MotoScreen ${{ steps.rel.outputs.tag }}
           body_path: .github/release-notes.md
           files: dist/*.apk
           prerelease: false

@@ -245,6 +245,7 @@ class SetupActivity : AppCompatActivity() {
         findViewById<MaterialButton>(R.id.profile_clc450).setOnClickListener { setProfileOverride(ProfileOverride.CLC450) }
         findViewById<MaterialButton>(R.id.btn_screen_margins).setOnClickListener { ScreenMarginsActivity.start(this) }
         findViewById<MaterialButton>(R.id.btn_fit_to_dash).setOnClickListener { ScreenFitActivity.start(this) }
+        polishSettings()
         findViewById<MaterialButton>(R.id.btn_custom_resolution).setOnClickListener { CustomResolutionActivity.start(this) }
         findViewById<MaterialButton>(R.id.transport_auto).setOnClickListener { setTransport(WifiTransport.AUTO) }
         findViewById<MaterialButton>(R.id.transport_ap).setOnClickListener { setTransport(WifiTransport.AP) }
@@ -830,10 +831,97 @@ class SetupActivity : AppCompatActivity() {
             sw.addView(cell, android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
         }
         col.addView(sw)
+        // v11 (B4): launcher icon — three designs, switched through manifest activity-aliases.
+        col.addView(label(R.string.ms_icon_title, 16))
+        val curIcon = MotoScreen.icon(this)
+        val ir = android.widget.LinearLayout(this).apply { orientation = android.widget.LinearLayout.HORIZONTAL }
+        for (ic in MotoScreen.Icon.values()) {
+            val sel = ic == curIcon
+            val cell = android.widget.LinearLayout(this).apply {
+                orientation = android.widget.LinearLayout.VERTICAL
+                gravity = android.view.Gravity.CENTER_HORIZONTAL
+                isClickable = true
+                setPadding(0, px(6), 0, px(6))
+                background = if (sel) android.graphics.drawable.GradientDrawable().apply {
+                    cornerRadius = 16 * dp; setStroke(px(2), c(R.color.brand_gold))
+                } else null
+                setOnClickListener {
+                    if (!sel) {
+                        MotoScreen.setIcon(this@SetupActivity, ic)
+                        Toast.makeText(this@SetupActivity, R.string.ms_icon_toast, Toast.LENGTH_LONG).show()
+                        recreate()
+                    }
+                }
+            }
+            cell.addView(android.widget.ImageView(this).apply {
+                setImageResource(ic.mipmap)
+                clipToOutline = true
+                outlineProvider = object : android.view.ViewOutlineProvider() {
+                    override fun getOutline(v: View, o: android.graphics.Outline) { o.setRoundRect(0, 0, v.width, v.height, 14 * dp) }
+                }
+            },
+                android.widget.LinearLayout.LayoutParams(px(54), px(54)))
+            cell.addView(TextView(this).apply {
+                setText(ic.label); textSize = 12f; gravity = android.view.Gravity.CENTER
+                setTextColor(c(if (sel) R.color.text_primary else R.color.text_secondary))
+                setPadding(0, px(4), 0, 0)
+            })
+            ir.addView(cell, android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                marginStart = px(4); marginEnd = px(4)
+            })
+        }
+        col.addView(ir)
         box.addView(col)
         column.addView(box, column.indexOfChild(card), android.widget.LinearLayout.LayoutParams(
             android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
         ).apply { bottomMargin = px(12) })
+    }
+
+    /**
+     * v11 (S1–S3): the "open another screen" buttons become list rows (text + ›), and the big
+     * On | Off button pairs become one switch next to the setting's own title.
+     */
+    private fun polishSettings() {
+        val dp = resources.displayMetrics.density
+        fun px(v: Int) = (v * dp).toInt()
+        val c = { id: Int -> ContextCompat.getColor(this, id) }
+        for (id in listOf(R.id.btn_fit_to_dash, R.id.btn_crash_settings)) {
+            val b = findViewById<MaterialButton?>(id) ?: continue
+            b.backgroundTintList = android.content.res.ColorStateList.valueOf(c(R.color.surface_high))
+            b.setTextColor(c(R.color.text_primary))
+            b.gravity = android.view.Gravity.START or android.view.Gravity.CENTER_VERTICAL
+            b.textAlignment = View.TEXT_ALIGNMENT_VIEW_START
+            b.setIconResource(R.drawable.ic_chevron_right)
+            b.iconGravity = MaterialButton.ICON_GRAVITY_END
+            b.iconTint = android.content.res.ColorStateList.valueOf(c(R.color.text_secondary))
+            b.cornerRadius = px(14)
+            b.minHeight = px(54)
+            b.setPadding(px(16), 0, px(12), 0)
+            (b.layoutParams as? android.view.ViewGroup.MarginLayoutParams)?.topMargin = px(6)
+        }
+        switchify(R.id.autoconnect_on, { AppSettings.autoConnect(this) }) { AppSettings.setAutoConnect(this, it) }
+        switchify(R.id.logtrips_on, { AppSettings.logTrips(this) }) { AppSettings.setLogTrips(this, it) }
+    }
+
+    private fun switchify(onId: Int, get: () -> Boolean, set: (Boolean) -> Unit) {
+        val on = findViewById<View?>(onId) ?: return
+        val pair = on.parent as? View ?: return
+        val parent = pair.parent as? android.widget.LinearLayout ?: return
+        val idx = parent.indexOfChild(pair)
+        val title = (if (idx >= 2) parent.getChildAt(idx - 2) else null) as? TextView ?: return
+        val sw = com.google.android.material.materialswitch.MaterialSwitch(this).apply {
+            text = title.text
+            textSize = 16f
+            setTextColor(ContextCompat.getColor(this@SetupActivity, R.color.text_primary))
+            typeface = androidx.core.content.res.ResourcesCompat.getFont(this@SetupActivity, R.font.archivo_semibold)
+            isChecked = get()
+            setOnCheckedChangeListener { _, v -> set(v); refreshOptions() }
+        }
+        title.visibility = View.GONE
+        pair.visibility = View.GONE
+        parent.addView(sw, parent.indexOfChild(title), android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+        ).apply { topMargin = (title.layoutParams as? android.view.ViewGroup.MarginLayoutParams)?.topMargin ?: 0 })
     }
 
     private var stepsExpanded = false

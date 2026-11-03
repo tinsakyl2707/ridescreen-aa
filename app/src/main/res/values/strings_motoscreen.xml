@@ -56,7 +56,7 @@
     <string name="ms_stat_maint_days">days to %1$s</string>
     <string name="ms_stat_maint_over">%1$s overdue</string>
     <string name="ms_help_send_tech">📤 Send problem to technician</string>
-    <string name="ms_guide_title">How to use MotoScreen TH</string>
+    <string name="ms_guide_title">How to use MotoScreen</string>
     <string name="ms_guide_body">First time only\n1. Android Auto settings → tap \"Version\" 10 times → ⋮ → Developer settings → allow unknown sources.\n2. Pair the phone\'s Bluetooth with the dash (ICANTRON_BT…). Turn the iPhone\'s Bluetooth off if it was paired.\n3. On the dash open screen mirroring, tap \"Scan QR\" in Settings → My bike, pick Zontes 368G.\n\nEvery ride\n• Start the bike, open the mirroring page, tap Connect (or let it connect by itself when Bluetooth links).\n• After a phone restart: Android Auto → ⋮ → \"Start head unit server\".\n• Switching to another dash page (tyre pressure etc.) pauses the picture; come back and it returns.\n\nSomething wrong? Tap 🩺 App doctor.</string>
     <string name="ms_setup_done">✅ First-time setup is done · tap to show</string>
     <string name="ms_setup_done_hide">▲ Hide the first-time steps</string>
@@ -77,7 +77,7 @@
     <string name="wz_status_ok">✅ Done</string>
     <string name="wz_status_todo">⏳ Not yet: tap the button below</string>
     <string name="wz_status_manual">👉 The phone can\'t check this one: do it, then tap \"Done, next\"</string>
-    <string name="wz_welcome_title">Welcome to MotoScreen TH</string>
+    <string name="wz_welcome_title">Welcome to MotoScreen</string>
     <string name="wz_welcome_body">Maps, music and calls from your phone, on the Zontes 368G dash.\n\nSetup takes about 5 minutes, once. Do it with the bike nearby: the last step scans the QR on the dash.\n\nPick your language:</string>
     <string name="wz_aa_title">1 · Android Auto</string>
     <string name="wz_aa_body">The app uses Android Auto on your phone to draw the map on the dash.\n\nSome phones come with a tiny \"stub\" version that can\'t do this. Tap the button and press Update / Install in Play Store.</string>
@@ -107,4 +107,13 @@
     <string name="ms_accent_amber">Amber</string>
     <string name="ms_accent_red">Red</string>
     <string name="ms_accent_lime">Lime</string>
+    <string name="ms_stat_maint_set_value">Set up</string>
+    <string name="doctor_hus_unknown">Android doesn\'t let apps see this. If the dash shows the map it\'s on; after a phone restart: Android Auto → ⋮ → Start head unit server.</string>
+    <string name="ms_maint_tap_hint">Tap an item to mark it done or edit it.</string>
+    <string name="ms_km_unit">km</string>
+    <string name="ms_icon_title">App icon</string>
+    <string name="ms_icon_gauge">Gauge</string>
+    <string name="ms_icon_screen">Screen</string>
+    <string name="ms_icon_mono">M</string>
+    <string name="ms_icon_toast">Icon changed. The home screen can take a few seconds to update.</string>
 </resources>

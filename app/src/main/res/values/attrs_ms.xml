@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- MotoScreen TH: the rider-selectable accent (Settings ▸ Look). -->
+    <!-- MotoScreen: the rider-selectable accent (Settings ▸ Look). -->
     <attr name="msAccent" format="color" />
     <attr name="msAccent2" format="color" />
     <attr name="msAccentDark" format="color" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- MotoScreen TH v5 · Thai for the screens riders actually open (settings, trips, maintenance, fit, parking). -->
+<!-- MotoScreen v5 · Thai for the screens riders actually open (settings, trips, maintenance, fit, parking). -->
 <resources>
     <!-- Settings -->
     <string name="pref_vq_smooth">ประหยัดเน็ต (ภาพนุ่มขึ้น)</string>
@@ -189,7 +189,7 @@
     <string name="ms_stat_maint_days">วัน ถึง%1$s</string>
     <string name="ms_stat_maint_over">เกินกำหนด%1$s</string>
     <string name="ms_help_send_tech">📤 ส่งปัญหาให้ช่าง (แนบบันทึกให้เอง)</string>
-    <string name="ms_guide_title">วิธีใช้ MotoScreen TH</string>
+    <string name="ms_guide_title">วิธีใช้ MotoScreen</string>
     <string name="ms_guide_body">ทำครั้งแรกครั้งเดียว\n1. ตั้งค่า Android Auto → แตะ \"เวอร์ชัน\" 10 ครั้ง → ⋮ → การตั้งค่าสำหรับนักพัฒนา → เปิด \"แหล่งที่มาที่ไม่รู้จัก\"\n2. จับคู่บลูทูธมือถือกับจอรถ (ICANTRON_BT…) ถ้าเคยต่อกับไอโฟน ให้ปิดบลูทูธไอโฟนก่อน\n3. เปิดหน้า \"ฉายหน้าจอ\" บนจอรถ แล้วสแกน QR จาก ตั้งค่า → รถของฉัน เลือก Zontes 368G\n\nทุกครั้งที่ขี่\n• ติดรถ เปิดหน้าฉายหน้าจอ แล้วกด \"เชื่อมต่อ\" (หรือให้แอปต่อเองตอนบลูทูธรถติด)\n• ถ้าเพิ่งรีสตาร์ทมือถือ: Android Auto → ⋮ → \"เริ่มเซิร์ฟเวอร์เครื่องเสียง\"\n• สลับไปหน้าอื่นบนจอรถ (เช่นดูลมยาง) ภาพจะหยุด กลับมาหน้าฉายหน้าจอแล้วภาพขึ้นเอง\n\nมีปัญหา? กด 🩺 หมอแอป</string>
     <string name="ms_setup_done">✅ ตั้งค่าเริ่มต้นเสร็จแล้ว · แตะเพื่อดู</string>
     <string name="ms_setup_done_hide">▲ ซ่อนขั้นตอนตั้งค่าครั้งแรก</string>

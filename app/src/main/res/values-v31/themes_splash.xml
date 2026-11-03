@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- v11 splash (Android 12+): the chosen launcher icon on the app's own background colour,
+         light or dark, instead of a white flash. -->
+    <style name="Theme.OpenCfMoto" parent="Base.Theme.OpenCfMoto">
+        <item name="android:windowSplashScreenBackground">@color/bg</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/ms_icon_bg</item>
+    </style>
+</resources>

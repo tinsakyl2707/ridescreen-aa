@@ -774,6 +774,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        builtNight = nightBit()
         AppSettings.applyToHolder(this)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -1072,10 +1073,15 @@ class MainActivity : AppCompatActivity() {
 
     /** Accent the screen was built with; a change in Settings rebuilds it on return. */
     private var builtAccentGeneration = MotoScreen.accentGeneration
+    /** This activity handles uiMode changes itself (car mode), so a light/dark flip needs a rebuild. */
+    private fun nightBit() = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+    private var builtNight = -1
 
     override fun onResume() {
         super.onResume()
-        if (builtAccentGeneration != MotoScreen.accentGeneration) { builtAccentGeneration = MotoScreen.accentGeneration; recreate(); return }
+        if (builtAccentGeneration != MotoScreen.accentGeneration || builtNight != nightBit()) {
+            builtAccentGeneration = MotoScreen.accentGeneration; builtNight = nightBit(); recreate(); return
+        }
         val quiet = MotoScreen.langSwitching
         if (quiet) MotoScreen.fadeIn(this)
         Support.onResume(this)
@@ -1357,8 +1363,8 @@ class MainActivity : AppCompatActivity() {
         // Wordmark: the last word in gold.
         findViewById<TextView>(R.id.brand_title).apply {
             val t = getString(R.string.brand_wordmark)
-            // "RideScreen" + " AA" in gold.
-            val split = t.lastIndexOf(' ').takeIf { it > 0 } ?: t.length
+            // "Moto" + "Screen" in the accent (or the last word after a space, for other wordmarks).
+            val split = t.lastIndexOf(' ').takeIf { it > 0 } ?: t.indexOf("Screen").takeIf { it > 0 } ?: t.length
             text = android.text.SpannableString(t).apply {
                 setSpan(
                     android.text.style.ForegroundColorSpan(ContextCompat.getColor(this@MainActivity, R.color.brand_gold)),
@@ -1447,12 +1453,18 @@ class MainActivity : AppCompatActivity() {
         val st = try { Maintenance.mostUrgent(this) } catch (_: Exception) { null }
         val loc = java.util.Locale.getDefault()
         when {
-            st == null -> { v.text = "＋"; label.text = getString(R.string.ms_stat_maint_setup) }
+            st == null -> {
+                // v11 (H5): a word in the accent, not a giant "+" next to a number.
+                v.text = getString(R.string.ms_stat_maint_set_value); v.textSize = 20f
+                label.text = getString(R.string.ms_stat_maint_setup)
+            }
             st.kmLeft != null -> {
+                v.textSize = 25f
                 v.text = if (st.kmLeft <= 0) "!" else String.format(loc, "%,.0f", st.kmLeft)
                 label.text = getString(if (st.kmLeft <= 0) R.string.ms_stat_maint_over else R.string.ms_stat_maint_km, st.task.name)
             }
             else -> {
+                v.textSize = 25f
                 val d = st.daysLeft ?: 0
                 v.text = if (d <= 0) "!" else d.toString()
                 label.text = getString(if (d <= 0) R.string.ms_stat_maint_over else R.string.ms_stat_maint_days, st.task.name)
@@ -1543,6 +1555,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setTileSub(id: Int, sub: String?) {
+        // v11 (H1): the four home shortcuts stay one line so they're all the same height.
+        if (id == R.id.btn_trips_list || id == R.id.btn_maint || id == R.id.btn_doctor_tile || id == R.id.btn_help) return
         val tile = tiles[id] ?: return
         tile.sub.text = sub.orEmpty()
         tile.sub.visibility = if (sub.isNullOrBlank()) View.GONE else View.VISIBLE
@@ -1856,6 +1870,8 @@ class MainActivity : AppCompatActivity() {
             Phase.STREAMING, Phase.MIRRORING -> ContextCompat.getColor(this, R.color.status_live)
             Phase.ERROR -> ContextCompat.getColor(this, R.color.status_error)
             else -> if (phase.busy) ContextCompat.getColor(this, R.color.status_busy)
+                    // v11 (H4): a saved bike = ready, in the accent; grey only with nothing to connect to.
+                    else if (BikeMemory.hasSaved(this)) ContextCompat.getColor(this, R.color.brand_gold)
                     else ContextCompat.getColor(this, R.color.status_idle)
         }
         statusView.setTextColor(ContextCompat.getColor(this, R.color.text_primary))

@@ -51,12 +51,19 @@ object Doctor {
         }
         list.addView(summary)
         // Problems first, then unknowns, then passes.
-        for (it in items.sortedBy { i -> when (i.ok) { false -> 0; null -> 1; true -> 2 } }) {
+        for (it in items.sortedBy { i -> when (i.ok) { false -> 0; true -> 1; null -> 2 } }) {
             list.addView(row(activity, it, dp))
         }
         val scroll = ScrollView(activity).apply { addView(list) }
+        val title = TextView(activity).apply {
+            setText(R.string.doctor_title)
+            textSize = 22f
+            setTextColor(ContextCompat.getColor(activity, R.color.text_primary))
+            typeface = androidx.core.content.res.ResourcesCompat.getFont(activity, R.font.archivo_black)
+            setPadding((24 * dp).toInt(), (20 * dp).toInt(), (24 * dp).toInt(), 0)
+        }
         MaterialAlertDialogBuilder(activity)
-            .setTitle(R.string.doctor_title)
+            .setCustomTitle(title)
             .setView(scroll)
             .setPositiveButton(R.string.doctor_close, null)
             .setNeutralButton(R.string.doctor_recheck) { _, _ -> activity.window.decorView.post { show(activity) } }
@@ -78,7 +85,8 @@ object Doctor {
             orientation = LinearLayout.VERTICAL
             setPadding(0, (8 * dp).toInt(), 0, (8 * dp).toInt())
         }
-        val mark = when (item.ok) { true -> "✅"; false -> "❌"; null -> "⚠️" }
+        // v11 (D1): "can't tell" is information, not a warning (Android hides e.g. the AA server state).
+        val mark = when (item.ok) { true -> "✅"; false -> "❌"; null -> "ℹ️" }
         box.addView(TextView(activity).apply {
             text = "$mark  ${item.title}"
             textSize = 15f
@@ -151,8 +159,10 @@ object Doctor {
         }
 
         // 2. Head unit server (AA 17.4+). Passive probe only: null = can't tell.
-        val hus = try { HeadUnitServer.probe(activity) } catch (_: Exception) { null }
-        out += Item(s(R.string.doctor_hus), s(R.string.doctor_hus_desc), hus, s(R.string.hus_open)) { a -> HeadUnitServer.openSettings(a) }
+        // Android hides the server's state from us; a dash showing AA this session proves it's up.
+        val hus = (try { HeadUnitServer.probe(activity) } catch (_: Exception) { null })
+            ?: if (ConnectionState.phase == Phase.STREAMING || LogBus.snapshot().contains("sent frame #")) true else null
+        out += Item(s(R.string.doctor_hus), s(if (hus == null) R.string.doctor_hus_unknown else R.string.doctor_hus_desc), hus, s(R.string.hus_open)) { a -> HeadUnitServer.openSettings(a) }
 
         // 3. Phone Wi‑Fi on.
         val wifiOn = try {

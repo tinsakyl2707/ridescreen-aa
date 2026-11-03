@@ -76,17 +76,38 @@ class MaintenanceActivity : AppCompatActivity() {
 
         // Tasks.
         body.addView(section(getString(R.string.maint_tasks)))
+        body.addView(text(getString(R.string.ms_maint_tap_hint), 12f, R.color.text_secondary))
         for (t in book.tasks.filter { it.enabled }.sortedByDescending { Maintenance.status(book, it).fraction }) {
             val s = Maintenance.status(book, t)
+            // v11 (M1/M2): one compact row per item — name + status on one line, the bar, the interval.
+            // Tap the row for Done / Edit instead of two big buttons on every card.
             card { c ->
-                c.addView(text(t.name, 16f, R.color.text_primary, bold = true))
                 val col = when (s.level) {
                     Maintenance.Level.DUE -> R.color.status_error
                     Maintenance.Level.SOON -> R.color.status_busy
                     Maintenance.Level.OK -> R.color.status_live
                     Maintenance.Level.UNKNOWN -> R.color.text_secondary
                 }
-                c.addView(text(Maintenance.statusText(this, s), 13f, col))
+                c.addView(LinearLayout(this).apply {
+                    orientation = LinearLayout.HORIZONTAL
+                    gravity = Gravity.CENTER_VERTICAL
+                    addView(text(t.name, 16f, R.color.text_primary, bold = true).apply {
+                        layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+                    })
+                    addView(text(if (s.level == Maintenance.Level.UNKNOWN) "—" else Maintenance.statusText(this@MaintenanceActivity, s), 13f, col).apply {
+                        layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = dp(8) }
+                    })
+                })
+                c.isClickable = true
+                c.foreground = androidx.core.content.ContextCompat.getDrawable(this, android.R.drawable.list_selector_background)
+                c.setOnClickListener {
+                    com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                        .setTitle(t.name)
+                        .setItems(arrayOf(getString(R.string.maint_done), getString(R.string.maint_edit))) { _, w ->
+                            if (w == 0) askDone(t, book.odometer) else editTask(t, book)
+                        }
+                        .show()
+                }
                 if (s.level != Maintenance.Level.UNKNOWN) {
                     c.addView(LinearProgressIndicator(this).apply {
                         max = 100
@@ -97,10 +118,6 @@ class MaintenanceActivity : AppCompatActivity() {
                     })
                 }
                 c.addView(text(intervalText(t), 12f, R.color.text_secondary))
-                c.addView(row(
-                    button(getString(R.string.maint_done), filled = true) { askDone(t, book.odometer) },
-                    button(getString(R.string.maint_edit)) { editTask(t, book) },
-                ))
             }
         }
         body.addView(button(getString(R.string.maint_add_task)) { editTask(null, book) })

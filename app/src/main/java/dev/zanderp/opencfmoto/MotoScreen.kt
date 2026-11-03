@@ -56,10 +56,40 @@ object MotoScreen {
 
     fun setNightMode(ctx: Context, mode: Int) {
         prefs(ctx).edit().putInt("night", mode).apply()
+        accentGeneration++   // MainActivity handles uiMode itself (car mode), so tell it to rebuild
         AppCompatDelegate.setDefaultNightMode(mode)
     }
 
     fun applyNightMode(ctx: Context) = AppCompatDelegate.setDefaultNightMode(nightMode(ctx))
+
+    // ---- Launcher icon (activity-aliases in the manifest) ----
+
+    enum class Icon(val alias: String, val mipmap: Int, val label: Int) {
+        GAUGE(".LauncherIconGauge", R.mipmap.ic_ms_gauge, R.string.ms_icon_gauge),
+        SCREEN(".LauncherIconScreen", R.mipmap.ic_ms_screen, R.string.ms_icon_screen),
+        MONO(".LauncherIconMono", R.mipmap.ic_ms_mono, R.string.ms_icon_mono),
+    }
+
+    private fun aliasName(ctx: Context, i: Icon) = "dev.zanderp.opencfmoto" + i.alias
+
+    fun icon(ctx: Context): Icon = Icon.values().firstOrNull { i ->
+        ctx.packageManager.getComponentEnabledSetting(android.content.ComponentName(ctx.packageName, aliasName(ctx, i))) ==
+            android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+    } ?: Icon.GAUGE
+
+    /** Enable the chosen alias first, then disable the others, so there is always a launcher entry. */
+    fun setIcon(ctx: Context, choice: Icon) {
+        val pm = ctx.packageManager
+        fun set(i: Icon, on: Boolean) = pm.setComponentEnabledSetting(
+            android.content.ComponentName(ctx.packageName, aliasName(ctx, i)),
+            if (on) android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+            else android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+            android.content.pm.PackageManager.DONT_KILL_APP,
+        )
+        set(choice, true)
+        Icon.values().filter { it != choice }.forEach { set(it, false) }
+        LogBus.log("[LOOK] launcher icon → ${choice.name}")
+    }
 
     /** "th" or "en": the app's own choice if set, else the phone's language. */
     fun currentLang(): String {

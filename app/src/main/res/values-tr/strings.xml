@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MotoScreen TH</string>
+    <string name="app_name">MotoScreen</string>
     <string name="about_copyright">© 2026 Alexandru</string>
     <string name="about_copyright_body">Alexandru (zanderp) tarafından sürdürülmektedir. GNU AGPL v3 veya daha yenisi altında ücretsiz yazılım — tam telif hakkı ve atıf metni için depodaki LICENSE ve NOTICE dosyalarına bak..</string>
     <string name="about_license_body">Bu uygulamayı AGPL kapsamında kullanabilir, inceleyebilir, paylaşabilir ve değiştirebilirsin. Değiştirilmiş bir sürümü yeniden dağıtırsan (ağ hizmeti olarak dahil), aynı lisans altında ilgili kaynak kodunun tamamını sunmalısın.</string>

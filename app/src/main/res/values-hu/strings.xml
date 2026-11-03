@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Draft + terminology pass — improve via PR: docs/TRANSLATIONS.md -->
 <resources>
-    <string name="app_name">MotoScreen TH</string>
+    <string name="app_name">MotoScreen</string>
     <string name="about_copyright">© 2026 Alexandru</string>
     <string name="about_copyright_body">Karbantartja Alexandru (zanderp). Szabad szoftver a GNU AGPL v3 vagy újabb alatt — a teljes szerzői jogi és attribúciós szöveg a LICENSE és NOTICE fájlokban található a repóban.</string>
     <string name="about_license_body">Az AGPL alatt használhatod, tanulmányozhatod, megoszthatod és módosíthatod ezt az alkalmazást. Ha módosított verziót terjesztesz (beleértve hálózati szolgáltatásként is), a teljes megfelelő forráskódot ugyanezen licenc alatt kell elérhetővé tenned.</string>

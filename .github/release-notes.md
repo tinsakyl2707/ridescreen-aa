@@ -1,4 +1,4 @@
-**MotoScreen TH** — Android Auto บนจอเดิม Zontes 368G (ดัดแปลงจาก RideScreen AA / OpenCfMoto, AGPL-3.0)
+**MotoScreen** — Android Auto บนจอเดิม Zontes 368G (ดัดแปลงจาก RideScreen AA / OpenCfMoto, AGPL-3.0)
 
 - ภาษาไทย, ธีมเข้ากับจอ 368G, หน้าแรกเรียบง่าย
 - 🩺 หมอแอป: ตรวจมือถือและบันทึกหาสาเหตุให้อัตโนมัติ
