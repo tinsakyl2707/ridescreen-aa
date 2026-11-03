@@ -118,7 +118,7 @@
     <string name="ms_icon_toast">Icon changed. The home screen can take a few seconds to update.</string>
     <string name="fuel_g95">Gasohol 95</string>
     <string name="fuel_e20">E20</string>
-    <string name="fuel_loading">Fuel price</string>
+    <string name="ms_fuel_card_title">Fuel price</string>
     <string name="fuel_tap_hint">Getting today\'s price… tap for settings</string>
     <string name="fuel_title_fmt">%1$s · %2$s ฿</string>
     <string name="fuel_title_missing">%1$s · no price</string>

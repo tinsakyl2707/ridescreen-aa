@@ -223,7 +223,7 @@
     </plurals>
     <string name="fuel_g95">แก๊สโซฮอล์ 95</string>
     <string name="fuel_e20">E20</string>
-    <string name="fuel_loading">ราคาน้ำมัน</string>
+    <string name="ms_fuel_card_title">ราคาน้ำมัน</string>
     <string name="fuel_tap_hint">กำลังดึงราคาวันนี้… แตะเพื่อตั้งค่า</string>
     <string name="fuel_title_fmt">%1$s · %2$s ฿</string>
     <string name="fuel_title_missing">%1$s · ไม่มีราคา</string>

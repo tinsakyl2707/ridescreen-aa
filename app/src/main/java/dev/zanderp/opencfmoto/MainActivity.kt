@@ -1457,7 +1457,7 @@ class MainActivity : AppCompatActivity() {
         card.setOnClickListener { showFuelDialog() }
         val snap = FuelPrice.cached(this)
         if (snap == null) {
-            title.setText(R.string.fuel_loading); sub.setText(R.string.fuel_tap_hint); trend.text = ""
+            title.setText(R.string.ms_fuel_card_title); sub.setText(R.string.fuel_tap_hint); trend.text = ""
             return
         }
         val main = FuelPrice.primary(this)
