@@ -1,0 +1,26 @@
+# MotoScreen TH — งานที่ตัดสินใจแล้ว รอแก้รวมรอบเดียว
+
+## B1 · สลับภาษาแล้วค้าง (พบใน v9, 3 พ.ย. 2026) — ตัดสินใจ: A + B
+**อาการ:** กดปุ่ม TH | EN แล้วหน้าจอค้างไปช่วงหนึ่ง
+**สาเหตุ (จากโค้ด):**
+- หน่วงเอง 240 ms ก่อนเรียก `setApplicationLocales`
+- Android สร้าง MainActivity ใหม่ทั้งหน้า และ onCreate/onResume รันงานเหมือนเปิดแอปครั้งแรก
+  (ถอดรูปรถบน main thread, maybeAutoConnect, maybeCheckUpdate, ถามสิทธิ์/WhatsNew)
+- ไม่มี transition ระหว่างหน้าเก่ากับหน้าใหม่
+
+**แก้ A — ให้สร้างหน้าใหม่เบาลง**
+- ตั้ง flag "recreated for language" (static/companion) ก่อน setLang
+- ถ้า flag นี้ตั้งอยู่: ข้าม maybeAutoConnect, maybeCheckUpdate, maybeAskNearbyUpfront,
+  Xiaomi autostart, WhatsNew/Telemetry และ wizard check
+- ย้ายการถอดรูป hero (BitmapFactory) ไปทำบน background thread แล้วค่อย set บน UI
+- ลดหน่วง 240 ms → ~120 ms
+
+**แก้ B — แอนิเมชันจางออก/จางเข้า**
+- ตอนกด: thumb เลื่อน + content (R.id.main) alpha 1→0 ภายใน ~150 ms แล้วเรียก setLang
+- หลังสร้างใหม่ (มี flag): content เริ่มที่ alpha 0 แล้ว animate → 1 ภายใน ~200 ms
+- ทำใน SetupWizardActivity ด้วย (มีปุ่มภาษาในหน้าแรกของ wizard)
+
+**ต้องเช็คตอนแก้:** สลับภาษาตอนกำลังฉายภาพอยู่ ภาพบนจอรถต้องไม่สะดุด
+(projection อยู่ใน service แต่ต้องดูว่า MainActivity.onDestroy ไม่ไปหยุดอะไร)
+
+**ยังรอจากผู้ใช้:** ค้างนานกี่วินาที / ตอนนั้นต่อจอรถอยู่ไหม / log รอบที่กด
