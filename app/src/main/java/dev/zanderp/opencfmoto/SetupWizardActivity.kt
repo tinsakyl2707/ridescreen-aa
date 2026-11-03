@@ -156,6 +156,7 @@ class SetupWizardActivity : AppCompatActivity() {
         setContentView(root)
         LogBus.log("[WIZARD] opened")
         render()
+        if (MotoScreen.langSwitching) MotoScreen.fadeIn(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

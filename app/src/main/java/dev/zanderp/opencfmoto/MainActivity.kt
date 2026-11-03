@@ -1021,7 +1021,9 @@ class MainActivity : AppCompatActivity() {
 
         // First launch: walk the user through the one-time prerequisites.
         try {
-            if (!SetupActivity.hasSeen(this)) SetupActivity.start(this)
+            if (MotoScreen.langSwitching) {
+                // v10: just rebuilt for TH/EN — no auto-connect, prompts or what's-new here.
+            } else if (!SetupActivity.hasSeen(this)) SetupActivity.start(this)
             else {
                 maybeAutoConnect()
                 if (!maybeAskNearbyUpfront() && !maybeAskXiaomiAutostart() && !WhatsNew.maybeShow(this)) TelemetryNotice.maybeShow(this)
@@ -1061,17 +1063,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /** Decoded hero photo, kept across MainActivity recreations (language / accent / dark mode). */
+    private object HeroCache {
+        @Volatile var key: String? = null
+        @Volatile var bmp: android.graphics.Bitmap? = null
+        @Volatile var decoding: String? = null
+    }
+
     /** Accent the screen was built with; a change in Settings rebuilds it on return. */
     private var builtAccentGeneration = MotoScreen.accentGeneration
 
     override fun onResume() {
         super.onResume()
         if (builtAccentGeneration != MotoScreen.accentGeneration) { builtAccentGeneration = MotoScreen.accentGeneration; recreate(); return }
+        val quiet = MotoScreen.langSwitching
+        if (quiet) MotoScreen.fadeIn(this)
         Support.onResume(this)
         // The wizard's last step ("scan the QR on the dash") hands over to the normal scanner here.
         if (SetupWizardActivity.pendingScan) { SetupWizardActivity.pendingScan = false; startAaScan() }
-        else if (SetupWizardActivity.shouldShow(this)) { SetupWizardActivity.start(this); return }
-        else Doctor.maybeAskBattery(this)
+        else if (!quiet && SetupWizardActivity.shouldShow(this)) { SetupWizardActivity.start(this); return }
+        else if (!quiet) Doctor.maybeAskBattery(this)
         renderQuickDestinations()
         // Back from the app's permission page / Bluetooth / Wi‑Fi settings: carry on with Connect.
         if (pendingAaQr != null && dev.zanderp.opencfmoto.aa.AaSelfMode.canAttemptHur(this) &&
@@ -1099,9 +1110,12 @@ class MainActivity : AppCompatActivity() {
         if (WifiGate.isWifiEnabled(this)) WifiGate.cancelNotification(this)
         // Retry auto-connect on resume: after finishing first-run setup, or once the bike's Wi-Fi
         // comes into range shortly after launch. Guarded so it only ever starts one attempt.
-        if (SetupActivity.hasSeen(this)) maybeAutoConnect()
-        maybeCheckUpdate()
-        maybeResumeFromParked(intent)
+        if (!quiet) {
+            if (SetupActivity.hasSeen(this)) maybeAutoConnect()
+            maybeCheckUpdate()
+            maybeResumeFromParked(intent)
+        }
+        MotoScreen.langSwitchDone()
     }
 
     /**
@@ -1267,7 +1281,8 @@ class MainActivity : AppCompatActivity() {
         // the bike down here is exactly what left the dash on a black screen (the pending
         // onSteadyVideo hand-off was cancelled before it could fire). Only tear down when AA is NOT
         // running — i.e. the mirror path or a genuine exit. Full teardown is the "Stop" button.
-        if (!AndroidAutoService.isRunning) {
+        // v10: a rebuild for TH/EN, dark mode or the accent is not an exit — keep the link up.
+        if (!AndroidAutoService.isRunning && !isChangingConfigurations && !MotoScreen.langSwitching) {
             AaVideoBridge.onSteadyVideo = null
             prober.stop()
             bleWakeUp?.stop()
@@ -1312,22 +1327,31 @@ class MainActivity : AppCompatActivity() {
     private fun refreshHero() {
         val photo = findViewById<android.widget.ImageView?>(R.id.hero_photo) ?: return
         val bike = BikeMemory.selected(this)
-        val bmp = bike?.photoPath?.let { p ->
-            runCatching {
+        // v10: the photo used to be decoded on the main thread on every resume (and again on every
+        // language switch). Decode once in the background and keep it for the next screen.
+        val path = bike?.photoPath
+        val key = path?.let { "$it@${java.io.File(it).lastModified()}" }
+        val cached = if (key != null && key == HeroCache.key) HeroCache.bmp else null
+        if (key != null && key != HeroCache.key && key != HeroCache.decoding) Thread({
+            val decoded = runCatching {
                 val bounds = android.graphics.BitmapFactory.Options().apply { inJustDecodeBounds = true }
-                android.graphics.BitmapFactory.decodeFile(p, bounds)
+                android.graphics.BitmapFactory.decodeFile(path, bounds)
                 var sample = 1
                 while (bounds.outWidth / (sample * 2) >= 1080) sample *= 2
-                android.graphics.BitmapFactory.decodeFile(p, android.graphics.BitmapFactory.Options().apply { inSampleSize = sample })
+                android.graphics.BitmapFactory.decodeFile(path, android.graphics.BitmapFactory.Options().apply { inSampleSize = sample })
             }.getOrNull()
-        }
+            HeroCache.key = key; HeroCache.bmp = decoded; HeroCache.decoding = null
+            runOnUiThread { if (!isFinishing && !isDestroyed && decoded != null) refreshHero() }
+        }, "hero-decode").also { HeroCache.decoding = key }.start()
+        val bmp = cached
         photo.setImageBitmap(bmp)
         findViewById<View>(R.id.hero_placeholder).visibility = if (bmp == null) View.VISIBLE else View.GONE
         findViewById<View?>(R.id.hero_scrim)?.visibility = if (bmp == null) View.GONE else View.VISIBLE
         findViewById<TextView>(R.id.hero_name).text = bike?.name ?: ""
         findViewById<TextView>(R.id.hero_sub).text = when {
             bike == null -> getString(R.string.main_no_bike_paired_yet)
-            bmp == null -> getString(R.string.ms_hero_add_photo)
+            bmp == null && bike.photoPath == null -> getString(R.string.ms_hero_add_photo)
+            bmp == null -> ""
             else -> ""
         }
         // Wordmark: the last word in gold.

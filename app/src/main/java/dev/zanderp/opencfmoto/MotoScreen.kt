@@ -69,7 +69,27 @@ object MotoScreen {
     }
 
     private fun setLang(tag: String) {
+        langSwitching = true
+        langSwitchAt = android.os.SystemClock.elapsedRealtime()
         AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tag))
+    }
+
+    /**
+     * v10 · True while screens are being rebuilt for a TH/EN switch: they skip what a fresh launch
+     * does (auto-connect, update check, prompts) and fade in instead of popping. Cleared by
+     * MainActivity's first resume afterwards, or after 5 s whatever happens.
+     */
+    @Volatile var langSwitching = false
+        get() = field && android.os.SystemClock.elapsedRealtime() - langSwitchAt < 5_000
+    @Volatile private var langSwitchAt = 0L
+
+    fun langSwitchDone() { langSwitching = false }
+
+    /** The rebuilt screen starts transparent and fades in (the old one faded out before the switch). */
+    fun fadeIn(activity: android.app.Activity) {
+        val content = activity.findViewById<View?>(android.R.id.content) ?: return
+        content.alpha = 0f
+        content.animate().alpha(1f).setDuration(200).setInterpolator(DecelerateInterpolator()).start()
     }
 
     /**
@@ -96,7 +116,18 @@ object MotoScreen {
             val next = if (currentLang() == "th") "en" else "th"
             paint(next, animate = true)
             root.isEnabled = false
-            root.postDelayed({ setLang(next) }, 240)
+            // Fade the whole screen out while the thumb slides, then switch: the rebuilt screen fades
+            // back in (fadeIn), so the switch reads as one transition instead of a freeze.
+            val content = (root.context as? android.app.Activity)?.findViewById<View?>(android.R.id.content)
+            if (content != null) {
+                content.animate().alpha(0f).setDuration(140).withEndAction {
+                    setLang(next)
+                    // Safety: if Android didn't rebuild this screen, don't leave it invisible.
+                    content.postDelayed({ if (content.alpha < 1f) { content.alpha = 1f; root.isEnabled = true } }, 1500)
+                }.start()
+            } else {
+                root.postDelayed({ setLang(next) }, 140)
+            }
         }
     }
 }
