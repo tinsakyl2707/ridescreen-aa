@@ -111,6 +111,9 @@
             android:name=".SetupActivity"
             android:exported="false" />
         <activity
+            android:name=".SetupWizardActivity"
+            android:exported="false" />
+        <activity
             android:name=".TripActivity"
             android:exported="false" />
         <activity

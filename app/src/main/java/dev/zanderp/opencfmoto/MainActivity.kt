@@ -1064,7 +1064,10 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Support.onResume(this)
-        Doctor.maybeAskBattery(this)
+        // The wizard's last step ("scan the QR on the dash") hands over to the normal scanner here.
+        if (SetupWizardActivity.pendingScan) { SetupWizardActivity.pendingScan = false; startAaScan() }
+        else if (SetupWizardActivity.shouldShow(this)) { SetupWizardActivity.start(this); return }
+        else Doctor.maybeAskBattery(this)
         renderQuickDestinations()
         // Back from the app's permission page / Bluetooth / Wi‑Fi settings: carry on with Connect.
         if (pendingAaQr != null && dev.zanderp.opencfmoto.aa.AaSelfMode.canAttemptHur(this) &&

@@ -168,4 +168,35 @@
     <string name="yir_year">ปีนี้</string>
     <string name="yir_zone">โซนของคุณ</string>
     <string name="yir_zone_sub">สีแดง = ที่ที่ขี่บ่อยที่สุด</string>
+    <string name="wz_menu">🧭 ตัวช่วยตั้งค่าทีละขั้น</string>
+    <string name="wz_skip">ข้าม</string>
+    <string name="wz_back">ย้อนกลับ</string>
+    <string name="wz_next">ถัดไป ›</string>
+    <string name="wz_done_next">ทำแล้ว ถัดไป ›</string>
+    <string name="wz_start">เริ่มเลย ›</string>
+    <string name="wz_finish">เสร็จ</string>
+    <string name="wz_progress">ขั้นที่ %1$d จาก %2$d</string>
+    <string name="wz_status_ok">✅ เรียบร้อย</string>
+    <string name="wz_status_todo">⏳ ยังไม่เรียบร้อย: กดปุ่มด้านล่าง</string>
+    <string name="wz_status_manual">👉 ขั้นนี้มือถือเช็คเองไม่ได้ ทำตามแล้วกด \"ทำแล้ว ถัดไป\"</string>
+    <string name="wz_welcome_title">ยินดีต้อนรับสู่ MotoScreen TH</string>
+    <string name="wz_welcome_body">แผนที่ เพลง และสายโทรเข้าจากมือถือ ขึ้นบนจอ Zontes 368G\n\nตั้งค่าครั้งเดียว ใช้เวลาประมาณ 5 นาที ทำตอนอยู่ใกล้รถ เพราะขั้นสุดท้ายต้องสแกน QR บนจอรถ\n\nเลือกภาษา:</string>
+    <string name="wz_aa_title">1 · Android Auto</string>
+    <string name="wz_aa_body">แอปใช้ Android Auto ในมือถือวาดแผนที่ขึ้นจอรถ\n\nมือถือบางรุ่นมาพร้อม Android Auto ตัวย่อ (stub) ที่ใช้งานนี้ไม่ได้ กดปุ่มแล้วกด \"อัปเดต\" หรือ \"ติดตั้ง\" ใน Play Store</string>
+    <string name="wz_aa_btn">เปิด Android Auto ใน Play Store</string>
+    <string name="wz_perm_title">2 · อนุญาตสิทธิ์</string>
+    <string name="wz_perm_body">แอปต้องใช้:\n• กล้อง: สแกน QR บนจอรถ\n• ตำแหน่ง / อุปกรณ์ใกล้เคียง: ต่อ Wi‑Fi ของรถ\n• การแจ้งเตือน: ให้แอปทำงานต่อตอนขี่\n\nกดปุ่มแล้วเลือก \"อนุญาต\" ทุกข้อ</string>
+    <string name="wz_perm_btn">อนุญาตสิทธิ์</string>
+    <string name="wz_batt_title">3 · แบตเตอรี่</string>
+    <string name="wz_batt_body">มือถือ OPPO, realme, Xiaomi ชอบปิดแอปเบื้องหลังเพื่อประหยัดแบต ทำให้จอรถดับกลางทาง\n\nกดปุ่มแล้วเลือก \"อนุญาต\" (ไม่จำกัด)</string>
+    <string name="wz_batt_btn">ตั้งแบตเตอรี่เป็นไม่จำกัด</string>
+    <string name="wz_dev_title">4 · โหมดนักพัฒนา Android Auto</string>
+    <string name="wz_dev_body">ทำครั้งเดียวในหน้าตั้งค่าของ Android Auto:\n\n1. เลื่อนลงล่างสุด แตะ \"เวอร์ชัน\" 10 ครั้ง → ตกลง\n2. ⋮ มุมขวาบน → การตั้งค่าสำหรับนักพัฒนา → เปิด \"แหล่งที่มาที่ไม่รู้จัก\"\n3. ⋮ → \"เริ่มเซิร์ฟเวอร์เครื่องเสียง\"\n\n⚠️ ทุกครั้งที่รีสตาร์ทมือถือ ต้องทำข้อ 3 ใหม่ (หน้าแรกของแอปจะเตือนให้)</string>
+    <string name="wz_dev_btn">เปิดตั้งค่า Android Auto</string>
+    <string name="wz_bt_title">5 · บลูทูธกับจอรถ</string>
+    <string name="wz_bt_body">ติดรถ แล้วเข้าตั้งค่าบลูทูธของมือถือ จับคู่กับจอรถ ชื่อ ICANTRON_BT-… (หรือ ZT…)\n\nถ้าไอโฟนหรือมือถือเครื่องอื่นเคยต่อกับรถ ให้ปิดบลูทูธเครื่องนั้นก่อน และห้ามจับคู่ \"PKE-…\" (นั่นคือกุญแจรถ)</string>
+    <string name="wz_bt_btn">เปิดตั้งค่าบลูทูธ</string>
+    <string name="wz_qr_title">6 · สแกน QR บนจอรถ</string>
+    <string name="wz_qr_body">บนจอรถเปิดหน้า \"ฉายหน้าจอ\" (หน้าที่มี QR) แล้วกดปุ่มด้านล่าง ส่องกล้องไปที่ QR ถ้าถามรุ่นให้เลือก \"Zontes 368G\"\n\nแค่นี้เสร็จ ครั้งต่อไปแค่ติดรถแล้วกดเชื่อมต่อ หรือปล่อยให้แอปต่อเอง</string>
+    <string name="wz_qr_btn">สแกน QR บนจอรถ</string>
 </resources>

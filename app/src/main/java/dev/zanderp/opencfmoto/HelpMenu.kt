@@ -17,6 +17,7 @@ object HelpMenu {
     fun show(activity: Activity, shareLogs: () -> Unit, reportProblem: () -> Unit, extras: List<Pair<String, () -> Unit>> = emptyList()) {
         val items = listOf(
             activity.getString(R.string.doctor_menu) to { Doctor.show(activity) },
+            activity.getString(R.string.wz_menu) to { SetupWizardActivity.start(activity) },
             activity.getString(R.string.help_guide) to { showThaiGuide(activity) },
             activity.getString(R.string.help_interfaces) to { showInterfacesTip(activity) },
             activity.getString(R.string.ms_help_send_tech) to shareLogs,
