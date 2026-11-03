@@ -27,7 +27,7 @@ import kotlin.math.cos
 
 /** "Your year on the bike": numbers for a year or a month, the story cards, and the share image. */
 object YearInReview {
-    private const val BCN_MADRID_KM = 620.0
+    private const val BCN_MADRID_KM = 620.0  // overridden per language: see refKm()
     private const val MAX_PLAUSIBLE_KMH = 150
     /** Marker for the "your zone" card, which shows the heat map instead of a number. */
     const val ZONE = "🗺️"
@@ -88,9 +88,11 @@ object YearInReview {
     fun cards(ctx: Context, s: Stats): List<Card> {
         val loc = Locale.getDefault()
         val out = ArrayList<Card>()
-        val comp = if (s.km >= BCN_MADRID_KM)
-            ctx.getString(R.string.yir_km_times, String.format(loc, "%.1f", s.km / BCN_MADRID_KM))
-        else ctx.getString(R.string.yir_km_percent, (s.km / BCN_MADRID_KM * 100).toInt())
+        // Reference trip per language (Barcelona → Madrid 620 km; Thai: Bangkok → Chiang Mai 700 km).
+        val ref = ctx.getString(R.string.ms_yir_ref_km).toDoubleOrNull() ?: BCN_MADRID_KM
+        val comp = if (s.km >= ref)
+            ctx.getString(R.string.yir_km_times, String.format(loc, "%.1f", s.km / ref))
+        else ctx.getString(R.string.yir_km_percent, (s.km / ref * 100).toInt())
         out += Card("🏍️", String.format(loc, "%,.0f", s.km), ctx.getString(R.string.yir_km), comp)
         out += Card("📅", s.days.toString(), ctx.getString(R.string.yir_days),
             ctx.getString(R.string.yir_days_sub, s.trips.size, String.format(loc, "%.0f", s.hours)))

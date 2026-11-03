@@ -65,4 +65,5 @@
     <string name="ms_explorer_start">Start</string>
     <string name="ms_explorer_running">Scanning the dash… %1$d%%</string>
     <string name="ms_explorer_none">No open ports found. Is the phone on the bike\'s Wi‑Fi?</string>
+    <string name="ms_yir_ref_km">620</string>
 </resources>

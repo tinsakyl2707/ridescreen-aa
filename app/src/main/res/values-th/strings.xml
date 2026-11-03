@@ -155,7 +155,7 @@
     <string name="setup_landscape">แนวนอน</string>
     <string name="setup_portrait">แนวตั้ง</string>
     <string name="setup_bt_trigger">เชื่อมต่อเองเมื่อบลูทูธรถเชื่อมต่อ</string>
-    <string name="setup_bt_trigger_desc">แนะนำ: เลือกบลูทูธของจอรถ (ชื่อขึ้นต้นด้วย \"ZT\") แล้วอนุญาต \"แสดงทับแอปอื่น\" ครั้งต่อไปสตาร์ทรถ แอปจะเชื่อมต่อเอง</string>
+    <string name="setup_bt_trigger_desc">แนะนำ: เลือกบลูทูธของจอรถ (ชื่อขึ้นต้นด้วย \"ICANTRON\" หรือ \"ZT\") แล้วอนุญาต \"แสดงทับแอปอื่น\" ครั้งต่อไปสตาร์ทรถ แอปจะเชื่อมต่อเอง</string>
     <string name="setup_bt_trigger_pick">เลือกอุปกรณ์บลูทูธ</string>
     <string name="setup_bt_trigger_none">ปิด</string>
     <string name="setup_bt_trigger_set">เชื่อมต่อเมื่อ: %1$s</string>
@@ -172,7 +172,7 @@
     <string name="ms_step2">เปิด Wi‑Fi และบลูทูธมือถือ (จับคู่บลูทูธกับจอรถแล้ว)</string>
     <string name="ms_step3">เพิ่งรีสตาร์ทมือถือ? Android Auto → ⋮ → \"เริ่มเซิร์ฟเวอร์เครื่องเสียง\"</string>
     <string name="ms_quick_title">ทางลัด</string>
-    <string name="fit_open">🎯 ปรับภาพให้พอดีจอรถ (เห็นผลสด)</string>
+    <string name="fit_open">🎯 ปรับภาพให้พอดีจอรถ</string>
     <string name="fit_open_hint">กดลูกศรบนมือถือ ดูผลบนจอรถทันที ต้องเชื่อมต่อก่อนถึงจะเห็นผล</string>
     <string name="setup_fill_edge_to_edge_crops_a_little">เต็มจอ — ชนขอบ (ตัดขอบนิดหน่อย)</string>
     <string name="setup_match_dash">ตามจอรถ</string>

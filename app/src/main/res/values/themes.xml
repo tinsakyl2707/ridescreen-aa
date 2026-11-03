@@ -173,6 +173,11 @@
         <item name="android:minHeight">@dimen/btn_segment_min_height</item>
         <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>
+        <!-- MotoScreen TH: Material's 24dp side padding left 3-up segments ~40dp for text, so
+             "กลางวัน" broke into "กลาง/วัน" and the map tabs showed "R…". -->
+        <item name="android:paddingStart">6dp</item>
+        <item name="android:paddingEnd">6dp</item>
+        <item name="android:minWidth">0dp</item>
     </style>
 
     <!-- Visual test: rounded pill shortcut (Controles / Viajes). -->

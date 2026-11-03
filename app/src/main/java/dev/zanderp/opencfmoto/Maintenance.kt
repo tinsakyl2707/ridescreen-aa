@@ -74,7 +74,7 @@ object Maintenance {
                 key,
                 if (o.has("odoBase")) o.getDouble("odoBase") else null,
                 o.optDouble("kmSince", 0.0),
-                o.optJSONArray("tasks")?.let { a -> (0 until a.length()).map { taskFrom(a.getJSONObject(it)) } } ?: defaultTasks(ctx),
+                o.optJSONArray("tasks")?.let { a -> localize(ctx, (0 until a.length()).map { taskFrom(a.getJSONObject(it)) }) } ?: defaultTasks(ctx),
                 o.optJSONArray("log")?.let { a -> (0 until a.length()).map { entryFrom(a.getJSONObject(it)) } } ?: emptyList(),
                 o.optDouble("appKm", 0.0),
             )
@@ -129,6 +129,25 @@ object Maintenance {
         val custom = b.tasks.filter { it.id.startsWith("custom_") }
         save(ctx, b.copy(tasks = merged + custom))
         LogBus.log("[MAINT] plan applied: ${plan.size} tasks (+${custom.size} custom)")
+    }
+
+    /**
+     * MotoScreen TH: the built-in tasks were saved with the name in whatever language the app had
+     * then ("Oil and filter"). Show them in the current language instead; the rider's own tasks
+     * (custom_…) keep exactly the name they typed.
+     */
+    private fun localize(ctx: Context, tasks: List<Task>): List<Task> {
+        val plan = tasks.any { it.id == "oil_filter" }
+        val res = mapOf(
+            "oil" to if (plan) R.string.maint_oil_engine else R.string.maint_oil,
+            "air" to R.string.maint_air, "belt" to R.string.maint_belt, "brakes" to R.string.maint_brakes,
+            "tyres" to R.string.maint_tyres, "service" to R.string.maint_service, "itv" to R.string.maint_itv,
+            "insurance" to R.string.maint_insurance, "oil_filter" to R.string.maint_oil_filter,
+            "gear_oil" to R.string.maint_gear_oil, "valves" to R.string.maint_valves, "pulleys" to R.string.maint_pulleys,
+            "steer_lock" to R.string.maint_steer_lock, "spark" to R.string.maint_spark,
+            "brake_fluid" to R.string.maint_brake_fluid, "coolant" to R.string.maint_coolant,
+        )
+        return tasks.map { t -> res[t.id]?.let { t.copy(name = ctx.getString(it)) } ?: t }
     }
 
     private fun defaultTasks(ctx: Context) = listOf(

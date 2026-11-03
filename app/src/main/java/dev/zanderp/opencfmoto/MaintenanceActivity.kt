@@ -104,7 +104,8 @@ class MaintenanceActivity : AppCompatActivity() {
             }
         }
         body.addView(button(getString(R.string.maint_add_task)) { editTask(null, book) })
-        body.addView(button(getString(R.string.maint_plan_125)) { askPlan125() })
+        // The 125X manual table only makes sense on a 125X.
+        if (BikePicker.selected(this)?.dashKey == "125x") body.addView(button(getString(R.string.maint_plan_125)) { askPlan125() })
 
         // Fuel.
         body.addView(section(getString(R.string.maint_fuel)))
