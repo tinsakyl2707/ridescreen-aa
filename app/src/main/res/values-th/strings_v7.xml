@@ -221,4 +221,34 @@
     <plurals name="home_tile_trips_today">
         <item quantity="other">วันนี้ %1$d ทริป</item>
     </plurals>
+    <string name="fuel_g95">แก๊สโซฮอล์ 95</string>
+    <string name="fuel_e20">E20</string>
+    <string name="fuel_loading">ราคาน้ำมัน</string>
+    <string name="fuel_tap_hint">กำลังดึงราคาวันนี้… แตะเพื่อตั้งค่า</string>
+    <string name="fuel_title_fmt">%1$s · %2$s ฿</string>
+    <string name="fuel_title_missing">%1$s · ไม่มีราคา</string>
+    <string name="fuel_other_fmt">%1$s %2$s ฿</string>
+    <string name="fuel_tank_fmt">เต็มถัง ~%1$s ฿</string>
+    <string name="fuel_stale">⚠ ราคาเก่า</string>
+    <string name="fuel_trend_up">พรุ่งนี้ ▲%1$s</string>
+    <string name="fuel_trend_down">พรุ่งนี้ ▼%1$s</string>
+    <string name="fuel_dialog_title">⛽ ราคาน้ำมัน</string>
+    <string name="fuel_pick_main">น้ำมันที่เติม (โชว์ก่อน และใช้แจ้งเตือน)</string>
+    <string name="fuel_tank_hint">ขนาดถัง (ลิตร) ใช้คำนวณค่าเติมเต็มถัง</string>
+    <string name="fuel_notify_switch">แจ้งเตือน 18:00 เมื่อราคาพรุ่งนี้เปลี่ยน</string>
+    <string name="fuel_refresh">ดึงราคาใหม่</string>
+    <string name="fuel_failed">ดึงราคาจากบางจากและ ปตท. ไม่ได้ เช็คอินเทอร์เน็ตแล้วลองใหม่</string>
+    <string name="fuel_channel">ราคาน้ำมัน</string>
+    <string name="fuel_notif_title">⛽ พรุ่งนี้ราคาน้ำมันเปลี่ยน</string>
+    <string name="fuel_notif_up">%1$s ขึ้น %2$s ฿ พรุ่งนี้ 05:00 (→ %3$s ฿) · เติมวันนี้ถูกกว่า</string>
+    <string name="fuel_notif_down">%1$s ลง %2$s ฿ พรุ่งนี้ 05:00 (→ %3$s ฿) · ถ้ารอได้ เติมพรุ่งนี้คุ้มกว่า</string>
+    <string name="fuel_refuel_hint">ราคา (เว้นว่าง = ลิตร × %1$s ฿)</string>
+    <string name="extras_rain">เตือนฝนข้างหน้า</string>
+    <string name="extras_rain_desc">ตอนเชื่อมต่อจอรถ แอปเช็คพยากรณ์ 3 ชั่วโมงข้างหน้าแถวที่คุณอยู่ (Open-Meteo ใช้ตำแหน่งคร่าวๆ) ถ้าฝนน่าจะตกจะเตือนบนมือถือ</string>
+    <string name="rain_channel">เตือนระหว่างขี่</string>
+    <string name="rain_title">🌧️ ฝนน่าจะตก</string>
+    <string name="rain_title_heavy">🌧️ ฝนน่าจะตกหนัก</string>
+    <string name="rain_now">ฝนกำลังตก หรือใกล้จะตกแถวที่คุณอยู่</string>
+    <string name="rain_in_minutes">ฝนน่าจะตกในอีกประมาณ %1$d นาที แถวที่คุณอยู่</string>
+    <string name="rain_source">สภาพอากาศ: Open-Meteo.com</string>
 </resources>

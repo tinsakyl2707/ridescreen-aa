@@ -901,6 +901,8 @@ class SetupActivity : AppCompatActivity() {
         }
         switchify(R.id.autoconnect_on, { AppSettings.autoConnect(this) }) { AppSettings.setAutoConnect(this, it) }
         switchify(R.id.logtrips_on, { AppSettings.logTrips(this) }) { AppSettings.setLogTrips(this, it) }
+        // v12: rain-ahead alert back on the settings screen, as a switch like the others.
+        switchify(R.id.extras_rain_on, { RideExtras.rain(this) }) { RideExtras.setRain(this, it) }
     }
 
     private fun switchify(onId: Int, get: () -> Boolean, set: (Boolean) -> Unit) {

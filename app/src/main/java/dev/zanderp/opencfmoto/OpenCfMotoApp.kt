@@ -45,6 +45,7 @@ class OpenCfMotoApp : Application() {
         try { TripRecorder.recoverAtStart(this) } catch (_: Exception) {}
         AppHttp.init(this)
         try { WeeklySummary.ensureScheduled(this) } catch (_: Exception) {}
+        try { FuelPrice.ensureScheduled(this) } catch (_: Exception) {}
         ConnectSound.init(this)
         ConnectWidget.init(this)
         try {

@@ -72,6 +72,15 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:id="@+id/fuel_card" android:background="@drawable/ms_gauge_cell" android:foreground="?selectableItemBackground" android:clickable="true" android:focusable="true" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:paddingStart="16.0dip" android:paddingEnd="14.0dip" android:paddingTop="12.0dip" android:paddingBottom="12.0dip">
+                <TextView android:textSize="22.0sp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⛽" />
+                <LinearLayout android:orientation="vertical" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_weight="1.0" android:layout_marginStart="12.0dip">
+                    <TextView android:textSize="16.0sp" android:textColor="@color/text_primary" android:id="@+id/fuel_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="1" android:ellipsize="end" android:fontFamily="@font/archivo_semibold" android:text="@string/fuel_loading" />
+                    <TextView android:textSize="12.0sp" android:textColor="@color/text_secondary" android:id="@+id/fuel_sub" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="1" android:ellipsize="end" />
+                </LinearLayout>
+                <TextView android:textSize="14.0sp" android:textColor="@color/text_secondary" android:id="@+id/fuel_trend" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8.0dip" android:gravity="end" android:fontFamily="@font/archivo_semibold" />
+            </LinearLayout>
+
             <LinearLayout android:orientation="vertical" android:id="@+id/prep_card" android:background="@drawable/ms_panel_accent" android:paddingTop="14.0dip" android:paddingBottom="14.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:paddingStart="18.0dip" android:paddingEnd="14.0dip">
                 <TextView android:textSize="15.0sp" android:textColor="@color/brand_gold" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/ms_prep_title" android:fontFamily="@font/archivo_semibold" />
                 <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginTop="12.0dip">

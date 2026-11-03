@@ -116,4 +116,26 @@
     <string name="ms_icon_screen">Screen</string>
     <string name="ms_icon_mono">M</string>
     <string name="ms_icon_toast">Icon changed. The home screen can take a few seconds to update.</string>
+    <string name="fuel_g95">Gasohol 95</string>
+    <string name="fuel_e20">E20</string>
+    <string name="fuel_loading">Fuel price</string>
+    <string name="fuel_tap_hint">Getting today\'s price… tap for settings</string>
+    <string name="fuel_title_fmt">%1$s · %2$s ฿</string>
+    <string name="fuel_title_missing">%1$s · no price</string>
+    <string name="fuel_other_fmt">%1$s %2$s ฿</string>
+    <string name="fuel_tank_fmt">full tank ~%1$s ฿</string>
+    <string name="fuel_stale">⚠ old price</string>
+    <string name="fuel_trend_up">tomorrow ▲%1$s</string>
+    <string name="fuel_trend_down">tomorrow ▼%1$s</string>
+    <string name="fuel_dialog_title">⛽ Fuel price</string>
+    <string name="fuel_pick_main">Your fuel (shown first, used for alerts)</string>
+    <string name="fuel_tank_hint">Tank size, litres (for the full-tank cost)</string>
+    <string name="fuel_notify_switch">Alert at 18:00 when tomorrow\'s price changes</string>
+    <string name="fuel_refresh">Refresh now</string>
+    <string name="fuel_failed">Couldn\'t get the price from Bangchak or PTT. Check the internet and try again.</string>
+    <string name="fuel_channel">Fuel price</string>
+    <string name="fuel_notif_title">⛽ Fuel price changes tomorrow</string>
+    <string name="fuel_notif_up">%1$s goes UP %2$s ฿ at 05:00 tomorrow (→ %3$s ฿). Filling up today is cheaper.</string>
+    <string name="fuel_notif_down">%1$s goes DOWN %2$s ฿ at 05:00 tomorrow (→ %3$s ฿). Worth waiting if you can.</string>
+    <string name="fuel_refuel_hint">Price (empty = litres × %1$s ฿)</string>
 </resources>

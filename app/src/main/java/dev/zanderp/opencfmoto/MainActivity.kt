@@ -1098,6 +1098,8 @@ class MainActivity : AppCompatActivity() {
         }
         // Maintenance status only changes with rides / edits: once per resume, not every 5 s tick.
         renderMaint()
+        renderFuel()
+        FuelPrice.refreshIfStale(this) { runOnUiThread { if (!isFinishing && !isDestroyed) renderFuel() } }
         try { YearInReview.maybeNotify(this) } catch (_: Exception) {}
         // The active bike (and its name) may have changed in the Garage — reflect it on the label and
         // the Connect button.
@@ -1446,6 +1448,84 @@ class MainActivity : AppCompatActivity() {
     }
 
     /** v2.3 · Tap the dash clock while projecting: set it again (one extra resync). */
+    /** v12 · Thai pump price card (Bangchak; PTT/OR fallback). Always says when it was fetched. */
+    private fun renderFuel() {
+        val card = findViewById<View?>(R.id.fuel_card) ?: return
+        val title = findViewById<TextView>(R.id.fuel_title)
+        val sub = findViewById<TextView>(R.id.fuel_sub)
+        val trend = findViewById<TextView>(R.id.fuel_trend)
+        card.setOnClickListener { showFuelDialog() }
+        val snap = FuelPrice.cached(this)
+        if (snap == null) {
+            title.setText(R.string.fuel_loading); sub.setText(R.string.fuel_tap_hint); trend.text = ""
+            return
+        }
+        val main = FuelPrice.primary(this)
+        val other = FuelPrice.Fuel.values().first { it != main }
+        val p = snap.prices[main]
+        val loc = java.util.Locale.US
+        title.text = if (p?.today != null) getString(R.string.fuel_title_fmt, getString(main.label), String.format(loc, "%.2f", p.today))
+            else getString(R.string.fuel_title_missing, getString(main.label))
+        val parts = ArrayList<String>()
+        snap.prices[other]?.today?.let { parts += getString(R.string.fuel_other_fmt, getString(other.label), String.format(loc, "%.2f", it)) }
+        val tank = FuelPrice.tankLitres(this)
+        if (tank > 0 && p?.today != null) parts += getString(R.string.fuel_tank_fmt, String.format(loc, "%,.0f", tank * p.today))
+        parts += snap.source + " " + android.text.format.DateFormat.getTimeFormat(this).format(java.util.Date(snap.at))
+        if (System.currentTimeMillis() - snap.at > 24 * 60 * 60_000L) parts += getString(R.string.fuel_stale)
+        sub.text = parts.joinToString(" · ")
+        val d = if (p?.today != null && p.tomorrow != null) p.tomorrow - p.today else 0.0
+        when {
+            d > 0.004 -> { trend.text = getString(R.string.fuel_trend_up, String.format(loc, "%.2f", d)); trend.setTextColor(ContextCompat.getColor(this, R.color.status_error)) }
+            d < -0.004 -> { trend.text = getString(R.string.fuel_trend_down, String.format(loc, "%.2f", -d)); trend.setTextColor(ContextCompat.getColor(this, R.color.status_live)) }
+            else -> { trend.text = ""; }
+        }
+    }
+
+    private fun showFuelDialog() {
+        val dp = resources.displayMetrics.density
+        val box = android.widget.LinearLayout(this).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            setPadding((24 * dp).toInt(), (8 * dp).toInt(), (24 * dp).toInt(), 0)
+        }
+        val group = android.widget.RadioGroup(this)
+        val cur = FuelPrice.primary(this)
+        for (f in FuelPrice.Fuel.values()) group.addView(android.widget.RadioButton(this).apply {
+            id = View.generateViewId(); setText(f.label); isChecked = f == cur; tag = f
+        })
+        box.addView(TextView(this).apply { setText(R.string.fuel_pick_main); textSize = 13f; setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_secondary)) })
+        box.addView(group)
+        val tank = android.widget.EditText(this).apply {
+            inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
+            hint = getString(R.string.fuel_tank_hint)
+            FuelPrice.tankLitres(this@MainActivity).takeIf { it > 0 }?.let { setText(String.format(java.util.Locale.US, "%.1f", it)) }
+        }
+        box.addView(tank)
+        val notify = com.google.android.material.materialswitch.MaterialSwitch(this).apply {
+            setText(R.string.fuel_notify_switch); isChecked = FuelPrice.notifyOn(this@MainActivity)
+        }
+        box.addView(notify)
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.fuel_dialog_title)
+            .setView(box)
+            .setPositiveButton(R.string.fit_done) { _, _ ->
+                (group.findViewById<View>(group.checkedRadioButtonId)?.tag as? FuelPrice.Fuel)?.let { FuelPrice.setPrimary(this, it) }
+                tank.text.toString().trim().toDoubleOrNull()?.takeIf { it in 1.0..60.0 }?.let { FuelPrice.setTankLitres(this, it) }
+                FuelPrice.setNotifyOn(this, notify.isChecked)
+                renderFuel()
+            }
+            .setNeutralButton(R.string.fuel_refresh) { _, _ ->
+                Thread({
+                    val s = FuelPrice.fetchNow(this)
+                    runOnUiThread {
+                        if (isFinishing || isDestroyed) return@runOnUiThread
+                        if (s == null) Toast.makeText(this, R.string.fuel_failed, Toast.LENGTH_LONG).show()
+                        renderFuel()
+                    }
+                }, "fuel-refresh").start()
+            }
+            .show()
+    }
+
     /** The third gauge: km (or days) to the next maintenance item, instead of the dash clock. */
     private fun renderMaintStat() {
         val v = findViewById<TextView?>(R.id.stat_clock) ?: return

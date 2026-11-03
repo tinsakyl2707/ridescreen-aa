@@ -213,6 +213,9 @@ class MaintenanceActivity : AppCompatActivity() {
     private fun askRefuel() {
         val liters = number(null, getString(R.string.maint_liters), decimal = true)
         val euros = number(null, getString(R.string.maint_euros), decimal = true)
+        FuelPrice.cached(this)?.prices?.get(FuelPrice.primary(this))?.today?.let {
+            euros.hint = getString(R.string.fuel_refuel_hint, String.format(Locale.US, "%.2f", it))
+        }
         val box = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; addView(liters); addView(euros) }
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.maint_refuel)
@@ -223,7 +226,10 @@ class MaintenanceActivity : AppCompatActivity() {
                 if (l == null || l <= 0) {
                     Toast.makeText(this, R.string.maint_liters_needed, Toast.LENGTH_SHORT).show()
                 } else {
-                    Maintenance.addRefuel(this, l, euros.text.toString().replace(',', '.').toDoubleOrNull())
+                    // v12: no price typed → litres × today's pump price for the rider's fuel (if we have one).
+                    val typed = euros.text.toString().replace(',', '.').toDoubleOrNull()
+                    val perL = FuelPrice.cached(this)?.prices?.get(FuelPrice.primary(this))?.today
+                    Maintenance.addRefuel(this, l, typed ?: perL?.let { it * l })
                     render()
                 }
             }
