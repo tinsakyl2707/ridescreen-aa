@@ -226,16 +226,9 @@
         <receiver
             android:name=".CrashActionReceiver"
             android:exported="false" />
-        <!-- v13: lets the MotoScreen dash show (and skip) what the music app is playing. -->
-        <service
-            android:name=".MsNotificationListener"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-        </service>
+        <!-- v16: no NotificationListenerService. In Thailand Google Play Protect blocks sideloaded
+             apps that declare one ("enhanced fraud protection"), so the dash can't read the song
+             title; music is still controlled with standard media keys. -->
         <activity
             android:name=".ButtonTestActivity"
             android:exported="false" />

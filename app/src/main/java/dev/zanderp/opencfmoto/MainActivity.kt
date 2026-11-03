@@ -2703,7 +2703,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun chooseDashMode(dash: Boolean) {
-        if (dash && !MotoDash.hasMediaAccess(this) && !askedMediaAccess) {
+        if (false && dash && !MotoDash.hasMediaAccess(this) && !askedMediaAccess) {
             askedMediaAccess = true
             com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.dash_media_title)
