@@ -28,3 +28,10 @@
 **แก้แล้วใน v10:** flag `MotoScreen.langSwitching` (หมดอายุเอง 5 วิ), ข้าม auto-connect / update / prompts / wizard,
 รูป hero ถอดเบื้องหลัง + cache ข้ามการสร้างหน้าใหม่, จางออก 140 ms → จางเข้า 200 ms (หน้าแรก + wizard),
 onDestroy ไม่ teardown การเชื่อมต่อถ้าเป็นการสร้างหน้าใหม่ (isChangingConfigurations)
+
+## B2 · ชื่อแอปมีคำว่า "TH" ดูแปลก (3 พ.ย. 2026) — เสนอ: ตัด TH → "MotoScreen"
+- เปลี่ยน app_name / brand_wordmark ทุก locale เป็น "MotoScreen"
+- wordmark หน้าแรก: "Moto" ขาว + "Screen" สีหลัก (โค้ดเดิมแบ่งที่ช่องว่าง → ต้องแบ่งที่ตัว S แทน)
+- ข้อความในแอปที่มีคำว่า "MotoScreen TH" (wizard, คู่มือ, share_text/footer, release notes, workflow ชื่อไฟล์ APK) → "MotoScreen"
+- ไม่เปลี่ยน package `th.motoscreen.app` (ผู้ใช้มองไม่เห็น และถ้าเปลี่ยนจะลงทับเวอร์ชันเดิมไม่ได้)
+- รอผู้ใช้ยืนยันชื่อ
