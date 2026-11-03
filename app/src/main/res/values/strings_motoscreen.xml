@@ -239,7 +239,7 @@
     <string name="de_warn_t">Warn above (number turns red, edge pulses)</string>
     <string name="de_off">Off</string>
     <string name="de_help">How to</string>
-    <string name="de_help_body">• Drag a widget to move it. It snaps to a grid; a yellow line shows the centre.\n• Tap to select, then Style / Colour / Size / Layer.\n• Long-press a widget for every option.\n• Ready-made: start from a full theme, then move anything.\n• Panels and lines go behind; to move a panel, grab its edge.\n• Save: if the dash is on, the bike updates at once.\n\nData comes from the phone: GPS speed, heading, altitude, trip, weather, fuel price. Tyre pressure, RPM, gear and fuel level are not sent to the phone by the bike.</string>
+    <string name="de_help_body">• Drag a widget to move it. It snaps to a grid; a yellow line shows the centre.\n• Tap to select, then Style / Colour / Size / Layer.\n• Long-press a widget for every option.\n• Ready-made: start from a full theme, then move anything.\n• Panels and lines go behind; to move a panel, grab its edge.\n• Save: if the dash is on, the bike updates at once.\n\n• Map: one live map (rounded, circle or full screen). It follows you heading-up and zooms out with speed; tiles load over mobile data.\n\nData comes from the phone: GPS speed, heading, altitude, trip, weather, fuel price. Tyre pressure, RPM, gear and fuel level are not sent to the phone by the bike.</string>
     <string name="de_no_styles">This widget has one look</string>
     <string name="de_presets">Ready-made</string>
     <string name="de_style">Style</string>
@@ -282,4 +282,8 @@
     <string name="dw_photo">Picture / logo</string>
     <string name="dw_sun">Sunrise / sunset</string>
     <string name="dw_temp">Temperature</string>
+    <!-- v20 map widget -->
+    <string name="dw_map">Map</string>
+    <string name="ds_full">Full screen</string>
+    <string name="dp_map">Map</string>
 </resources>

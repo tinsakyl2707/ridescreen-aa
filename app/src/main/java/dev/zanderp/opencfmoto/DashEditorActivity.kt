@@ -176,7 +176,7 @@ class DashEditorActivity : AppCompatActivity() {
     /** New widgets land in the middle; panels and lines go behind everything else. */
     private fun place(w: DashWidget) {
         checkpoint()
-        if (w.type == DashWidget.Type.PANEL || w.type == DashWidget.Type.LINE) dash.widgets.add(0, w) else dash.widgets += w
+        if (w.type == DashWidget.Type.PANEL || w.type == DashWidget.Type.LINE || w.type == DashWidget.Type.MAP) dash.widgets.add(0, w) else dash.widgets += w
         preview.selected = w
         refresh()
     }

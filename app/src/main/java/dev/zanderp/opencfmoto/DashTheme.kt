@@ -52,6 +52,7 @@ data class DashWidget(
         SPEED(R.string.dw_speed, 0, intArrayOf(R.string.ds_plain, R.string.ds_digital)),
         MAX(R.string.dw_max, 0),
         AVG(R.string.dw_avg, 0),
+        MAP(R.string.dw_map, 1, intArrayOf(R.string.ds_rounded, R.string.ds_circle, R.string.ds_full)),
         TRIP(R.string.dw_trip, 1),
         RIDE_TIME(R.string.dw_ride_time, 1),
         ODO(R.string.dw_odo, 1),
@@ -175,6 +176,14 @@ data class DashTheme(
                 w(DashWidget.Type.FUEL, 0.25f, 0.93f, 0),
                 w(DashWidget.Type.MAINT, 0.75f, 0.93f, 0),
             ), font = DashFont.CHAKRA.ordinal, max = 160),
+            DashTheme(ctx.getString(R.string.dp_map), "black", 0.4f, mutableListOf(
+                w(DashWidget.Type.MAP, 0.5f, 0.5f, 1, 2),
+                w(DashWidget.Type.HEADING, 0.5f, 0.08f, 1, 1),
+                w(DashWidget.Type.PANEL, 0.15f, 0.76f, 1, 0),
+                w(DashWidget.Type.SPEED, 0.15f, 0.74f, 0),
+                w(DashWidget.Type.CLOCK, 0.91f, 0.88f, 0),
+                w(DashWidget.Type.RAIN, 0.84f, 0.08f, 0),
+            ), font = DashFont.CHAKRA.ordinal),
             DashTheme(ctx.getString(R.string.dp_minimal), "black", 0.4f, mutableListOf(
                 w(DashWidget.Type.SPEED, 0.5f, 0.48f, 2),
                 w(DashWidget.Type.LINE, 0.5f, 0.80f, 1, 1),
@@ -431,6 +440,9 @@ class DashRenderer(private val ctx: Context) {
         overWarn = theme.warn > 0 && speed > theme.warn
 
         p.shader = null; p.style = Paint.Style.FILL
+        // Live dash: the real map is a view *under* this canvas — leave its shape unpainted.
+        val hole = if (sample) null else mapArea(theme, w, h)
+        if (hole != null) { c.save(); c.clipOutPath(mapPath(hole.first, hole.second, k)) }
         val bmp = background(theme)
         if (bmp != null) {
             val s = maxOf(w / bmp.width, h / bmp.height)
@@ -442,6 +454,14 @@ class DashRenderer(private val ctx: Context) {
         } else {
             gradientBg(c, w, h, theme)
             if (theme.dim > 0.46f) { p.color = Color.argb(((theme.dim - 0.45f) * 255).toInt(), 0, 0, 0); c.drawRect(0f, 0f, w, h, p) }
+        }
+        if (hole != null) c.restore()
+        if (theme.widgets.any { it.type == DashWidget.Type.MAP && it.style == 2 }) {
+            // Full-screen map: soft top/bottom shade so the widgets stay readable.
+            p.shader = LinearGradient(0f, 0f, 0f, h * 0.3f, Color.argb(150, 0, 0, 0), Color.TRANSPARENT, Shader.TileMode.CLAMP)
+            c.drawRect(0f, 0f, w, h * 0.3f, p)
+            p.shader = LinearGradient(0f, h * 0.65f, 0f, h, Color.TRANSPARENT, Color.argb(170, 0, 0, 0), Shader.TileMode.CLAMP)
+            c.drawRect(0f, h * 0.65f, w, h, p); p.shader = null
         }
         bounds.clear()
         for (wd in theme.widgets) bounds += wd to drawWidget(c, wd, w, h, k, live, sample, speed, theme)
@@ -618,6 +638,16 @@ class DashRenderer(private val ctx: Context) {
             }
             DashWidget.Type.TEXT -> txt(c, wd.text.ifBlank { ctx.getString(R.string.dw_text_sample) }, x, y + 12f * s, 34f * s, main, false)
             DashWidget.Type.PHOTO -> photo(c, wd, x, y, s, hi)
+            DashWidget.Type.MAP -> {
+                val r = mapRectOf(wd, w, h)
+                val isLive = !sample && theme.widgets.firstOrNull { it.type == DashWidget.Type.MAP } === wd
+                if (!isLive) fakeMap(c, r, wd.style, k, hi)
+                if (wd.style != 2) {
+                    p.style = Paint.Style.STROKE; p.strokeWidth = 3f * k; p.color = hi
+                    c.drawPath(mapPath(r, wd.style, k), p); p.style = Paint.Style.FILL
+                }
+                if (wd.style == 2) RectF(w * 0.3f, h * 0.3f, w * 0.7f, h * 0.7f) else r
+            }
             DashWidget.Type.PANEL -> panel(c, wd.style, x, y, s, hi)
             DashWidget.Type.LINE -> {
                 val half = 200f * s; val t = 3f * s
@@ -856,10 +886,53 @@ class DashRenderer(private val ctx: Context) {
         return r
     }
 
+    /** The map widget's rectangle on the dash canvas. */
+    fun mapRectOf(wd: DashWidget, w: Float, h: Float): RectF {
+        if (wd.style == 2) return RectF(0f, 0f, w, h)
+        val sc = scale(wd.size) * (w / 1024f)
+        val hw = (if (wd.style == 1) 130f else 200f) * sc
+        val hh = 130f * sc
+        return RectF(wd.x * w - hw, wd.y * h - hh, wd.x * w + hw, wd.y * h + hh)
+    }
+
+    /** First map widget (the live one): rect + style (0 rounded, 1 circle, 2 full screen). */
+    fun mapArea(theme: DashTheme, w: Float, h: Float): Pair<RectF, Int>? =
+        theme.widgets.firstOrNull { it.type == DashWidget.Type.MAP }?.let { mapRectOf(it, w, h) to it.style }
+
+    fun mapPath(r: RectF, style: Int, k: Float) = Path().apply {
+        when (style) {
+            1 -> addOval(r, Path.Direction.CW)
+            2 -> addRect(r, Path.Direction.CW)
+            else -> addRoundRect(r, 22f * k, 22f * k, Path.Direction.CW)
+        }
+    }
+
+    /** Editor / thumbnail stand-in for the real map: a few streets, a river, a park, you. */
+    private fun fakeMap(c: Canvas, r: RectF, style: Int, k: Float, hi: Int) {
+        c.save(); c.clipPath(mapPath(r, style, k))
+        p.shader = null; p.style = Paint.Style.FILL; p.color = Color.parseColor("#1C232B"); c.drawRect(r, p)
+        p.color = Color.parseColor("#1F3A2A"); c.drawRect(r.left + r.width() * 0.62f, r.top + r.height() * 0.08f, r.left + r.width() * 0.86f, r.top + r.height() * 0.36f, p)
+        p.style = Paint.Style.STROKE; p.strokeCap = Paint.Cap.ROUND
+        p.color = Color.parseColor("#1E4E79"); p.strokeWidth = 16f * k
+        c.drawPath(Path().apply {
+            moveTo(r.left, r.top + r.height() * 0.78f)
+            cubicTo(r.left + r.width() * 0.3f, r.top + r.height() * 0.6f, r.left + r.width() * 0.6f, r.bottom, r.right, r.top + r.height() * 0.7f)
+        }, p)
+        p.color = Color.parseColor("#3A4452"); p.strokeWidth = 5f * k
+        for (i in 1..5) { val xx = r.left + r.width() * i / 6f; c.drawLine(xx, r.top, xx - r.width() * 0.05f, r.bottom, p) }
+        for (i in 1..3) { val yy = r.top + r.height() * i / 4f; c.drawLine(r.left, yy, r.right, yy + r.height() * 0.04f, p) }
+        p.color = Color.parseColor("#E8B04A"); p.strokeWidth = 9f * k
+        c.drawLine(r.left, r.top + r.height() * 0.35f, r.right, r.top + r.height() * 0.55f, p)
+        p.style = Paint.Style.FILL; p.color = hi
+        val cx = r.centerX(); val cy = r.centerY() + r.height() * 0.08f; val a = 16f * k
+        c.drawPath(Path().apply { moveTo(cx, cy - a); lineTo(cx + a * 0.7f, cy + a * 0.8f); lineTo(cx, cy + a * 0.35f); lineTo(cx - a * 0.7f, cy + a * 0.8f); close() }, p)
+        c.restore()
+    }
+
     fun hit(xPx: Float, yPx: Float, pad: Float): DashWidget? {
         // Prefer content over decor: a panel is only picked when nothing on top of it is hit.
         val hits = bounds.filter { (_, r) -> RectF(r).apply { inset(-pad, -pad) }.contains(xPx, yPx) }.map { it.first }
-        return hits.lastOrNull { it.type != DashWidget.Type.PANEL && it.type != DashWidget.Type.LINE } ?: hits.lastOrNull()
+        return hits.lastOrNull { it.type != DashWidget.Type.PANEL && it.type != DashWidget.Type.LINE && it.type != DashWidget.Type.MAP } ?: hits.lastOrNull()
     }
 
     fun boundsOf(wd: DashWidget): RectF? = bounds.firstOrNull { it.first === wd }?.second

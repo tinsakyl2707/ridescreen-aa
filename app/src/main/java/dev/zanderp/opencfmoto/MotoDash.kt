@@ -71,6 +71,11 @@ class CockpitView(context: Context, private val log: (String) -> Unit) : View(co
     private val lm = context.getSystemService(LocationManager::class.java)
     /** v18: the layout comes from the rider's custom theme ([DashTheme]) — same renderer as the editor. */
     private val renderer = DashRenderer(context)
+    /** v20: where the live map must sit (null = no map widget) — [DashScreen] places the map view there. */
+    var onMapArea: ((RectF?, Int) -> Unit)? = null
+    var onFix: ((Location) -> Unit)? = null
+    private var lastArea: RectF? = null
+    private var lastStyle = -1
 
     private val tick = object : Runnable {
         override fun run() { invalidate(); main.postDelayed(this, 200) }
@@ -93,6 +98,7 @@ class CockpitView(context: Context, private val log: (String) -> Unit) : View(co
 
     override fun onLocationChanged(location: Location) {
         fix = location
+        onFix?.invoke(location)
         lastFixAt = System.currentTimeMillis()
     }
 
@@ -101,6 +107,81 @@ class CockpitView(context: Context, private val log: (String) -> Unit) : View(co
         if (w <= 0 || h <= 0) return
         val fresh = System.currentTimeMillis() - lastFixAt < 5000
         val live = fix?.toLive(fresh) ?: DashRenderer.Live(0, false)
-        renderer.draw(c, w, h, DashTheme.current(context), live, sample = false)
+        val theme = DashTheme.current(context)
+        renderer.draw(c, w, h, theme, live, sample = false)
+        val area = renderer.mapArea(theme, w, h)
+        if (area?.first != lastArea || (area?.second ?: -1) != lastStyle) {
+            lastArea = area?.first; lastStyle = area?.second ?: -1
+            val cb = onMapArea
+            if (cb != null) post { cb(area?.first, area?.second ?: 0) }
+        }
+    }
+}
+
+/**
+ * v20 · The whole MotoScreen dash: the live map (osmdroid, the engine that encodes cleanly to the
+ * bike) underneath, and [CockpitView] on top — which leaves the map's shape unpainted.
+ */
+@SuppressLint("ViewConstructor")
+class DashScreen(context: Context, private val log: (String) -> Unit) : android.widget.FrameLayout(context) {
+    private val mapHost = android.widget.FrameLayout(context).apply { visibility = GONE; clipToOutline = true }
+    private val cockpit = CockpitView(context, log)
+    private var map: DashMapController? = null
+    private var lastFix: Location? = null
+
+    init {
+        addView(mapHost, LayoutParams(1, 1))
+        addView(cockpit, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        cockpit.onMapArea = { r, st -> place(r, st) }
+        cockpit.onFix = { loc -> lastFix = loc; follow(loc) }
+    }
+
+    private fun place(r: RectF?, style: Int) {
+        if (r == null) { mapHost.visibility = GONE; return }
+        if (map == null) {
+            try {
+                map = DashMapController(context, mapHost).also { m ->
+                    m.onResume()
+                    val start = lastFix ?: RideExtras.lastLocation(context, 24 * 3_600_000L)
+                    if (start != null) m.setCenter(start.latitude, start.longitude, 16.0)
+                }
+                log("[DASH] map on")
+            } catch (e: Exception) {
+                log("[DASH] map failed: ${e.message}"); return
+            }
+        }
+        val lp = mapHost.layoutParams as LayoutParams
+        lp.width = r.width().toInt(); lp.height = r.height().toInt()
+        lp.leftMargin = r.left.toInt(); lp.topMargin = r.top.toInt()
+        mapHost.layoutParams = lp
+        val k = width / 1024f
+        mapHost.outlineProvider = object : android.view.ViewOutlineProvider() {
+            override fun getOutline(v: View, o: android.graphics.Outline) {
+                when (style) {
+                    1 -> o.setOval(0, 0, v.width, v.height)
+                    2 -> o.setRect(0, 0, v.width, v.height)
+                    else -> o.setRoundRect(0, 0, v.width, v.height, 22f * k)
+                }
+            }
+        }
+        mapHost.invalidateOutline()
+        mapHost.visibility = VISIBLE
+        log("[DASH] map at ${r.left.toInt()},${r.top.toInt()} ${r.width().toInt()}x${r.height().toInt()} style=$style")
+        lastFix?.let { follow(it) }
+    }
+
+    /** Heading-up while moving, zoom out as speed rises. */
+    private fun follow(loc: Location) {
+        val m = map ?: return
+        val kmh = if (loc.hasSpeed()) loc.speed * 3.6f else 0f
+        val moving = kmh > 5f && loc.hasBearing()
+        val zoom = when { kmh < 25 -> 17.0; kmh < 60 -> 16.0; kmh < 90 -> 15.5; else -> 15.0 }
+        try { m.follow(loc.latitude, loc.longitude, if (moving) loc.bearing else 0f, zoom, headingUp = moving, moving = moving) } catch (_: Exception) {}
+    }
+
+    override fun onDetachedFromWindow() {
+        try { map?.onPause(); map?.onDestroy() } catch (_: Exception) {}
+        map = null
+        super.onDetachedFromWindow()
     }
 }

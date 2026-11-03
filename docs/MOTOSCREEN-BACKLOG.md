@@ -127,3 +127,10 @@ onDestroy ไม่ teardown การเชื่อมต่อถ้าเป
 - Colour per widget (12 + auto), theme highlight + text colour; 6 fonts (Kanit, Chakra Petch, Orbitron, DSEG7 LCD, Share Tech Mono, IBM Plex).
 - 10 backgrounds (+ sunset, ocean, racing, forest, carbon, cyber grid). Gauge full scale; speed warning (red + pulsing edge). Layer front/back.
 - Skipped: lean angle / g-force (needs a rigidly mounted phone + gyro fusion; accelerometer alone reads ~0 in a balanced turn).
+
+## B10 · Map on the MotoScreen dash — v20
+- MAP widget (rounded / circle / full screen), one live map: osmdroid view under CockpitView (DashScreen), cockpit clips out the map shape.
+- Heading-up when moving (>5 km/h), zoom 17→15 with speed; tiles over cellular (same provider as GPX mode). Encoder map bitrate boost applies.
+- New "Map" preset (full-screen map + compass tape + speed panel).
+- Upstream full GPX/navigation hub still exists but its button (btn_gpx) is hidden — ask before re-enabling.
+- No turn-by-turn in the MotoScreen dash yet.

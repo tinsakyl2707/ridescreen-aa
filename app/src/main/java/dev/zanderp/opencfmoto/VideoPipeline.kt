@@ -177,7 +177,9 @@ class VideoPipeline(
             // Map / GPX Presentation changes every pan/GPS tick — give H.264 more bits + shorter GOP
             // so motion doesn't smear into block artifacts on the bike (phone preview skips encode).
             // Skip FREE_RIDE 1.35× boost when the profile already targets a low OEM rate (e.g. Morini 10 fps / 2 Mbit).
-            val mapBoost = GpxSession.active && profile.videoFrameRate >= 30
+            val mapBoost = (GpxSession.active ||
+                (MotoDash.active && DashTheme.current(context).widgets.any { it.type == DashWidget.Type.MAP })) &&
+                profile.videoFrameRate >= 30
             val bitrate = (VideoPrefs.bitrateFor(context, profile) * if (mapBoost) 1.35f else 1f).toInt()
             val iframeSec = if (mapBoost) {
                 maxOf(1, profile.videoIFrameIntervalSec / 2)
@@ -488,7 +490,7 @@ class VideoPipeline(
         try {
             val display = createOwnVirtualDisplay() ?: return
             val pres = Presentation(context, display)
-            pres.setContentView(CockpitView(pres.context, log))
+            pres.setContentView(DashScreen(pres.context, log))
             try { pres.window?.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) } catch (_: Exception) {}
             pres.show()
             presentation = pres
