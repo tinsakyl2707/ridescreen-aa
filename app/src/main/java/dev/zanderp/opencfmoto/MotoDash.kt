@@ -42,7 +42,8 @@ object MotoDash {
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences("motoscreen_th", Context.MODE_PRIVATE)
     /** Connect button target: false = Android Auto (default), true = our dash. */
-    fun preferDash(ctx: Context) = prefs(ctx).getBoolean("prefer_dash", false)
+    // v17: rider chose Android Auto — the MotoScreen dash stays in the code but is switched off.
+    fun preferDash(ctx: Context) = false
     fun setPreferDash(ctx: Context, on: Boolean) = prefs(ctx).edit().putBoolean("prefer_dash", on).apply()
 
     /** The music app currently playing, through our notification listener. Null without access. */
@@ -132,7 +133,7 @@ class CockpitView(context: Context, private val log: (String) -> Unit) : View(co
         c.drawRect(0f, 0f, w, h, p)
 
         // ---- centre: GPS speed gauge ----
-        val cx = w / 2; val cy = h * 0.90f; val r = 190f * k
+        val cx = w / 2; val cy = h * 0.80f; val r = 172f * k
         arc.set(cx - r, cy - r, cx + r, cy + r)
         p.shader = null; p.style = Paint.Style.STROKE; p.strokeCap = Paint.Cap.ROUND; p.strokeWidth = 22f * k
         p.color = track
@@ -145,8 +146,8 @@ class CockpitView(context: Context, private val log: (String) -> Unit) : View(co
             c.drawArc(arc, 160f, 220f * frac, false, p)
         }
         p.shader = null
-        text(c, if (spd < 0) "--" else spd.toString(), cx, h * 0.66f, 150f * k, white, heavy, Paint.Align.CENTER)
-        text(c, if (spd < 0) context.getString(R.string.dash_gps_wait) else context.getString(R.string.dash_kmh), cx, h * 0.78f, 24f * k, muted, medium, Paint.Align.CENTER)
+        text(c, if (spd < 0) "--" else spd.toString(), cx, h * 0.70f, 140f * k, white, heavy, Paint.Align.CENTER)
+        text(c, if (spd < 0) context.getString(R.string.dash_gps_wait) else context.getString(R.string.dash_kmh), cx, h * 0.81f, 24f * k, muted, medium, Paint.Align.CENTER)
 
         // ---- right: clock, date, rain, fuel ----
         val now = Date()
