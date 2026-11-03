@@ -135,7 +135,7 @@ class VideoPipeline(
             // Android Auto (letterbox) mode: bring up the compositor now so the AA decoder has an
             // input surface and can reach steady video; the encoder is created later, once the bike
             // tells us its canvas size (see [configureBikeCanvas]).
-            aaCompositor = AaCompositor(log).also { it.start() }
+            aaCompositor = AaCompositor(log, dashOverlay = true).also { it.start() }
             log("[VIDEO] COMPOSITOR mode — decoder input ready; awaiting bike canvas")
             return
         }

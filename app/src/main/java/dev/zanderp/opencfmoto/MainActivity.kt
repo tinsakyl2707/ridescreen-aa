@@ -1946,7 +1946,11 @@ class MainActivity : AppCompatActivity() {
         // v13: rider wants our dash — once Android Auto is up (the proven connect path), switch.
         if (phase == Phase.STREAMING && MotoDash.preferDash(this) && !MotoDash.active && !dashAutoTried) {
             dashAutoTried = true
-            connectBtn.post { if (ConnectionState.phase == Phase.STREAMING && !MotoDash.active) switchToMotoDash() }
+            connectBtn.post {
+                if (ConnectionState.phase != Phase.STREAMING || MotoDash.active) return@post
+                // v21: theme with a Google Maps window → keep Android Auto and draw our dash over it.
+                if (AaDashOverlay.wanted(this)) AaDashOverlay.enable(this) else switchToMotoDash()
+            }
         }
         statusView.text = getString(phase.labelRes) +
             (if (ClockLab.resyncInProgress() && phase != Phase.STOPPED && phase != Phase.IDLE)
@@ -2723,7 +2727,14 @@ class MainActivity : AppCompatActivity() {
         renderDashMode()
         val live = ConnectionState.phase == Phase.STREAMING
         if (!live) return
-        if (dash && !MotoDash.active) switchToMotoDash()
+        if (dash && AaDashOverlay.wanted(this)) {
+            if (MotoDash.active) {
+                log("→ dash (own) → Google Maps dash: reconnecting")
+                stopEverything()
+                connectBtn.postDelayed({ reconnectSavedBike() }, 2500)
+            } else AaDashOverlay.enable(this)
+        } else if (dash && !MotoDash.active) { AaDashOverlay.disable(); switchToMotoDash() }
+        else if (!dash && AaDashOverlay.enabled) AaDashOverlay.disable()
         else if (!dash && MotoDash.active) {
             // Back to Android Auto: a clean reconnect is the reliable way to restart AA video.
             log("→ dash → Android Auto: reconnecting")
@@ -2749,6 +2760,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun stopEverything() {
         MotoDash.active = false
+        AaDashOverlay.disable()
         dashAutoTried = false
         log("→ stopping everything (Android Auto + bike)")
         try { AaVideoBridge.onSteadyVideo = null } catch (_: Exception) {}

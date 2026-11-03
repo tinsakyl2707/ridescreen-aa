@@ -33,7 +33,11 @@ import java.nio.FloatBuffer
  * All GL work happens on a dedicated thread with the EGL context current. Based on the standard
  * SurfaceTexture→encoder pattern (Grafika).
  */
-class AaCompositor(private val log: (String) -> Unit) {
+class AaCompositor(
+    private val log: (String) -> Unit,
+    /** v21: Android Auto path only — allow the MotoScreen dash layer ([AaDashOverlay]) on top. */
+    private val dashOverlay: Boolean = false,
+) {
 
     private val thread = HandlerThread("aa-compositor").apply { start() }
     private val handler = Handler(thread.looper)
@@ -96,6 +100,24 @@ class AaCompositor(private val log: (String) -> Unit) {
 
     private val texMatrix = FloatArray(16)
 
+    // ---- v21 MotoScreen dash layer (only when [dashOverlay] && AaDashOverlay.enabled) ----
+    private var ovProgram = 0
+    private var ovPos = 0
+    private var ovTex = 0
+    private var ovTexture = 0
+    private var ovHasTex = false
+    /** Bitmap rows are top-down: flip v so the layer isn't drawn upside down. */
+    private val ovQuad: FloatBuffer = ByteBuffer
+        .allocateDirect(4 * 4 * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().apply {
+            put(floatArrayOf(
+                -1f, -1f, 0f, 1f,
+                 1f, -1f, 1f, 1f,
+                -1f,  1f, 0f, 0f,
+                 1f,  1f, 1f, 0f,
+            ))
+            position(0)
+        }
+
     // Frame pacing (battery): the compositor throttles live AA frames to [minFrameIntervalMs] (set
     // from the user's PowerMode) so we don't GPU-composite + hardware-encode + Wi-Fi-transmit more
     // often than needed. A frame that arrives too soon is coalesced (its texture is still latched)
@@ -153,6 +175,7 @@ class AaCompositor(private val log: (String) -> Unit) {
                 surfaceTexture.setOnFrameAvailableListener({ handler.post { onFrame() } }, handler)
                 inputSurface = Surface(surfaceTexture)
                 handler.postDelayed(keepAlive, KEEPALIVE_TICK_MS)
+                if (dashOverlay) AaDashOverlay.requestRedraw = { handler.post { pendingFrame = true } }
                 val kind = if (mirrorBuf) "mirror capture" else "AA decoder"
                 log("[COMPOSITOR] ready (buffer size ${bufW}x${bufH}) — $kind input surface up (no output canvas yet)")
             } catch (e: Exception) {
@@ -196,6 +219,7 @@ class AaCompositor(private val log: (String) -> Unit) {
                 windowSurface = EGL14.eglCreateWindowSurface(eglDisplay, eglConfig, encoderSurface, attrs, 0)
                 canvasW = cw; canvasH = ch; srcW = sw; srcH = sh; fitMode = fit
                 computeViewport()
+                if (dashOverlay) AaDashOverlay.setCanvas(cw, ch)
                 log("[COMPOSITOR] output set canvas=${cw}x$ch src=${sw}x$sh fit=$fit → draw rect=${vpW}x$vpH @($vpX,$vpY)")
             } catch (e: Exception) {
                 log("[COMPOSITOR] setOutput failed: $e")
@@ -463,14 +487,74 @@ class AaCompositor(private val log: (String) -> Unit) {
         surfaceTexture.getTransformMatrix(texMatrix)
         // vpY is measured from the top (touch mapping); GL viewports are from the bottom. Same
         // result for symmetric margins, but a top-only inset used to land at the bottom.
-        if (windowSurface != EGL14.EGL_NO_SURFACE) renderTo(windowSurface, vpX, canvasH - vpY - vpH, vpW, vpH)
+        if (windowSurface != EGL14.EGL_NO_SURFACE) {
+            if (dashOverlay && AaDashOverlay.enabled && canvasW > 0 && canvasH > 0) renderDash()
+            else {
+                ovHasTex = false
+                renderTo(windowSurface, vpX, canvasH - vpY - vpH, vpW, vpH)
+            }
+        }
         if (previewSurface != EGL14.EGL_NO_SURFACE) renderTo(previewSurface, ppX, ppY, ppW, ppH)
         lastDrawMs = android.os.SystemClock.uptimeMillis()
         pendingFrame = false
     }
 
+    /**
+     * v21: AA picture into the theme's Google Maps window (cover, or fit for style 1), then the
+     * MotoScreen dash layer over the whole canvas. Corner shapes come from the layer itself.
+     */
+    private fun renderDash() {
+        AaDashOverlay.take()?.let { bmp ->
+            try {
+                EGL14.eglMakeCurrent(eglDisplay, windowSurface, windowSurface, eglContext)
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, ovTexture)
+                android.opengl.GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0)
+                ovHasTex = true
+            } catch (e: Exception) {
+                log("[AA-DASH] upload failed: $e")
+            }
+            AaDashOverlay.recycle(bmp)
+        }
+        val win = AaDashOverlay.window ?: android.graphics.Rect(0, 0, canvasW, canvasH)
+        val ww = win.width().coerceAtLeast(1); val wh = win.height().coerceAtLeast(1)
+        val srcAspect = if (bufW > 0 && bufH > 0) (bufW * cropU) / (bufH * cropV) else 16f / 9f
+        val winAspect = ww.toFloat() / wh
+        val fit = AaDashOverlay.windowStyle == 1
+        var dw: Int; var dh: Int
+        if ((srcAspect < winAspect) != fit) { dw = ww; dh = Math.round(ww / srcAspect) } else { dh = wh; dw = Math.round(wh * srcAspect) }
+        val dx = win.left + (ww - dw) / 2
+        val dy = win.top + (wh - dh) / 2
+        // GL viewports/scissors count from the bottom.
+        renderTo(
+            windowSurface, dx, canvasH - dy - dh, dw, dh,
+            clip = intArrayOf(win.left, canvasH - win.bottom, ww, wh), overlay = ovHasTex,
+        )
+    }
+
+    private fun drawOverlayLayer() {
+        GLES20.glViewport(0, 0, canvasW, canvasH)
+        GLES20.glUseProgram(ovProgram)
+        GLES20.glEnable(GLES20.GL_BLEND)
+        GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA)   // Android bitmaps are premultiplied
+        ovQuad.position(0)
+        GLES20.glVertexAttribPointer(ovPos, 2, GLES20.GL_FLOAT, false, 16, ovQuad)
+        GLES20.glEnableVertexAttribArray(ovPos)
+        ovQuad.position(2)
+        GLES20.glVertexAttribPointer(ovTex, 2, GLES20.GL_FLOAT, false, 16, ovQuad)
+        GLES20.glEnableVertexAttribArray(ovTex)
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, ovTexture)
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
+        GLES20.glDisableVertexAttribArray(ovPos)
+        GLES20.glDisableVertexAttribArray(ovTex)
+        GLES20.glDisable(GLES20.GL_BLEND)
+    }
+
     /** Render the latched frame into [target], letterboxed to viewport ([vx],[vy],[vw],[vh]). */
-    private fun renderTo(target: EGLSurface, vx: Int, vy: Int, vw: Int, vh: Int) {
+    private fun renderTo(
+        target: EGLSurface, vx: Int, vy: Int, vw: Int, vh: Int,
+        clip: IntArray? = null, overlay: Boolean = false,
+    ) {
         EGL14.eglMakeCurrent(eglDisplay, target, target, eglContext)
 
         // Black background (the letterbox bars).
@@ -481,7 +565,10 @@ class AaCompositor(private val log: (String) -> Unit) {
         // never paint outside the bike encoder surface.
         val clipW = if (target === windowSurface) canvasW else previewW
         val clipH = if (target === windowSurface) canvasH else previewH
-        if (clipW > 0 && clipH > 0) {
+        if (clip != null) {
+            GLES20.glEnable(GLES20.GL_SCISSOR_TEST)
+            GLES20.glScissor(clip[0], clip[1], clip[2], clip[3])
+        } else if (clipW > 0 && clipH > 0) {
             GLES20.glEnable(GLES20.GL_SCISSOR_TEST)
             GLES20.glScissor(0, 0, clipW, clipH)
         }
@@ -507,6 +594,7 @@ class AaCompositor(private val log: (String) -> Unit) {
         GLES20.glDisableVertexAttribArray(aPosition)
         GLES20.glDisableVertexAttribArray(aTexCoord)
         GLES20.glDisable(GLES20.GL_SCISSOR_TEST)
+        if (overlay && target === windowSurface) drawOverlayLayer()
         if (calibrating && target === windowSurface) drawCalibrationFrame()
 
         // Monotonic presentation time so repeated (keep-alive) frames aren't dropped as duplicate PTS.
@@ -516,6 +604,7 @@ class AaCompositor(private val log: (String) -> Unit) {
 
     fun release() {
         handler.removeCallbacks(keepAlive)
+        if (dashOverlay) AaDashOverlay.requestRedraw = null
         handler.post {
             try { inputSurface?.release() } catch (_: Exception) {}
             try { if (::surfaceTexture.isInitialized) surfaceTexture.release() } catch (_: Exception) {}
@@ -598,6 +687,33 @@ class AaCompositor(private val log: (String) -> Unit) {
         GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR)
         GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE)
         GLES20.glTexParameteri(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE)
+
+        if (dashOverlay) {
+            ovProgram = linkProgram(
+                """
+                attribute vec4 aPosition;
+                attribute vec2 aTexCoord;
+                varying vec2 vTexCoord;
+                void main() { gl_Position = aPosition; vTexCoord = aTexCoord; }
+                """.trimIndent(),
+                """
+                precision mediump float;
+                varying vec2 vTexCoord;
+                uniform sampler2D sLayer;
+                void main() { gl_FragColor = texture2D(sLayer, vTexCoord); }
+                """.trimIndent(),
+            )
+            ovPos = GLES20.glGetAttribLocation(ovProgram, "aPosition")
+            ovTex = GLES20.glGetAttribLocation(ovProgram, "aTexCoord")
+            val t = IntArray(1)
+            GLES20.glGenTextures(1, t, 0)
+            ovTexture = t[0]
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, ovTexture)
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR)
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR)
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE)
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE)
+        }
     }
 
     private fun linkProgram(vsSrc: String, fsSrc: String): Int {

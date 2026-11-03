@@ -134,3 +134,12 @@ onDestroy ไม่ teardown การเชื่อมต่อถ้าเป
 - New "Map" preset (full-screen map + compass tape + speed panel).
 - Upstream full GPX/navigation hub still exists but its button (btn_gpx) is hidden — ask before re-enabling.
 - No turn-by-turn in the MotoScreen dash yet.
+
+## B11 · Google Maps inside the MotoScreen dash — v21
+- New widget AA "Google Maps (Android Auto)": fill window / show whole AA screen / full screen.
+- Mode: MotoScreen dash + theme has AA widget → Android Auto keeps running (phone screen can be off);
+  AaCompositor (dashOverlay=true, AA path only) draws AA into the window, then the dash layer
+  (AaDashOverlay: DashRenderer → bitmap @4 fps, own GPS listener) blended on top.
+- Theme without AA widget → old own-content dash. Plain Android Auto mode untouched (overlay off).
+- Presets: "Google Maps + info", "Google Maps full".
+- Not verified on the bike yet. Risks: AA layout is drawn for the full panel, so "fill window" crops its sides.

@@ -176,7 +176,7 @@ class DashEditorActivity : AppCompatActivity() {
     /** New widgets land in the middle; panels and lines go behind everything else. */
     private fun place(w: DashWidget) {
         checkpoint()
-        if (w.type == DashWidget.Type.PANEL || w.type == DashWidget.Type.LINE || w.type == DashWidget.Type.MAP) dash.widgets.add(0, w) else dash.widgets += w
+        if (w.type == DashWidget.Type.PANEL || w.type == DashWidget.Type.LINE || w.type == DashWidget.Type.MAP || w.type == DashWidget.Type.AA) dash.widgets.add(0, w) else dash.widgets += w
         preview.selected = w
         refresh()
     }
@@ -467,7 +467,12 @@ class DashEditorActivity : AppCompatActivity() {
         DashTheme.setCurrent(this, dash)
         dirty = false
         LogBus.log("[DASH-EDIT] saved '${dash.name}' · bg=${dash.bg} · ${dash.widgets.joinToString { "${it.type}@${"%.2f".format(it.x)},${"%.2f".format(it.y)}/${it.size}" }}")
-        toast(if (MotoDash.active) R.string.de_saved_live else R.string.de_saved)
+        val wantsAa = dash.widgets.any { it.type == DashWidget.Type.AA }
+        toast(when {
+            MotoDash.active && wantsAa -> R.string.de_saved_reconnect
+            MotoDash.active || AaDashOverlay.enabled -> R.string.de_saved_live
+            else -> R.string.de_saved
+        })
     }
 
     // ---- saved themes ----

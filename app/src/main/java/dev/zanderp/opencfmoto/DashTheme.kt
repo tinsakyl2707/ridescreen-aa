@@ -53,6 +53,8 @@ data class DashWidget(
         MAX(R.string.dw_max, 0),
         AVG(R.string.dw_avg, 0),
         MAP(R.string.dw_map, 1, intArrayOf(R.string.ds_rounded, R.string.ds_circle, R.string.ds_full)),
+        /** v21: the live Android Auto picture (Google Maps etc.) inside the dash. */
+        AA(R.string.dw_aa, 1, intArrayOf(R.string.ds_aa_fill, R.string.ds_aa_fit, R.string.ds_full)),
         TRIP(R.string.dw_trip, 1),
         RIDE_TIME(R.string.dw_ride_time, 1),
         ODO(R.string.dw_odo, 1),
@@ -176,6 +178,19 @@ data class DashTheme(
                 w(DashWidget.Type.FUEL, 0.25f, 0.93f, 0),
                 w(DashWidget.Type.MAINT, 0.75f, 0.93f, 0),
             ), font = DashFont.CHAKRA.ordinal, max = 160),
+            DashTheme(ctx.getString(R.string.dp_gmaps), "glow", 0.45f, mutableListOf(
+                w(DashWidget.Type.AA, 0.36f, 0.5f, 2, 0),
+                w(DashWidget.Type.SPEED, 0.86f, 0.30f, 1),
+                w(DashWidget.Type.CLOCK, 0.86f, 0.62f, 0),
+                w(DashWidget.Type.TRIP, 0.86f, 0.80f, 0),
+                w(DashWidget.Type.RAIN, 0.86f, 0.06f, 0),
+                w(DashWidget.Type.FUEL, 0.86f, 0.95f, 0),
+            ), font = DashFont.CHAKRA.ordinal),
+            DashTheme(ctx.getString(R.string.dp_gmaps_full), "black", 0.4f, mutableListOf(
+                w(DashWidget.Type.AA, 0.5f, 0.5f, 1, 2),
+                w(DashWidget.Type.PANEL, 0.88f, 0.82f, 0, 0),
+                w(DashWidget.Type.SPEED, 0.88f, 0.78f, 0),
+            ), font = DashFont.CHAKRA.ordinal),
             DashTheme(ctx.getString(R.string.dp_map), "black", 0.4f, mutableListOf(
                 w(DashWidget.Type.MAP, 0.5f, 0.5f, 1, 2),
                 w(DashWidget.Type.HEADING, 0.5f, 0.08f, 1, 1),
@@ -441,8 +456,9 @@ class DashRenderer(private val ctx: Context) {
 
         p.shader = null; p.style = Paint.Style.FILL
         // Live dash: the real map is a view *under* this canvas — leave its shape unpainted.
-        val hole = if (sample) null else mapArea(theme, w, h)
-        if (hole != null) { c.save(); c.clipOutPath(mapPath(hole.first, hole.second, k)) }
+        // Live dash: real map / Android Auto pictures sit *under* this canvas — leave their shapes unpainted.
+        val holes = if (sample) emptyList() else liveWindows(theme, w, h)
+        if (holes.isNotEmpty()) { c.save(); holes.forEach { c.clipOutPath(mapPath(it.first, it.second, k)) } }
         val bmp = background(theme)
         if (bmp != null) {
             val s = maxOf(w / bmp.width, h / bmp.height)
@@ -455,8 +471,8 @@ class DashRenderer(private val ctx: Context) {
             gradientBg(c, w, h, theme)
             if (theme.dim > 0.46f) { p.color = Color.argb(((theme.dim - 0.45f) * 255).toInt(), 0, 0, 0); c.drawRect(0f, 0f, w, h, p) }
         }
-        if (hole != null) c.restore()
-        if (theme.widgets.any { it.type == DashWidget.Type.MAP && it.style == 2 }) {
+        if (holes.isNotEmpty()) c.restore()
+        if (holes.any { it.second == 2 } || (sample && theme.widgets.any { (it.type == DashWidget.Type.MAP || it.type == DashWidget.Type.AA) && it.style == 2 })) {
             // Full-screen map: soft top/bottom shade so the widgets stay readable.
             p.shader = LinearGradient(0f, 0f, 0f, h * 0.3f, Color.argb(150, 0, 0, 0), Color.TRANSPARENT, Shader.TileMode.CLAMP)
             c.drawRect(0f, 0f, w, h * 0.3f, p)
@@ -638,9 +654,24 @@ class DashRenderer(private val ctx: Context) {
             }
             DashWidget.Type.TEXT -> txt(c, wd.text.ifBlank { ctx.getString(R.string.dw_text_sample) }, x, y + 12f * s, 34f * s, main, false)
             DashWidget.Type.PHOTO -> photo(c, wd, x, y, s, hi)
+            DashWidget.Type.AA -> {
+                val r = windowRectOf(wd, w, h)
+                val shape = if (wd.style == 2) 2 else 0
+                val isLive = !sample && aaLive && theme.widgets.firstOrNull { it.type == DashWidget.Type.AA } === wd
+                if (!isLive) {
+                    fakeMap(c, r, shape, k, Color.parseColor("#4285F4"))
+                    chip(c, if (aaLive || sample) "Google Maps · Android Auto" else ctx.getString(R.string.dw_aa_reconnect),
+                        r.centerX(), r.top + 26f * k, 16f * k, Color.WHITE, Color.argb(170, 0, 0, 0))
+                }
+                if (shape != 2) {
+                    p.style = Paint.Style.STROKE; p.strokeWidth = 3f * k; p.color = hi
+                    c.drawPath(mapPath(r, shape, k), p); p.style = Paint.Style.FILL
+                }
+                if (shape == 2) RectF(w * 0.3f, h * 0.3f, w * 0.7f, h * 0.7f) else r
+            }
             DashWidget.Type.MAP -> {
                 val r = mapRectOf(wd, w, h)
-                val isLive = !sample && theme.widgets.firstOrNull { it.type == DashWidget.Type.MAP } === wd
+                val isLive = !sample && !aaLive && theme.widgets.firstOrNull { it.type == DashWidget.Type.MAP } === wd
                 if (!isLive) fakeMap(c, r, wd.style, k, hi)
                 if (wd.style != 2) {
                     p.style = Paint.Style.STROKE; p.strokeWidth = 3f * k; p.color = hi
@@ -886,6 +917,34 @@ class DashRenderer(private val ctx: Context) {
         return r
     }
 
+    /**
+     * True when this renderer draws the dash layer over live Android Auto video ([AaDashOverlay]):
+     * the AA widget is a window onto Google Maps; the osmdroid MAP widget can't be live there.
+     */
+    var aaLive = false
+
+    /** The live windows to leave unpainted: (rect, shape 0 rounded / 1 circle / 2 full). */
+    fun liveWindows(theme: DashTheme, w: Float, h: Float): List<Pair<RectF, Int>> {
+        val out = ArrayList<Pair<RectF, Int>>()
+        if (aaLive) {
+            val aa = theme.widgets.firstOrNull { it.type == DashWidget.Type.AA }
+            if (aa == null) out += RectF(0f, 0f, w, h) to 2
+            else out += windowRectOf(aa, w, h) to (if (aa.style == 2) 2 else 0)
+        } else {
+            mapArea(theme, w, h)?.let { out += it }
+        }
+        return out
+    }
+
+    /** Rectangle of a window widget (MAP or AA) on the dash canvas. */
+    fun windowRectOf(wd: DashWidget, w: Float, h: Float): RectF =
+        if (wd.type == DashWidget.Type.AA) {
+            if (wd.style == 2) RectF(0f, 0f, w, h) else {
+                val sc = scale(wd.size) * (w / 1024f)
+                RectF(wd.x * w - 240f * sc, wd.y * h - 150f * sc, wd.x * w + 240f * sc, wd.y * h + 150f * sc)
+            }
+        } else mapRectOf(wd, w, h)
+
     /** The map widget's rectangle on the dash canvas. */
     fun mapRectOf(wd: DashWidget, w: Float, h: Float): RectF {
         if (wd.style == 2) return RectF(0f, 0f, w, h)
@@ -932,7 +991,7 @@ class DashRenderer(private val ctx: Context) {
     fun hit(xPx: Float, yPx: Float, pad: Float): DashWidget? {
         // Prefer content over decor: a panel is only picked when nothing on top of it is hit.
         val hits = bounds.filter { (_, r) -> RectF(r).apply { inset(-pad, -pad) }.contains(xPx, yPx) }.map { it.first }
-        return hits.lastOrNull { it.type != DashWidget.Type.PANEL && it.type != DashWidget.Type.LINE && it.type != DashWidget.Type.MAP } ?: hits.lastOrNull()
+        return hits.lastOrNull { it.type != DashWidget.Type.PANEL && it.type != DashWidget.Type.LINE && it.type != DashWidget.Type.MAP && it.type != DashWidget.Type.AA } ?: hits.lastOrNull()
     }
 
     fun boundsOf(wd: DashWidget): RectF? = bounds.firstOrNull { it.first === wd }?.second
