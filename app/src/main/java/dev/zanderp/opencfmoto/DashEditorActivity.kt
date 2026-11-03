@@ -51,6 +51,8 @@ class DashEditorActivity : AppCompatActivity() {
     private lateinit var selLabel: TextView
 
     private val photoPicker = registerForActivityResult(ActivityResultContracts.GetContent()) { uri -> uri?.let { importPhoto(it) } }
+    /** v19: a picture placed as a widget (rider, logo, sticker). */
+    private val stickerPicker = registerForActivityResult(ActivityResultContracts.GetContent()) { uri -> uri?.let { importSticker(it) } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,26 +90,34 @@ class DashEditorActivity : AppCompatActivity() {
         })
         root.addView(left, LinearLayout.LayoutParams(0, -1, 1f))
 
-        // ---- right: tools ----
-        val tools = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(px(12), 0, 0, 0) }
-        fun tool(label: Int, primary: Boolean = false, onClick: () -> Unit) = TextView(this).apply {
-            setText(label); textSize = 14f; gravity = Gravity.CENTER
+        // ---- right: tools (two columns, Save pinned at the bottom) ----
+        val side = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(px(10), 0, 0, 0) }
+        val tools = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        fun button(label: Int, primary: Boolean, onClick: () -> Unit) = TextView(this).apply {
+            setText(label); textSize = 13f; gravity = Gravity.CENTER; maxLines = 2
             typeface = ResourcesCompat.getFont(this@DashEditorActivity, R.font.archivo_semibold)
             setTextColor(if (primary) c(R.color.on_brand) else c(R.color.text_primary))
             background = ContextCompat.getDrawable(this@DashEditorActivity, if (primary) R.drawable.ms_cta else R.drawable.ms_chip)
-            setPadding(px(10), px(10), px(10), px(10))
+            setPadding(px(6), px(9), px(6), px(9))
             setOnClickListener { onClick() }
-            tools.addView(this, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = px(6) })
         }
-        tool(R.string.de_add) { addWidget() }
-        tool(R.string.de_size) { cycleSize() }
-        tool(R.string.de_delete) { deleteSelected() }
-        tool(R.string.de_bg) { pickBackground() }
-        tool(R.string.de_undo) { doUndo() }
-        tool(R.string.de_themes) { themesMenu() }
-        tool(R.string.de_reset) { confirmReset() }
-        tool(R.string.de_save, primary = true) { save() }
-        root.addView(ScrollView(this).apply { addView(tools) }, LinearLayout.LayoutParams(px(176), -1))
+        fun row(a: Pair<Int, () -> Unit>, b: Pair<Int, () -> Unit>) {
+            tools.addView(LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                addView(button(a.first, false, a.second), LinearLayout.LayoutParams(0, -1, 1f).apply { marginEnd = px(3) })
+                addView(button(b.first, false, b.second), LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = px(3) })
+            }, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = px(6) })
+        }
+        row(R.string.de_add to { addWidget() }, R.string.de_presets to { presetGallery() })
+        row(R.string.de_style to { styleMenu() }, R.string.de_color to { colorMenu() })
+        row(R.string.de_size to { cycleSize() }, R.string.de_layer to { layerMenu() })
+        row(R.string.de_bg to { pickBackground() }, R.string.de_font to { fontMenu() })
+        row(R.string.de_speed to { speedMenu() }, R.string.de_undo to { doUndo() })
+        row(R.string.de_themes to { themesMenu() }, R.string.de_delete to { deleteSelected() })
+        row(R.string.de_reset to { confirmReset() }, R.string.de_help to { helpDialog() })
+        side.addView(ScrollView(this).apply { addView(tools) }, LinearLayout.LayoutParams(-1, 0, 1f))
+        side.addView(button(R.string.de_save, true) { save() }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = px(4) })
+        root.addView(side, LinearLayout.LayoutParams(px(232), -1))
 
         setContentView(root)
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -140,28 +150,197 @@ class DashEditorActivity : AppCompatActivity() {
     private fun refresh() {
         val s = preview.selected
         selLabel.text = if (s == null) getString(R.string.de_hint)
-            else getString(R.string.de_selected, getString(s.type.label), sizeName(s.size))
+            else getString(R.string.de_selected, getString(s.type.label), sizeName(s.size)) +
+                (s.type.styles.getOrNull(s.style)?.let { " · " + getString(it) } ?: "")
         preview.invalidate()
     }
 
     private fun sizeName(size: Int) = getString(when (size) { 0 -> R.string.de_size_s; 2 -> R.string.de_size_l; else -> R.string.de_size_m })
 
     private fun addWidget() {
-        val types = DashWidget.Type.values()
+        val icons = arrayOf("🏍", "🧭", "ℹ️", "🎨")
+        val types = DashWidget.Type.values().sortedBy { it.group }
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.de_add)
-            .setItems(types.map { getString(it.label) }.toTypedArray()) { _, i ->
+            .setItems(types.map { icons[it.group] + "  " + getString(it.label) }.toTypedArray()) { _, i ->
                 val t = types[i]
-                val add = { txt: String ->
-                    checkpoint()
-                    val w = DashWidget(t, 0.5f, 0.5f, 1, txt)
-                    dash.widgets += w
-                    preview.selected = w
-                    refresh()
+                when (t) {
+                    DashWidget.Type.TEXT -> askText("") { place(DashWidget(t, 0.5f, 0.5f, 1, it)) }
+                    DashWidget.Type.PHOTO -> stickerPicker.launch("image/*")
+                    else -> place(DashWidget(t, 0.5f, 0.5f, 1))
                 }
-                if (t == DashWidget.Type.TEXT) askText("") { add(it) } else add("")
             }
             .show()
+    }
+
+    /** New widgets land in the middle; panels and lines go behind everything else. */
+    private fun place(w: DashWidget) {
+        checkpoint()
+        if (w.type == DashWidget.Type.PANEL || w.type == DashWidget.Type.LINE) dash.widgets.add(0, w) else dash.widgets += w
+        preview.selected = w
+        refresh()
+    }
+
+    private fun styleMenu() {
+        val w = preview.selected ?: run { toast(R.string.de_pick_first); return }
+        if (w.type.styles.isEmpty()) { toast(R.string.de_no_styles); return }
+        MaterialAlertDialogBuilder(this)
+            .setTitle(getString(R.string.de_style) + " · " + getString(w.type.label))
+            .setSingleChoiceItems(w.type.styles.map { getString(it) }.toTypedArray(), w.style) { d, i ->
+                checkpoint(); w.style = i; refresh(); d.dismiss()
+            }
+            .show()
+    }
+
+    /** With a widget selected: its colour. Without: the theme's highlight and text colours. */
+    private fun colorMenu() {
+        val w = preview.selected
+        if (w != null) {
+            colorPicker(getString(R.string.de_color) + " · " + getString(w.type.label), w.color) { checkpoint(); w.color = it; refresh() }
+            return
+        }
+        val items = arrayOf(getString(R.string.de_color_accent), getString(R.string.de_color_ink))
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.de_color)
+            .setItems(items) { _, i ->
+                if (i == 0) colorPicker(items[0], dash.accent) { checkpoint(); dash.accent = it; refresh() }
+                else colorPicker(items[1], dash.ink) { checkpoint(); dash.ink = it; refresh() }
+            }
+            .show()
+    }
+
+    private fun colorPicker(title: String, current: Long, pick: (Long) -> Unit) {
+        val dp = resources.displayMetrics.density
+        val grid = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding((20 * dp).toInt(), (12 * dp).toInt(), (20 * dp).toInt(), 0) }
+        var dialog: androidx.appcompat.app.AlertDialog? = null
+        val all = longArrayOf(0L) + DashTheme.COLORS
+        all.toList().chunked(7).forEach { chunk ->
+            val row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+            chunk.forEach { col ->
+                row.addView(TextView(this).apply {
+                    val size = (36 * dp).toInt()
+                    gravity = Gravity.CENTER; textSize = 12f
+                    text = if (col == 0L) "A" else if (col == current) "✓" else ""
+                    setTextColor(if (col == 0L) ContextCompat.getColor(this@DashEditorActivity, R.color.text_primary) else Color.BLACK)
+                    background = android.graphics.drawable.GradientDrawable().apply {
+                        shape = android.graphics.drawable.GradientDrawable.OVAL
+                        if (col == 0L) setStroke((2 * dp).toInt(), Color.GRAY) else setColor(col.toInt())
+                        if (col == current && col != 0L) setStroke((3 * dp).toInt(), Color.WHITE)
+                    }
+                    setOnClickListener { pick(col); dialog?.dismiss() }
+                    layoutParams = LinearLayout.LayoutParams(size, size).apply { setMargins((4 * dp).toInt(), (4 * dp).toInt(), (4 * dp).toInt(), (4 * dp).toInt()) }
+                })
+            }
+            grid.addView(row)
+        }
+        grid.addView(TextView(this).apply {
+            setText(R.string.de_color_auto); textSize = 12f
+            setTextColor(ContextCompat.getColor(this@DashEditorActivity, R.color.text_secondary)); setPadding(0, (6 * dp).toInt(), 0, 0)
+        })
+        dialog = MaterialAlertDialogBuilder(this).setTitle(title).setView(grid).setNegativeButton(android.R.string.cancel, null).show()
+    }
+
+    private fun fontMenu() {
+        val fonts = DashFont.values()
+        val dp = resources.displayMetrics.density
+        val list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding((20 * dp).toInt(), (8 * dp).toInt(), (20 * dp).toInt(), 0) }
+        var dialog: androidx.appcompat.app.AlertDialog? = null
+        fonts.forEach { f ->
+            list.addView(TextView(this).apply {
+                text = (if (f.ordinal == dash.font) "✓  " else "    ") + getString(f.label) + "   " + "88 km/h 16:05"
+                textSize = 20f
+                typeface = try { ResourcesCompat.getFont(this@DashEditorActivity, f.num) } catch (_: Exception) { null }
+                setTextColor(ContextCompat.getColor(this@DashEditorActivity, R.color.text_primary))
+                setPadding(0, (10 * dp).toInt(), 0, (10 * dp).toInt())
+                setOnClickListener { checkpoint(); dash.font = f.ordinal; refresh(); dialog?.dismiss() }
+            })
+        }
+        dialog = MaterialAlertDialogBuilder(this).setTitle(R.string.de_font).setView(ScrollView(this).apply { addView(list) })
+            .setNegativeButton(android.R.string.cancel, null).show()
+    }
+
+    private fun speedMenu() {
+        val items = arrayOf(getString(R.string.de_gauge_max, dash.max), getString(if (dash.warn > 0) R.string.de_warn_on else R.string.de_warn_off, dash.warn))
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.de_speed)
+            .setItems(items) { _, i ->
+                if (i == 0) {
+                    val opts = intArrayOf(100, 120, 140, 160, 180, 200)
+                    MaterialAlertDialogBuilder(this).setTitle(R.string.de_gauge_max_t)
+                        .setSingleChoiceItems(opts.map { "$it km/h" }.toTypedArray(), opts.indexOf(dash.max)) { d, j -> checkpoint(); dash.max = opts[j]; refresh(); d.dismiss() }
+                        .show()
+                } else {
+                    val opts = intArrayOf(0, 60, 80, 90, 100, 110, 120, 140)
+                    MaterialAlertDialogBuilder(this).setTitle(R.string.de_warn_t)
+                        .setSingleChoiceItems(opts.map { if (it == 0) getString(R.string.de_off) else "$it km/h" }.toTypedArray(), opts.indexOf(dash.warn)) { d, j -> checkpoint(); dash.warn = opts[j]; refresh(); d.dismiss() }
+                        .show()
+                }
+            }
+            .show()
+    }
+
+    private fun layerMenu() {
+        val w = preview.selected ?: run { toast(R.string.de_pick_first); return }
+        val items = arrayOf(getString(R.string.de_front), getString(R.string.de_back))
+        MaterialAlertDialogBuilder(this).setTitle(R.string.de_layer)
+            .setItems(items) { _, i ->
+                checkpoint()
+                dash.widgets.removeAll { it === w }
+                if (i == 0) dash.widgets += w else dash.widgets.add(0, w)
+                refresh()
+            }.show()
+    }
+
+    /** Ready-made themes as pictures — tap one to start from it. */
+    private fun presetGallery() {
+        val dp = resources.displayMetrics.density
+        val r = DashRenderer(this)
+        val list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding((16 * dp).toInt(), (8 * dp).toInt(), (16 * dp).toInt(), 0) }
+        var dialog: androidx.appcompat.app.AlertDialog? = null
+        val widthPx = (resources.displayMetrics.widthPixels * 0.55f).toInt().coerceIn(360, 900)
+        (DashTheme.presets(this) + DashTheme.saved(this)).forEach { t ->
+            list.addView(TextView(this).apply {
+                text = t.name; textSize = 14f
+                setTextColor(ContextCompat.getColor(this@DashEditorActivity, R.color.text_primary)); setPadding(0, (10 * dp).toInt(), 0, (4 * dp).toInt())
+            })
+            list.addView(android.widget.ImageView(this).apply {
+                setImageBitmap(r.thumbnail(t, widthPx))
+                adjustViewBounds = true
+                setOnClickListener { loadTheme(t); dialog?.dismiss() }
+            }, LinearLayout.LayoutParams(-1, -2))
+        }
+        dialog = MaterialAlertDialogBuilder(this).setTitle(R.string.de_presets).setView(ScrollView(this).apply { addView(list) })
+            .setNegativeButton(android.R.string.cancel, null).show()
+    }
+
+    private fun helpDialog() {
+        MaterialAlertDialogBuilder(this).setTitle(R.string.de_help).setMessage(R.string.de_help_body)
+            .setPositiveButton(android.R.string.ok, null).show()
+    }
+
+    /** Sticker picture: centre-cropped square, 512 px. */
+    private fun importSticker(uri: Uri) {
+        Thread {
+            val name = "dash_img_${System.currentTimeMillis()}.jpg"
+            val ok = try {
+                val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
+                var sample = 1
+                while (minOf(bounds.outWidth, bounds.outHeight) / (sample * 2) >= 512) sample *= 2
+                val bmp = contentResolver.openInputStream(uri)?.use {
+                    BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inSampleSize = sample })
+                } ?: error("decode")
+                val side = minOf(bmp.width, bmp.height)
+                val sq = Bitmap.createBitmap(bmp, (bmp.width - side) / 2, (bmp.height - side) / 2, side, side)
+                val out = if (side > 512) Bitmap.createScaledBitmap(sq, 512, 512, true) else sq
+                DashTheme.imageFile(this, name).outputStream().use { out.compress(Bitmap.CompressFormat.JPEG, 90, it) }
+                true
+            } catch (e: Exception) { LogBus.log("[DASH-EDIT] sticker failed: ${e.message}"); false }
+            runOnUiThread {
+                if (ok) place(DashWidget(DashWidget.Type.PHOTO, 0.5f, 0.5f, 1, img = name))
+                else toast(R.string.de_photo_fail)
+            }
+        }.start()
     }
 
     private fun askText(start: String, done: (String) -> Unit) {
@@ -196,6 +375,10 @@ class DashEditorActivity : AppCompatActivity() {
                 dash.widgets += d; preview.selected = d; refresh()
             },
         )
+        if (w.type.styles.isNotEmpty()) opts += getString(R.string.de_style) + "…" to { styleMenu() }
+        opts += getString(R.string.de_color) + "…" to { colorMenu() }
+        opts += getString(R.string.de_front) to { checkpoint(); dash.widgets.removeAll { it === w }; dash.widgets += w; refresh() }
+        opts += getString(R.string.de_back) to { checkpoint(); dash.widgets.removeAll { it === w }; dash.widgets.add(0, w); refresh() }
         if (w.type == DashWidget.Type.TEXT) opts += getString(R.string.de_edit_text) to { askText(w.text) { checkpoint(); w.text = it; refresh() } }
         opts += getString(R.string.de_delete) to { checkpoint(); dash.widgets.removeAll { it === w }; preview.selected = null; refresh() }
         MaterialAlertDialogBuilder(this)
@@ -205,18 +388,25 @@ class DashEditorActivity : AppCompatActivity() {
     }
 
     private fun pickBackground() {
-        val keys = listOf("glow", "art", "photo", "black")
-        val names = arrayOf(getString(R.string.de_bg_glow), getString(R.string.de_bg_art), getString(R.string.de_bg_photo), getString(R.string.de_bg_black), getString(R.string.de_dim))
+        val keys = DashTheme.BACKGROUNDS
+        val names = keys.map { getString(bgName(it)) } + getString(R.string.de_dim)
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.de_bg)
-            .setItems(names) { _, i ->
+            .setItems(names.toTypedArray()) { _, i ->
                 when {
-                    i == 4 -> dimDialog()
+                    i == keys.size -> dimDialog()
                     keys[i] == "photo" -> photoPicker.launch("image/*")
                     else -> { checkpoint(); dash.bg = keys[i]; refresh() }
                 }
             }
             .show()
+    }
+
+    private fun bgName(k: String) = when (k) {
+        "sunset" -> R.string.de_bg_sunset; "ocean" -> R.string.de_bg_ocean; "racing" -> R.string.de_bg_racing
+        "forest" -> R.string.de_bg_forest; "carbon" -> R.string.de_bg_carbon; "grid" -> R.string.de_bg_grid
+        "black" -> R.string.de_bg_black; "art" -> R.string.de_bg_art; "photo" -> R.string.de_bg_photo
+        else -> R.string.de_bg_glow
     }
 
     private fun dimDialog() {
@@ -265,7 +455,8 @@ class DashEditorActivity : AppCompatActivity() {
             .setTitle(R.string.de_reset)
             .setMessage(R.string.de_reset_confirm)
             .setPositiveButton(R.string.de_reset) { _, _ ->
-                checkpoint(); dash = DashTheme.cockpit(this).also { it.bg = dash.bg; it.dim = dash.dim }
+                checkpoint(); val old = dash
+                dash = DashTheme.cockpit(this).also { it.bg = old.bg; it.dim = old.dim; it.accent = old.accent; it.ink = old.ink; it.font = old.font; it.warn = old.warn; it.max = old.max }
                 preview.selected = null; refresh()
             }
             .setNegativeButton(android.R.string.cancel, null)

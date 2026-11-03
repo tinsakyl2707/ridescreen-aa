@@ -66,7 +66,7 @@ class MsNotificationListener : NotificationListenerService()
 @SuppressLint("ViewConstructor")
 class CockpitView(context: Context, private val log: (String) -> Unit) : View(context), LocationListener {
     private val main = Handler(Looper.getMainLooper())
-    private var speedKmh = -1
+    private var fix: Location? = null
     private var lastFixAt = 0L
     private val lm = context.getSystemService(LocationManager::class.java)
     /** v18: the layout comes from the rider's custom theme ([DashTheme]) — same renderer as the editor. */
@@ -92,7 +92,7 @@ class CockpitView(context: Context, private val log: (String) -> Unit) : View(co
     }
 
     override fun onLocationChanged(location: Location) {
-        speedKmh = if (location.hasSpeed()) (location.speed * 3.6f).toInt() else 0
+        fix = location
         lastFixAt = System.currentTimeMillis()
     }
 
@@ -100,6 +100,7 @@ class CockpitView(context: Context, private val log: (String) -> Unit) : View(co
         val w = width.toFloat(); val h = height.toFloat()
         if (w <= 0 || h <= 0) return
         val fresh = System.currentTimeMillis() - lastFixAt < 5000
-        renderer.draw(c, w, h, DashTheme.current(context), DashRenderer.Live(speedKmh.coerceAtLeast(0), fresh), sample = false)
+        val live = fix?.toLive(fresh) ?: DashRenderer.Live(0, false)
+        renderer.draw(c, w, h, DashTheme.current(context), live, sample = false)
     }
 }

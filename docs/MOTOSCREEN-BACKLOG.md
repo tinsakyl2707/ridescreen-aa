@@ -118,3 +118,12 @@ onDestroy ไม่ teardown การเชื่อมต่อถ้าเป
   background (glow / art / own photo / black + dim), undo (40), reset, saved themes, share/import as text.
 - Entry: tap the selected "MotoScreen dash ✎" segment, long-press it, or Help → 🎨.
 - Not verified yet: the dash itself on the 368G.
+
+## B9 · More dash choices — v19
+- 7 ready-made themes (Cockpit, Sport, Touring, Minimal, Retro LCD, Night, Hero photo) shown as thumbnails.
+- 23 widgets: + max, odometer, heading (text / compass tape), altitude, GPS bars, temperature (Open-Meteo), sunrise/sunset (local calc),
+  fuel cost today (real consumption × price), picture/logo sticker, panel, line.
+- Styles: gauge arc/ring/LED bar/needle/digital LCD; speed plain/LCD; clock plain/seconds/analog; photo circle/rounded; panel glass/outline/stripe; line plain/fade.
+- Colour per widget (12 + auto), theme highlight + text colour; 6 fonts (Kanit, Chakra Petch, Orbitron, DSEG7 LCD, Share Tech Mono, IBM Plex).
+- 10 backgrounds (+ sunset, ocean, racing, forest, carbon, cyber grid). Gauge full scale; speed warning (red + pulsing edge). Layer front/back.
+- Skipped: lean angle / g-force (needs a rigidly mounted phone + gyro fusion; accelerometer alone reads ~0 in a balanced turn).
