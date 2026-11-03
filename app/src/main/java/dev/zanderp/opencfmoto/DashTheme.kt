@@ -153,7 +153,7 @@ data class DashTheme(
         fun presets(ctx: Context): List<DashTheme> = listOf(
             cockpit(ctx),
             DashTheme(ctx.getString(R.string.dp_sport), "racing", 0.4f, mutableListOf(
-                w(DashWidget.Type.PANEL, 0.80f, 0.50f, 2, 1),
+                w(DashWidget.Type.PANEL, 0.79f, 0.50f, 2, 1),
                 w(DashWidget.Type.GAUGE, 0.33f, 0.55f, 2, 1),
                 w(DashWidget.Type.MAX, 0.71f, 0.33f),
                 w(DashWidget.Type.AVG, 0.89f, 0.33f),
@@ -196,8 +196,8 @@ data class DashTheme(
                 w(DashWidget.Type.RAIN, 0.5f, 0.10f, 0),
             ), accent = 0xFFB0352A, ink = 0xFFE07B70, font = DashFont.CHAKRA.ordinal),
             DashTheme(ctx.getString(R.string.dp_hero), "art", 0.35f, mutableListOf(
-                w(DashWidget.Type.PANEL, 0.17f, 0.74f, 1, 0),
-                w(DashWidget.Type.GAUGE, 0.17f, 0.80f, 0, 1),
+                w(DashWidget.Type.PANEL, 0.17f, 0.72f, 1, 0),
+                w(DashWidget.Type.GAUGE, 0.17f, 0.72f, 0, 1),
                 w(DashWidget.Type.TEXT, 0.80f, 0.12f, 1, 0, "MotoScreen"),
                 w(DashWidget.Type.CLOCK, 0.90f, 0.82f),
                 w(DashWidget.Type.TEMP, 0.90f, 0.94f, 0),
